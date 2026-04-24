@@ -1,0 +1,25 @@
+45: { id: "benefits", name: "Giải pháp (Solution)", icon: <CheckCircle2 className="w-4 h-4" /> },
+53: { id: "comparison", name: "Bảng So Sánh", icon: <Scale className="w-4 h-4" /> },
+200: toast.success("Thao tác thành công!");
+206: toast.success("Thao tác thành công!");
+224: toast.success("Đã lưu nháp bộ phận: " + activeSection);
+237: toast.success("Thao tác thành công!");
+243: toast.success("Thao tác thành công!");
+266: toast.success("Thao tác thành công!");
+360: <Save className="w-4 h-4" /> Lưu nháp
+522: <label className="text-sm font-medium">Các vấn đề gặp phải</label>
+573: <label className="text-sm font-medium">Danh sách câu hỏi & giải đáp</label>
+625: <h3 className="font-bold text-lg border-b pb-2">Bảng so sánh AI</h3>
+766: <label className="text-sm font-medium">Danh sách cảm nhận</label>
+842: <label className="text-sm font-medium">Danh sách Giải pháp / Lợi ích</label>
+903: <label className="text-sm font-medium">Danh sách Modules & Bài học</label>
+1046: <label className="text-sm font-medium">Các Kết Quả Thực Tế (Icon Cards)</label>
+1165: <label className="text-sm font-medium">Mô tả tổng quát</label>
+1177: <LayoutDashboard className="w-4 h-4" /> Nội dung khối bên trái (Sidebar)
+1200: <label className="text-sm font-medium">Mô tả nội dung bên trái</label>
+1222: <Gift className="w-4 h-4" /> Danh sách quà tặng chi tiết
+1271: <label className="text-xs font-medium opacity-70 uppercase">Mô tả ngắn gÃ¡Â»Ân</label>
+1408: <label className="text-base font-semibold">Các Gói Học Phí</label>
+1443: <label className="text-xs font-medium">Giá bán</label>
+1470: Đánh dấu là gói Khuyến Nghị (Nổi bật)
+1551: <label className="text-sm font-medium text-muted-foreground">Google/AI API Key (Dùng cho Bảng So Sánh)</label>

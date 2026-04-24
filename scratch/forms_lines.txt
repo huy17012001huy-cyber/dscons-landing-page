@@ -1,0 +1,62 @@
+Line 66: const [bonusForm, setBonusForm] = useState((landingData as any).bonus || { title: "Đừng bỏ lỡ cơ hội thăng tiến!", features: [] });
+Line 77: const [testimonialsForm, setTestimonialsForm] = useState(landingData.testimonials);
+Line 154: setBonusForm({ ...bonusForm, ...content });
+Line 182: if (activeSection === "testimonials" && data.draft_content) setTestimonialsForm({ ...testimonialsForm, ...data.draft_content });
+Line 211: const bonusItems = (bonusForm.features || []).map((f: any) => ({
+Line 267: if (activeSection === "bonus") content = bonusForm;
+Line 273: if (activeSection === "testimonials") content = testimonialsForm;
+Line 305: if (activeSection === "bonus") content = bonusForm;
+Line 311: if (activeSection === "testimonials") content = testimonialsForm;
+Line 1182: value={testimonialsForm.title}
+Line 1183: onChange={(e) => setTestimonialsForm({...testimonialsForm, title: e.target.value})}
+Line 1190: <Button variant="outline" size="sm" onClick={() => setTestimonialsForm({...testimonialsForm, items: [...testimonialsForm.items, {name: "Người mới", role: "Học viên", content: "Nội dung cảm nhận...", videoUrl: ""}]})}>
+Line 1195: {testimonialsForm.items.map((item, index) => (
+Line 1202: const newItems = [...testimonialsForm.items];
+Line 1204: setTestimonialsForm({...testimonialsForm, items: newItems});
+Line 1216: const newItems = [...testimonialsForm.items];
+Line 1218: setTestimonialsForm({...testimonialsForm, items: newItems});
+Line 1227: const newItems = [...testimonialsForm.items];
+Line 1229: setTestimonialsForm({...testimonialsForm, items: newItems});
+Line 1239: const newItems = [...testimonialsForm.items];
+Line 1241: setTestimonialsForm({...testimonialsForm, items: newItems});
+Line 1252: const newItems = [...testimonialsForm.items];
+Line 1254: setTestimonialsForm({...testimonialsForm, items: newItems});
+Line 1271: <Button variant="outline" size="sm" onClick={() => setTestimonialsForm({...testimonialsForm, partners: [...(testimonialsForm.partners || []), {name: "Đối tác mới", logoUrl: ""}]})}>
+Line 1277: {(testimonialsForm.partners || []).map((partner: any, index: number) => (
+Line 1284: const newPartners = [...(testimonialsForm.partners || [])];
+Line 1286: setTestimonialsForm({...testimonialsForm, partners: newPartners});
+Line 1304: const newPartners = [...(testimonialsForm.partners || [])];
+Line 1306: setTestimonialsForm({...testimonialsForm, partners: newPartners});
+Line 1315: const newPartners = [...(testimonialsForm.partners || [])];
+Line 1317: setTestimonialsForm({...testimonialsForm, partners: newPartners});
+Line 1649: value={bonusForm.subtitle || ""}
+Line 1650: onChange={(e) => setBonusForm({...bonusForm, subtitle: e.target.value})}
+Line 1658: value={bonusForm.title || ""}
+Line 1659: onChange={(e) => setBonusForm({...bonusForm, title: e.target.value})}
+Line 1667: value={bonusForm.description || ""}
+Line 1668: onChange={(val) => setBonusForm({...bonusForm, description: val})}
+Line 1684: value={bonusForm.boxLeftSubtitle || ""}
+Line 1685: onChange={(e) => setBonusForm({...bonusForm, boxLeftSubtitle: e.target.value})}
+Line 1693: value={bonusForm.boxLeftTitle || ""}
+Line 1694: onChange={(e) => setBonusForm({...bonusForm, boxLeftTitle: e.target.value})}
+Line 1702: value={bonusForm.boxLeftDesc || ""}
+Line 1703: onChange={(val) => setBonusForm({...bonusForm, boxLeftDesc: val})}
+Line 1712: value={bonusForm.boxLeftNote || ""}
+Line 1713: onChange={(e) => setBonusForm({...bonusForm, boxLeftNote: e.target.value})}
+Line 1724: const newFeatures = [...(bonusForm.features || [])];
+Line 1726: setBonusForm({...bonusForm, features: newFeatures});
+Line 1732: {(bonusForm.features || []).map((feature: any, index: number) => (
+Line 1738: const newFeatures = [...(bonusForm.features || [])];
+Line 1740: setBonusForm({...bonusForm, features: newFeatures});
+Line 1749: const newFeatures = [...(bonusForm.features || [])];
+Line 1751: setBonusForm({...bonusForm, features: newFeatures});
+Line 1763: const newFeatures = [...(bonusForm.features || [])];
+Line 1765: setBonusForm({...bonusForm, features: newFeatures});
+Line 1775: const newFeatures = [...(bonusForm.features || [])];
+Line 1777: setBonusForm({...bonusForm, features: newFeatures});
+Line 1789: const newFeatures = [...(bonusForm.features || [])];
+Line 1791: setBonusForm({...bonusForm, features: newFeatures});
+Line 1808: const newFeatures = [...(bonusForm.features || [])];
+Line 1810: setBonusForm({...bonusForm, features: newFeatures});
+Line 2293: {activeSection === "bonus" && <div className="pointer-events-none origin-top-left scale-[0.8] w-[125%]"><BonusPreview data={bonusForm} /></div>}
+Line 2314: {activeSection === "testimonials" && <div className="pointer-events-none origin-top-left scale-[0.8] w-[125%]"><TestimonialsPreview data={testimonialsForm} /></div>}

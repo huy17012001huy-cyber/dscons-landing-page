@@ -1,0 +1,11 @@
+{
+  "gifts": [
+    "    { id: \"bonus\", name: \"Quà tặng (Bonus)\", icon: <Gift className=\"w-4 h-4\" /> },",
+    "      label: f.cmd || f.title || \"Quà tặng\",",
+    "        name: \"🎁 QUÀ TẶNG VÀ ƯU ĐÃI\",",
+    "                        <Gift className=\"w-4 h-4\" /> Danh sách quà tặng chi tiết",
+    "                        newFeatures.push({ icon: \"Gift\", cmd: \"Quà tặng mới\", desc: \"Mô tả chi tiết quà tặng\" });",
+    "                        + Thêm quà tặng"
+  ],
+  "testimonials": []
+}

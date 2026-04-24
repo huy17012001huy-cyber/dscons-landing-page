@@ -1,0 +1,18 @@
+�import HeroPreview from "@/components/sections/HeroSection";
+import PainPointsPreview from "@/components/sections/PainPoints";
+import SolutionPreview from "@/components/sections/Solution";
+import CurriculumPreview from "@/components/sections/Curriculum";
+import BonusPreview from "@/components/sections/Bonus";
+import InstructorPreview from "@/components/sections/Instructor";
+import PricingPreview from "@/components/sections/Pricing";
+import FAQPreview from "@/components/sections/FAQ";
+import ComparisonPreview from "@/components/landing/ComparisonTable";
+import NavbarPreview from "@/components/landing/Navbar";
+import OutcomesPreview from "@/components/sections/Outcomes";
+import TestimonialsPreview from "@/components/sections/Testimonials";
+import BottomCTAPreview from "@/components/sections/BottomCTA";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { 
+  LogOut, Layout

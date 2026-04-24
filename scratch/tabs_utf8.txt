@@ -1,0 +1,2 @@
+Line 531: <TabsTrigger value="header-info">Header</TabsTrigger>
+Line 532: <TabsTrigger value="hero-info">Hero</TabsTrigger>
