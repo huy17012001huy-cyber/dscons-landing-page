@@ -282,8 +282,8 @@ export default function Testimonials({ data: previewData }: { data?: any }) {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="hidden md:flex -left-12 border-primary/20 hover:bg-primary/10 hover:text-primary" />
-              <CarouselNext className="hidden md:flex -right-12 border-primary/20 hover:bg-primary/10 hover:text-primary" />
+              <CarouselPrevious className="flex -left-12 h-10 w-10 border-primary/20 hover:bg-primary/10 hover:text-primary transition-all shadow-md" />
+              <CarouselNext className="flex -right-12 h-10 w-10 border-primary/20 hover:bg-primary/10 hover:text-primary transition-all shadow-md" />
             </Carousel>
           </div>
         )}

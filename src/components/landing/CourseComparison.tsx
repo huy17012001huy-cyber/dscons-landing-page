@@ -194,12 +194,12 @@ const ComparisonModal = ({ isOpen, setIsOpen, config, localData, handleInputChan
 
         {/* Table Content */}
         <div className="bg-background/50 overflow-x-auto scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent">
-          <div className="min-w-[600px] md:min-w-full">
+          <div className="w-full min-w-[320px]">
             {/* Table Header */}
-            <div className="grid grid-cols-[1.5fr_1fr_1fr] border-b border-border bg-card shadow-sm">
-              <div className="p-5 md:p-6 text-xs md:text-sm font-bold text-muted-foreground uppercase tracking-widest">Tiêu chí</div>
-              <div className="p-5 md:p-6 text-center text-xs md:text-sm font-black text-primary uppercase tracking-widest bg-primary/5 border-x border-border">DSCons</div>
-              <div className="p-5 md:p-6 text-center text-xs md:text-sm font-bold text-muted-foreground uppercase tracking-widest">Trung tâm khác</div>
+            <div className="grid grid-cols-[1.2fr_1fr_1fr] md:grid-cols-[1.5fr_1fr_1fr] border-b border-border bg-card shadow-sm">
+              <div className="p-3 md:p-6 text-[10px] md:text-sm font-bold text-muted-foreground uppercase tracking-widest">Tiêu chí</div>
+              <div className="p-3 md:p-6 text-center text-[10px] md:text-sm font-black text-primary uppercase tracking-widest bg-primary/5 border-x border-border">DSCons</div>
+              <div className="p-3 md:p-6 text-center text-[10px] md:text-sm font-bold text-muted-foreground uppercase tracking-widest leading-tight">Trung tâm khác</div>
             </div>
 
             {/* Table Body */}
@@ -219,34 +219,34 @@ const ComparisonModal = ({ isOpen, setIsOpen, config, localData, handleInputChan
                     {(Array.isArray(cat.items) ? cat.items : []).map((item: any, itemIdx: number) => {
                       if (!item) return null;
                       return (
-                      <div key={itemIdx} className="grid grid-cols-[1.5fr_1fr_1fr] group hover:bg-muted/20 transition-colors">
+                      <div key={itemIdx} className="grid grid-cols-[1.2fr_1fr_1fr] md:grid-cols-[1.5fr_1fr_1fr] group hover:bg-muted/20 transition-colors">
                         {/* Criterion Label */}
-                        <div className="p-5 md:p-6 flex items-start gap-4">
-                          <span className="text-[11px] md:text-[12px] font-bold text-muted-foreground/50 mt-1">
+                        <div className="p-3 md:p-6 flex items-start gap-2 md:gap-4">
+                          <span className="text-[10px] md:text-[12px] font-bold text-muted-foreground/50 mt-1 hidden md:block">
                             {itemIdx + 1}
                           </span>
                           <span 
-                            className="text-[13px] md:text-sm font-semibold text-foreground/80 leading-relaxed flex-1"
+                            className="text-[11px] md:text-sm font-semibold text-foreground/80 leading-relaxed flex-1"
                             dangerouslySetInnerHTML={{ __html: formatTextGradients(item.label) }}
                           />
                         </div>
 
                         {/* DSCons Value */}
-                        <div className="p-5 md:p-6 flex items-start justify-center text-center bg-primary/5 border-x border-border">
-                          <div className="flex flex-col items-center gap-2">
+                        <div className="p-3 md:p-6 flex items-start justify-center text-center bg-primary/5 border-x border-border">
+                          <div className="flex flex-col items-center gap-1.5 md:gap-2">
                              {item.dsconsIcon === 'check' || (!item.dsconsIcon && (isExactMatch(item.dscons, 'có') || isExactMatch(item.dscons, 'check'))) ? (
-                               <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-600">
-                                 <Check size={18} strokeWidth={3} />
+                               <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-600 shrink-0">
+                                 <Check size={16} strokeWidth={3} className="md:w-[18px] md:h-[18px]" />
                                </div>
                              ) : item.dsconsIcon === 'cross' || (!item.dsconsIcon && isExactMatch(item.dscons, 'không')) ? (
-                               <div className="w-8 h-8 rounded-full bg-rose-500/10 flex items-center justify-center border border-rose-500/20 text-rose-600">
-                                 <X size={18} strokeWidth={3} />
+                               <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-rose-500/10 flex items-center justify-center border border-rose-500/20 text-rose-600 shrink-0">
+                                 <X size={16} strokeWidth={3} className="md:w-[18px] md:h-[18px]" />
                                </div>
                              ) : null}
                              {/* Only display the text if it's not EXACTLY "Có" or "Không" without a manual icon override */}
                              {(!item.dsconsIcon && (isExactMatch(item.dscons, 'có') || isExactMatch(item.dscons, 'không'))) ? null : (
                                <span 
-                                 className={`text-[13px] md:text-[14px] font-bold ${item.highlight ? 'text-rose-500' : 'text-foreground'}`}
+                                 className={`text-[11px] md:text-[14px] font-bold leading-tight ${item.highlight ? 'text-rose-500' : 'text-foreground'}`}
                                  dangerouslySetInnerHTML={{ __html: formatTextGradients(item.dscons) }}
                                />
                              )}
@@ -254,22 +254,23 @@ const ComparisonModal = ({ isOpen, setIsOpen, config, localData, handleInputChan
                         </div>
 
                         {/* Competitor Value */}
-                        <div className="p-5 md:p-6 flex flex-col items-center justify-start gap-4">
+                        <div className="p-3 md:p-6 flex flex-col items-center justify-start gap-2 md:gap-4">
                           {isStatic ? (
-                            <div className="flex flex-col items-center gap-2">
+                            <div className="flex flex-col items-center gap-1.5 md:gap-2">
                                {isExactMatch(item.competitor || "", 'có') || isExactMatch(item.competitor || "", 'check') ? (
-                                 <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-600">
-                                   <Check size={18} strokeWidth={3} />
+                                 <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-600 shrink-0">
+                                   <Check size={16} strokeWidth={3} className="md:w-[18px] md:h-[18px]" />
                                  </div>
                                ) : isExactMatch(item.competitor || "", 'không') ? (
-                                 <div className="w-8 h-8 rounded-full bg-rose-500/10 flex items-center justify-center border border-rose-500/20 text-rose-600">
-                                   <X size={18} strokeWidth={3} />
+                                 <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-rose-500/10 flex items-center justify-center border border-rose-500/20 text-rose-600 shrink-0">
+                                   <X size={16} strokeWidth={3} className="md:w-[18px] md:h-[18px]" />
                                  </div>
-                               ) : null}
-                               <div 
-                                 className="text-center text-sm text-muted-foreground italic"
-                                 dangerouslySetInnerHTML={{ __html: formatTextGradients(item.competitor || "Chưa có thông tin") }}
-                               />
+                               ) : (
+                                 <span 
+                                   className="text-[11px] md:text-[14px] font-semibold text-muted-foreground text-center leading-tight"
+                                   dangerouslySetInnerHTML={{ __html: formatTextGradients(item.competitor || "Chưa có thông tin") }}
+                                 />
+                               )}
                             </div>
                           ) : (
                             <div className="w-full space-y-3">
