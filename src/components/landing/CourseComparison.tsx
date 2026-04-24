@@ -103,7 +103,7 @@ const ComparisonModal = ({ isOpen, setIsOpen, config, localData, handleInputChan
         initial={isStatic ? {} : { opacity: 0, scale: 0.98, y: 10 }} 
         animate={isStatic ? {} : { opacity: 1, scale: 1, y: 0 }} 
         exit={isStatic ? {} : { opacity: 0, scale: 0.98, y: 10 }} 
-        className={isStatic ? "w-full" : "w-full max-w-6xl max-h-[90vh] shadow-2xl rounded-[2rem] overflow-y-auto custom-scrollbar border border-border/50 bg-card relative"}
+        className={isStatic ? "w-full overflow-x-hidden" : "w-full max-w-6xl max-h-[90vh] shadow-2xl rounded-[2rem] overflow-y-auto overflow-x-hidden custom-scrollbar border border-border/50 bg-card relative"}
       >
         {/* Header Section */}
         {!isStatic && (
@@ -149,7 +149,7 @@ const ComparisonModal = ({ isOpen, setIsOpen, config, localData, handleInputChan
               <Button 
                 onClick={handleAIAnalyze} 
                 disabled={isAnalyzing} 
-                className="bg-primary hover:bg-primary/90 text-white px-8 py-6 rounded-2xl text-base font-bold gap-3 shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50"
+                className="w-full md:w-auto bg-primary hover:bg-primary/90 text-white px-5 py-5 md:px-8 md:py-6 rounded-xl md:rounded-2xl text-[14px] md:text-base font-bold gap-2 md:gap-3 shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50"
               >
                 {isAnalyzing ? (
                   <>

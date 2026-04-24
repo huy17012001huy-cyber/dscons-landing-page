@@ -24,13 +24,14 @@ export default function ExitIntentPopup() {
   useEffect(() => {
     if (!config || !config.enabled || hasTriggered) return;
 
-  useEffect(() => {
-    if (!config || !config.enabled || hasTriggered) return;
-
     // Theo dõi thời gian vào trang
     const pageEntryTime = Date.now();
 
     const checkConditions = () => {
+      // ĐIỀU KIỆN 0: Không hiển thị nếu có bất kỳ Modal nào đang mở
+      const hasOpenModals = document.body.style.overflow === 'hidden' || document.body.hasAttribute('data-scroll-locked');
+      if (hasOpenModals) return false;
+
       const timeOnPage = (Date.now() - pageEntryTime) / 1000;
       const scrollY = window.scrollY;
       
