@@ -227,11 +227,12 @@ export const toggleVisibility = async (sectionName: string, isVisible: boolean, 
 
 export const saveCompetitorQuery = async (query: string, studentNeed: string = "", competitorData: any = null) => {
   try {
-    await supabase.from("competitor_queries").insert({ 
+    const { error } = await supabase.from("competitor_queries").insert({ 
       query,
       student_need: studentNeed,
       competitor_data: competitorData
     });
+    if (error) console.error("Supabase insert error:", error);
   } catch (err) {
     console.error("Error saving competitor query", err);
   }
@@ -241,8 +242,7 @@ export const getCompetitorQueries = async () => {
   const { data, error } = await supabase
     .from("competitor_queries")
     .select("*")
-    .order("created_at", { ascending: false })
-    .limit(50);
+    .order("created_at", { ascending: false });
   
   if (error) {
     console.error("Error fetching competitor queries", error);

@@ -19,7 +19,7 @@ import {
   LogOut, LayoutDashboard, Type, ImageIcon, List, Settings, Save, UploadCloud, 
   EyeOff, Loader2, Eye, X, Gift, Key, Globe, LayoutTemplate, AlertCircle, 
   CheckCircle2, Check, RotateCcw, Map, Trophy, Users, MessageSquare, CreditCard, HelpCircle, 
-  Scale, MousePointerClick, Palette, Bot, ChevronDown, ChevronUp, Video, Trash2, Tag
+  Scale, MousePointerClick, Palette, Bot, ChevronDown, ChevronUp, Video, Trash2, Tag, Download, Calendar
 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
@@ -32,6 +32,8 @@ import { LandingPageManager } from "@/components/admin/LandingPageManager";
 import { AccountManager } from "@/components/admin/AccountManager";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 import Switch from "@/components/ui/sky-toggle";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import { motion, AnimatePresence } from "framer-motion";
@@ -47,6 +49,31 @@ export default function Dashboard() {
   const [competitorQueries, setCompetitorQueries] = useState<any[]>([]);
   const [isDark, setIsDark] = useState(true);
   const [showApiKey, setShowApiKey] = useState(false);
+  const [historyDateFilter, setHistoryDateFilter] = useState("");
+
+  const filteredQueries = historyDateFilter 
+    ? competitorQueries.filter(q => {
+        const d = new Date(q.created_at);
+        const localDateStr = d.toLocaleDateString('en-CA');
+        return localDateStr === historyDateFilter;
+      })
+    : competitorQueries;
+
+  const handleExportHistory = () => {
+    const dataToExport = filteredQueries.map((q, idx) => ({
+      "STT": idx + 1,
+      "Thời gian": new Date(q.created_at).toLocaleString('vi-VN'),
+      "Nhu cầu": q.student_need || q.query || "Không nhập nhu cầu",
+      "Dữ liệu đối chiếu": q.competitor_data ? JSON.stringify(q.competitor_data) : ""
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "LichSuTraCuu");
+    
+    const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([wbout], { type: 'application/octet-stream' });
+    saveAs(blob, "LichSuTraCuu.xlsx");
+  };
 
   const sections = [
     { id: "header", name: "Giới thiệu (Header)", icon: <LayoutTemplate className="w-4 h-4" /> },
@@ -545,7 +572,7 @@ export default function Dashboard() {
         {/* Content Area & Live Preview Split */}
         <div className="flex-1 overflow-hidden flex relative">
           {/* Left Panel: Form */}
-          <div className={`${activeSection === "settings" || activeSection === "system-settings" ? "w-full" : activeSection === "comparison" ? "w-[40%]" : "w-[500px]"} flex-shrink-0 overflow-y-auto border-r border-border bg-card/50 transition-all duration-300`}>
+          <div className={`${activeSection === "settings" || activeSection === "system-settings" || (activeSection === "comparison" && comparisonActiveTab === "history") ? "w-full" : activeSection === "comparison" ? "w-[40%]" : "w-[500px]"} flex-shrink-0 overflow-y-auto border-r border-border bg-card/50 transition-all duration-300`}>
             <div className="p-6 border-b bg-muted/40 sticky top-0 z-10 backdrop-blur-sm">
               <h3 className="font-semibold text-lg">Chỉnh sửa nội dung</h3>
               <p className="text-sm text-muted-foreground">Thay đổi nội dung text, hình ảnh cho vùng {activeSection === "settings" ? "Cài đặt hệ thống" : sections.find(s => s.id === activeSection)?.name}.</p>
@@ -1340,18 +1367,39 @@ export default function Dashboard() {
                     ) : (
                       <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
                         <div className="bg-card p-6 rounded-xl border shadow-sm">
-                          <div className="flex items-center justify-between mb-6">
-                            <h3 className="font-bold text-lg">Lịch sử Học viên Tra cứu</h3>
-                            <div className="text-xs text-muted-foreground">Lưu trữ 50 lượt tra cứu gần nhất</div>
+                          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
+                            <div>
+                              <h3 className="font-bold text-lg">Lịch sử Học viên Tra cứu</h3>
+                              <div className="text-xs text-muted-foreground">Lưu trữ tất cả lượt tra cứu</div>
+                            </div>
+                            <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                              <div className="relative w-full md:w-auto">
+                                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                                <input 
+                                  type="date" 
+                                  value={historyDateFilter}
+                                  onChange={(e) => setHistoryDateFilter(e.target.value)}
+                                  className="h-9 w-full md:w-[160px] rounded-md border border-input bg-background pl-9 pr-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                                />
+                              </div>
+                              {historyDateFilter && (
+                                <Button variant="ghost" size="sm" onClick={() => setHistoryDateFilter("")} className="h-9 px-2 text-xs">
+                                  Xóa lọc
+                                </Button>
+                              )}
+                              <Button onClick={handleExportHistory} variant="outline" size="sm" className="h-9 gap-2 w-full md:w-auto">
+                                <Download className="w-4 h-4" /> Xuất Excel
+                              </Button>
+                            </div>
                           </div>
                           
-                          {competitorQueries.length === 0 ? (
+                          {filteredQueries.length === 0 ? (
                             <div className="text-center py-12 bg-muted/20 rounded-xl border-2 border-dashed border-border">
-                              <p className="text-muted-foreground">Chưa có lượt tra cứu nào.</p>
+                              <p className="text-muted-foreground">Chưa có lượt tra cứu nào phù hợp.</p>
                             </div>
                           ) : (
                             <div className="space-y-4">
-                              {competitorQueries.map((q, idx) => (
+                              {filteredQueries.map((q, idx) => (
                                 <details key={idx} className="group bg-muted/30 border border-border rounded-xl overflow-hidden transition-all hover:border-primary/30">
                                   <summary className="flex justify-between items-center p-4 cursor-pointer hover:bg-muted/50 transition-colors list-none">
                                     <div className="flex items-center gap-4">
@@ -1377,20 +1425,22 @@ export default function Dashboard() {
                                       <div>
                                         <h4 className="text-xs font-bold uppercase text-muted-foreground mb-2">Dữ liệu đối chiếu:</h4>
                                         <div className="overflow-x-auto rounded-lg border">
-                                          <table className="w-full text-xs">
+                                          <table className="w-full text-xs table-fixed">
                                             <thead className="bg-muted">
                                               <tr>
-                                                <th className="px-3 py-2 text-left border-r">Tiêu chí</th>
-                                                <th className="px-3 py-2 text-left border-r text-primary">DSCons</th>
-                                                <th className="px-3 py-2 text-left">Trung tâm khác</th>
+                                                <th className="w-1/3 px-3 py-2 text-left border-r">Tiêu chí</th>
+                                                <th className="w-1/3 px-3 py-2 text-left border-r text-primary">DSCons</th>
+                                                <th className="w-1/3 px-3 py-2 text-left">Trung tâm khác</th>
                                               </tr>
                                             </thead>
                                             <tbody>
                                               {q.competitor_data.map((item: any, i: number) => (
                                                 <tr key={i} className="border-t">
-                                                  <td className="px-3 py-2 border-r font-medium">{item.criterion}</td>
-                                                  <td className="px-3 py-2 border-r text-primary font-bold">{item.dscons}</td>
-                                                  <td className="px-3 py-2 italic text-muted-foreground">{item.competitor}</td>
+                                                  <td className="px-3 py-2 border-r font-medium break-words">{item.criterion}</td>
+                                                  <td className="px-3 py-2 border-r text-primary font-bold break-words">
+                                                    <div dangerouslySetInnerHTML={{ __html: item.dscons }} className="prose prose-sm max-w-none prose-p:my-0" />
+                                                  </td>
+                                                  <td className="px-3 py-2 italic text-muted-foreground break-words">{item.competitor}</td>
                                                 </tr>
                                               ))}
                                             </tbody>
@@ -2795,7 +2845,7 @@ export default function Dashboard() {
             </div>
           </div>
                     {/* Right Panel: Live Preview */}
-          {activeSection !== "settings" && activeSection !== "system-settings" && (
+          {activeSection !== "settings" && activeSection !== "system-settings" && !(activeSection === "comparison" && comparisonActiveTab === "history") && (
             <div className="flex-1 w-full bg-background relative isolate overflow-x-hidden overflow-y-auto">
                {activeSection === "header" && (
                   <div className="pointer-events-none origin-top-left scale-[0.8] w-[125%] h-full">
