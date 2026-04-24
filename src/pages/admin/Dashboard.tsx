@@ -64,6 +64,7 @@ export default function Dashboard() {
       "STT": idx + 1,
       "Thời gian": new Date(q.created_at).toLocaleString('vi-VN'),
       "Nhu cầu": q.student_need || q.query || "Không nhập nhu cầu",
+      "Điểm phân vân": q.student_hesitation || "Không nhập điểm phân vân",
       "Dữ liệu đối chiếu": q.competitor_data ? JSON.stringify(q.competitor_data) : ""
     }));
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
@@ -1417,9 +1418,16 @@ export default function Dashboard() {
                                     {q.student_need && (
                                       <div>
                                         <h4 className="text-xs font-bold uppercase text-muted-foreground mb-1">Nhu cầu chi tiết:</h4>
-                                        <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg">{q.student_need}</p>
+                                        <p className="text-sm text-foreground bg-muted/50 p-3 rounded-lg whitespace-pre-wrap">{q.student_need}</p>
                                       </div>
                                     )}
+
+                                      <div>
+                                        <h4 className="text-xs font-bold uppercase text-rose-500 mb-1">Điểm phân vân:</h4>
+                                        <p className={`text-sm p-3 rounded-lg whitespace-pre-wrap ${q.student_hesitation ? 'text-foreground bg-rose-500/10 border border-rose-500/20' : 'text-muted-foreground italic bg-muted/50 border border-border/50'}`}>
+                                          {q.student_hesitation || "Không nhập điểm phân vân"}
+                                        </p>
+                                      </div>
                                     
                                     {q.competitor_data && Array.isArray(q.competitor_data) && (
                                       <div>

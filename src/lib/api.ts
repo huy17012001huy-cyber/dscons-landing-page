@@ -225,11 +225,12 @@ export const toggleVisibility = async (sectionName: string, isVisible: boolean, 
 // OTHER FUNCTIONS
 // ==========================================
 
-export const saveCompetitorQuery = async (query: string, studentNeed: string = "", competitorData: any = null) => {
+export const saveCompetitorQuery = async (query: string, studentNeed: string = "", competitorData: any = null, studentHesitation: string = "") => {
   try {
     const { error } = await supabase.from("competitor_queries").insert({ 
       query,
       student_need: studentNeed,
+      student_hesitation: studentHesitation,
       competitor_data: competitorData
     });
     if (error) console.error("Supabase insert error:", error);

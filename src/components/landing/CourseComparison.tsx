@@ -74,7 +74,7 @@ const sanitizeAIHtml = (value: any, preserveNewlines = false) => {
   return template.innerHTML;
 };
 
-const ComparisonModal = ({ isOpen, setIsOpen, config, localData, handleInputChange, handleAIAnalyze, isAnalyzing, showResult, aiData, isStatic = false, studentNeed, setStudentNeed }: any) => {
+const ComparisonModal = ({ isOpen, setIsOpen, config, localData, handleInputChange, handleAIAnalyze, isAnalyzing, showResult, aiData, isStatic = false, studentNeed, setStudentNeed, studentHesitation, setStudentHesitation }: any) => {
   useEffect(() => {
     if (!isStatic && isOpen) {
       document.body.style.overflow = 'hidden';
@@ -139,6 +139,7 @@ const ComparisonModal = ({ isOpen, setIsOpen, config, localData, handleInputChan
                 onClick={() => {
                   localStorage.removeItem("dscons_comparison_draft");
                   localStorage.removeItem("dscons_student_need");
+                  localStorage.removeItem("dscons_student_hesitation");
                   window.location.reload();
                 }} 
                 className="bg-background hover:bg-muted text-muted-foreground px-4 py-6 rounded-2xl text-sm font-medium gap-2 shadow-sm transition-all"
@@ -340,6 +341,31 @@ const ComparisonModal = ({ isOpen, setIsOpen, config, localData, handleInputChan
           </div>
         </div>
 
+        {/* Student Hesitation Input Section */}
+        {!isStatic && (
+          <div className="bg-muted/10 px-6 py-6 md:px-12 border-t border-border shrink-0 mt-4 mb-4">
+            <div className="max-w-4xl mx-auto">
+              <label className="flex items-center gap-2 text-sm font-black text-foreground mb-3 uppercase tracking-wider">
+                <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                  <Sparkles size={14} />
+                </div>
+                Điểm phân vân của bạn (Tùy chọn):
+              </label>
+              <textarea 
+                value={studentHesitation || ""}
+                onChange={(e) => setStudentHesitation(e.target.value)}
+                placeholder="VD: Nếu bạn đang phân vân với trung tâm khác, điều gì khiến bạn khó lựa chọn nhất? (Ví dụ: Học phí bên kia rẻ hơn, thời gian học bên kia ngắn hơn...)"
+                rows={3}
+                className="w-full bg-background border border-border rounded-2xl p-4 text-[14px] md:text-base text-foreground focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all resize-none shadow-sm placeholder:text-muted-foreground/40 font-medium leading-relaxed"
+              />
+              <p className="mt-3 text-[12px] text-muted-foreground flex items-center gap-2 font-medium italic">
+                <Bot size={14} className="text-primary" />
+                Dựa vào điều này, AI sẽ phân tích và đưa ra góc nhìn khách quan giúp bạn dễ dàng quyết định hơn.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Footer / AI Verdict Section removed from here, moved to separate Modal */}
       </motion.div>
     </div>
@@ -354,6 +380,7 @@ export default function CourseComparison({ data: previewData, isPreview = false 
   const [config, setConfig] = useState<any>(null);
   const [localData, setLocalData] = useState<any[]>([]);
   const [studentNeed, setStudentNeed] = useState<string>("");
+  const [studentHesitation, setStudentHesitation] = useState<string>("");
 
   useEffect(() => {
     const loadData = async () => {
@@ -367,9 +394,14 @@ export default function CourseComparison({ data: previewData, isPreview = false 
       // Load saved draft from localStorage if available
       const savedDraft = localStorage.getItem("dscons_comparison_draft");
       const savedNeed = localStorage.getItem("dscons_student_need");
+      const savedHesitation = localStorage.getItem("dscons_student_hesitation");
       
       if (savedNeed && !isPreview) {
         setStudentNeed(savedNeed);
+      }
+
+      if (savedHesitation && !isPreview) {
+        setStudentHesitation(savedHesitation);
       }
       
       if (savedDraft && !isPreview) {
@@ -394,6 +426,13 @@ export default function CourseComparison({ data: previewData, isPreview = false 
     setStudentNeed(value);
     if (!isPreview) {
       localStorage.setItem("dscons_student_need", value);
+    }
+  };
+
+  const handleStudentHesitationChange = (value: string) => {
+    setStudentHesitation(value);
+    if (!isPreview) {
+      localStorage.setItem("dscons_student_hesitation", value);
     }
   };
 
@@ -425,11 +464,12 @@ export default function CourseComparison({ data: previewData, isPreview = false 
         saveCompetitorQuery(
           studentNeed || "Chưa nhập nhu cầu", 
           studentNeed, 
-          dataForAI
+          dataForAI,
+          studentHesitation
         ).catch(err => console.error("Could not save query", err));
       }
 
-      const result = await analyzeCompetitor(dataForAI, studentNeed);
+      const result = await analyzeCompetitor(dataForAI, studentNeed, studentHesitation);
       
       if (result && result.aiData) {
         setAiData(result.aiData);
@@ -464,6 +504,8 @@ export default function CourseComparison({ data: previewData, isPreview = false 
              isStatic={true} 
              studentNeed={studentNeed}
              setStudentNeed={handleStudentNeedChange}
+             studentHesitation={studentHesitation}
+             setStudentHesitation={handleStudentHesitationChange}
            />
         </div>
       </div>
@@ -526,6 +568,8 @@ export default function CourseComparison({ data: previewData, isPreview = false 
             isAnalyzing={isAnalyzing} 
             studentNeed={studentNeed}
             setStudentNeed={handleStudentNeedChange}
+            studentHesitation={studentHesitation}
+            setStudentHesitation={handleStudentHesitationChange}
           />
         )}
       </AnimatePresence>
