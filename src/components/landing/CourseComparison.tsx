@@ -193,8 +193,8 @@ const ComparisonModal = ({ isOpen, setIsOpen, config, localData, handleInputChan
         )}
 
         {/* Table Content */}
-        <div className="bg-background/50">
-          <div className="min-w-[600px]">
+        <div className="bg-background/50 overflow-x-auto scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent">
+          <div className="min-w-[600px] md:min-w-full">
             {/* Table Header */}
             <div className="grid grid-cols-[1.5fr_1fr_1fr] border-b border-border bg-card shadow-sm">
               <div className="p-5 md:p-6 text-xs md:text-sm font-bold text-muted-foreground uppercase tracking-widest">Tiêu chí</div>
