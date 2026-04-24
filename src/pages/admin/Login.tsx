@@ -57,7 +57,7 @@ export default function Login() {
             <p className="text-sm text-muted-foreground">Đăng nhập quyền Quản trị viên</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleLogin} className="space-y-6" autoComplete="off">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <div className="relative">
@@ -66,6 +66,7 @@ export default function Login() {
                   id="email"
                   type="email"
                   placeholder="admin@dscons.vn"
+                  autoComplete="off"
                   className="pl-10 bg-background/50 border-primary/20 text-foreground transition-all [&:-webkit-autofill]:transition-all [&:-webkit-autofill]:duration-[5000s] [&:-webkit-autofill]:ease-in-out [&:-webkit-autofill]:[-webkit-text-fill-color:white]"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -82,6 +83,7 @@ export default function Login() {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
+                  autoComplete="new-password"
                   className="pl-10 pr-10 bg-background/50 border-primary/20 text-foreground transition-all [&:-webkit-autofill]:transition-all [&:-webkit-autofill]:duration-[5000s] [&:-webkit-autofill]:ease-in-out [&:-webkit-autofill]:[-webkit-text-fill-color:white]"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
