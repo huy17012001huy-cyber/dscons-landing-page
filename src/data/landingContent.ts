@@ -50,12 +50,12 @@ export const landingData: any = {
     ],
     techLogosHeading: "Công cụ và công nghệ trong khóa học",
     techLogos: [
-      { id: "logo-1", image: "https://svgl.app/library/nvidia-wordmark-light.svg", className: "h-7 w-auto" },
-      { id: "logo-2", image: "https://svgl.app/library/supabase_wordmark_light.svg", className: "h-7 w-auto" },
-      { id: "logo-3", image: "https://svgl.app/library/openai_wordmark_light.svg", className: "h-7 w-auto" },
-      { id: "logo-4", image: "https://svgl.app/library/turso-wordmark-light.svg", className: "h-7 w-auto" },
-      { id: "logo-5", image: "https://svgl.app/library/vercel_wordmark.svg", className: "h-7 w-auto" },
-      { id: "logo-6", image: "https://svgl.app/library/github_wordmark_light.svg", className: "h-7 w-auto" }
+      { id: "logo-1", name: "Revit MEP", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Autodesk_Revit_2024_Icon.png/512px-Autodesk_Revit_2024_Icon.png", className: "h-8 w-auto grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all" },
+      { id: "logo-2", name: "Navisworks", image: "https://d2o6u5z37tov3w.cloudfront.net/wp-content/uploads/2021/08/navisworks-manage-2022.png", className: "h-8 w-auto grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all" },
+      { id: "logo-3", name: "AutoCAD", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/AutoCAD_logo.svg/512px-AutoCAD_logo.svg.png", className: "h-8 w-auto grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all" },
+      { id: "logo-4", name: "BIM 360", image: "https://seekvectorlogo.com/wp-content/uploads/2020/03/bim-360-vector-logo.png", className: "h-8 w-auto grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all" },
+      { id: "logo-5", name: "Dynamo", image: "https://primer.dynamobim.org/images/dynamo_logo_dark.png", className: "h-8 w-auto grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all" },
+      { id: "logo-6", name: "MagiCAD", image: "https://www.magicad.com/wp-content/uploads/2017/04/MagiCAD_Logo_RGB.png", className: "h-8 w-auto grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all" }
     ]
   },
   benefits: {

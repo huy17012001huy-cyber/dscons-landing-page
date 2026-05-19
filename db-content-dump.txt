@@ -1,0 +1,939 @@
+﻿
+// ===== SECTION: benefits (visible: true) =====
+{
+  "badge": "GIß║óI PH├üP Tß╗¬ DSCons",
+  "items": [
+    {
+      "title": "Th├ánh thß║ío dß╗▒ng h├¼nh 3D Full c├íc hß╗ç",
+      "description": "L├¬n m├┤ h├¼nh ch├¡nh x├íc, kiß╗âm so├ít mß╗ìi chi tiß║┐t hß╗ç thß╗æng tß╗½ ─æiß╗çn, n╞░ß╗¢c, ─æiß╗üu h├▓a ─æß║┐n chß╗»a ch├íy."
+    },
+    {
+      "title": "B├│c t├ích khß╗æi l╞░ß╗úng ho├án to├án tß╗▒ ─æß╗Öng",
+      "description": "Tß╗½ c╞í bß║ún ─æß║┐n chuy├¬n s├óu, hß╗ù trß╗ú tß╗▒ ─æß╗Öng lß║¡p bß║úng dß╗▒ to├ín ch├¡nh x├íc tuyß╗çt ─æß╗æi."
+    },
+    {
+      "title": "Tß║ío lß║¡p hß╗ô s╞í bß║ún vß║╜ kh├┤ng sai lß╗çch",
+      "description": "Cß║»t mß║╖t bß║▒ng, tß║ío mß║╖t cß║»t v├á s╞í ─æß╗ô kh├┤ng gian 3D tß╗▒ ─æß╗Öng, chuy├¬n nghiß╗çp."
+    },
+    {
+      "title": "Tuyß╗çt chi├¬u phß╗æi hß╗úp quß║ún l├╜ dß╗▒ ├ín (BIM)",
+      "description": "Xuß║Ñt bß║ún vß║╜ m╞░ß╗út m├á sang CAD, PDF v├á sß╗¡ dß╗Ñng Navisworks ─æß╗â xß╗¡ l├╜ va chß║ím tß╗æi ╞░u."
+    }
+  ],
+  "title": "Ch├¼a kh├│a v├áng: Nß║»m vß╗»ng Revit MEPF trß╗ìn vß║╣n"
+}
+
+// ===== SECTION: bonus (visible: true) =====
+{
+  "title": "V┼⌐ kh├¡ b├¡ mß║¡t **─ân ─æß╗⌐t ─æß╗æi thß╗º**",
+  "features": [
+    {
+      "cmd": "Th╞░ viß╗çn Family 3D (2.000K)",
+      "desc": "Trß╗ú thß╗º l├ám dß╗▒ ├ín si├¬u nhanh, ─æß╗Öc quyß╗ün DSCons (Tß║╖ng sau kh├│a hß╗ìc).",
+      "icon": "Package",
+      "mediaUrl": "https://online.dscons.vn/course/bo-family-chuyen-trien-khai-du-an-dscons/",
+      "mediaType": "website"
+    },
+    {
+      "cmd": "Bß╗Ö DSCons Tool 4 Th├íng (700K)",
+      "desc": "T─âng x30% tß╗æc ─æß╗Ö rß║úi tay, d├╣ng nghiß╗çn nh╞░ lisp CAD. K├¡ch hoß║ít v├áo hß╗ìc.",
+      "icon": "Wrench",
+      "mediaUrl": "https://www.youtube.com/watch?v=SRe8aEQKKDI&list=PLBPQjdqUuni3jfhwvn5woMwfmIJG27vKG",
+      "mediaType": "youtube"
+    },
+    {
+      "cmd": "Kh├│a Video Dß╗▒ng h├¼nh full c├íc hß╗ç C╞í ─Éiß╗çn(696K)",
+      "desc": "Gi├ío tr├¼nh video full c├íc hß╗ç c╞í ─æiß╗çn ─æß╗â nh├óm nhi v├á thß╗▒c h├ánh tß║íi nh├á.",
+      "icon": "Video",
+      "mediaUrl": "https://online.dscons.vn/course/dung-hinh-revit-mep-full-cac-he-co-dien/",
+      "mediaType": "website"
+    },
+    {
+      "cmd": "Kh├│a hß╗ìc Navisworks (796K)",
+      "desc": "Kiß╗âm so├ít c├íc ─æß║ºu mß╗æi va chß║ím gß║»t gao giß╗»a hß╗ç thß╗æng (Giß║úi cß╗⌐u c├┤ng tr├¼nh).",
+      "icon": "Layers",
+      "mediaUrl": "https://online.dscons.vn/course/naviswork-kiem-soat-va-xu-ly-xung-dot-cac-bo-mon/",
+      "mediaType": "website"
+    },
+    {
+      "cmd": "Kh├│a B├│c T├ích/Tr├¼nh b├áy hß╗ô s╞í bß║ún vß║╜",
+      "desc": "Bß╗Ö video tß╗▒ ─æß╗Öng t├¡nh khß╗æi l╞░ß╗úng tß║ío hß╗ô s╞í bß║ún vß║╜ chuß║⌐n tß╗½ng n├⌐t thiß║┐t kß║┐.",
+      "icon": "FileText",
+      "mediaUrl": "https://online.dscons.vn/course/boc-tach-kiem-soat-khoi-luong-trien-khai-ho-so-ban-ve/",
+      "mediaType": "website"
+    }
+  ],
+  "subtitle": "≡ƒÄü ╞»U ─É├âI Tß║╢NG K├êM 6.150K",
+  "boxLeftDesc": "<p>Tuyß╗çt ─æß╗æi kh├┤ng ─æß╗â hß╗ìc vi├¬n tay trß║»ng l├¬n ─æß║Ñu tr╞░ß╗¥ng. Kh├│a hß╗ìc trao tß║¡n tay hß╗ç thß╗æng Tool add-in kß║┐t hß╗úp h├áng tr─âm Video chß║Ñt x├ím cao nhß║Ñt, r├║t ngß║»n 50% thß╗¥i l╞░ß╗úng thao t├íc bß║▒ng tay.</p>",
+  "boxLeftNote": "Bß║Ñm v├áo tß╗½ng mß╗Ñc ─æß╗â xem chi tiß║┐t phß║ºn qu├á b├¬n trong.",
+  "description": "<p>Hß╗ìc ph├¡ !!<strong>3.900K!!</strong> nh╞░ng DSCons tß║╖ng bß║ín g├│i qu├á ─æß╗ô sß╗Ö trß╗ï gi├í tß╗¢i ~~5<strong>.200K~~.</strong></p>",
+  "boxLeftTitle": "Hß╗ç Sinh Th├íi Kß║┐ Thß╗½a Tß╗½ DSCons",
+  "boxLeftSubtitle": "Γ¡É Tß╗öNG TRß╗è GI├ü 5.200K"
+}
+
+// ===== SECTION: comparison (visible: true) =====
+{
+  "title": "─Éß╗¬NG LO Lß║«NG Nß║╛U NH╞»  Bß║áN ─ÉANG PH├éN V├éN",
+  "ctaBadge": "T├¡nh n─âng ─æß╗Öc quyß╗ün",
+  "ctaTitle": "Bß║ín c├▓n ─æang ph├ón v├ón vß╗¢i c├íc Trung t├óm kh├íc hay lo lß║»ng m├¼nh kh├┤ng ph├╣ hß╗úp vß╗¢i kh├│a hß╗ìc n├áy ?",
+  "buttonText": "Bß║«T ─Éß║ªU SO S├üNH Tß╗░ ─Éß╗ÿNG",
+  "categories": [
+    {
+      "name": "≡ƒÄô TH├öNG TIN KH├ôA Hß╗îC",
+      "items": [
+        {
+          "label": "Sß╗æ l╞░ß╗úng buß╗òi hß╗ìc",
+          "dscons": "<p>12 buß╗òi</p>",
+          "highlight": false
+        },
+        {
+          "label": "Thß╗¥i l╞░ß╗úng 1 buß╗òi hß╗ìc",
+          "dscons": "<p>3 tiß║┐ng</p>",
+          "highlight": false
+        },
+        {
+          "label": "Tß╗òng thß╗¥i l╞░ß╗úng",
+          "dscons": "<p>36 tiß║┐ng</p>",
+          "highlight": false
+        },
+        {
+          "label": "Thß╗¥i gian ho├án th├ánh",
+          "dscons": "<p>1,5 th├íng</p>",
+          "highlight": false
+        },
+        {
+          "label": "Hß╗ìc ph├¡ kh├│a hß╗ìc",
+          "dscons": "<p>3.900K</p>",
+          "highlight": false
+        },
+        {
+          "label": "Hß╗ìc ph├¡/1 buß╗òi",
+          "dscons": "<p>325K</p>",
+          "highlight": false
+        },
+        {
+          "label": "Hß╗ìc ph├¡/1h",
+          "dscons": "<p>~&nbsp;100K</p>",
+          "highlight": false
+        },
+        {
+          "label": "Hß╗ìc bß║úo l╞░u/cß║úi thiß╗çn",
+          "dscons": "<p>1 lß║ºn hß╗ìc bß║úo l╞░u/cß║úi thiß╗çn miß╗àn ph├¡</p>",
+          "highlight": false
+        }
+      ]
+    },
+    {
+      "name": "≡ƒÄü QU├Ç Tß║╢NG V├Ç ╞»U ─É├âI",
+      "items": [
+        {
+          "label": "Qu├á tß║╖ng 1",
+          "dscons": "<p>Th╞░ viß╗çn Family 3D --(2.000K)--</p>",
+          "highlight": false
+        },
+        {
+          "label": "Qu├á tß║╖ng 2",
+          "dscons": "<p>Bß╗Ö DSCons Tool 4 Th├íng --(700K)--</p>",
+          "highlight": false
+        },
+        {
+          "label": "Qu├á tß║╖ng 3",
+          "dscons": "<p>Kh├│a Video Dß╗▒ng h├¼nh --(696K)--</p>",
+          "highlight": false
+        },
+        {
+          "label": "Qu├á tß║╖ng 4",
+          "dscons": "<p>Kh├│a hß╗ìc Navisworks --(696K)--</p>",
+          "highlight": false
+        },
+        {
+          "label": "Qu├á tß║╖ng 5",
+          "dscons": "<p>Kh├│a B├│c T├ích khß╗æi l╞░ß╗úng/ Triß╗ân khai hß╗ô s╞í bß║ún vß║╜ --(996K)--</p>",
+          "highlight": false
+        },
+        {
+          "label": "Qu├á tß║╖ng 6",
+          "dscons": "<p>Kh├┤ng</p>",
+          "highlight": false
+        },
+        {
+          "label": "Qu├á tß║╖ng 7",
+          "dscons": "<p>Kh├┤ng</p>",
+          "highlight": false
+        }
+      ]
+    },
+    {
+      "name": "≡ƒÅà H├îNH THß╗¿C Hß╗îC & CHß╗¿NG NHß║¼N",
+      "items": [
+        {
+          "label": "H├¼nh thß╗⌐c hß╗ìc",
+          "dscons": "<p>~~Online qua Zoom hoß║╖c Offline trung t├óm ß╗ƒ H├á Nß╗Öi~~</p>",
+          "highlight": false
+        },
+        {
+          "label": "Cß║Ñp chß╗⌐ng nhß║¡n",
+          "dscons": "<p>C├│</p>",
+          "highlight": false,
+          "isInteractive": true
+        },
+        {
+          "label": "Bß║úo l╞░u kh├│a hß╗ìc",
+          "dscons": "<p>C├│</p>",
+          "highlight": false
+        }
+      ]
+    },
+    {
+      "name": "≡ƒô¥CHß║ñM B├ÇI & Hß╗û TRß╗ó Hß╗îC Tß║¼P",
+      "items": [
+        {
+          "label": "Chß║Ñm b├ái v├á chß╗»a b├ái",
+          "dscons": "<p>~~Chß║Ñm chi tiß║┐t tß╗½ng buß╗òi hß╗ìc: c├│ bß║úng ─æiß╗âm + nhß║¡n x├⌐t~~</p>",
+          "highlight": false,
+          "dsconsIcon": "check"
+        },
+        {
+          "label": "K├¿m cß║╖p l├ám BTVN",
+          "dscons": "<p>[[K├¿m 1-1 tß╗½ng hß╗ìc vi├¬n tr├¬n nh├│m]]</p>",
+          "highlight": false
+        },
+        {
+          "label": "M├┤ phß╗Ång hß╗ç thß╗æng cho ng╞░ß╗¥i tr├íi ng├ánh",
+          "dscons": "<p>;;C├│ <strong>video m├┤ phß╗Ång</strong>, diß╗àn giß║úi nguy├¬n l├╜ hß╗ç thß╗æng;;</p>",
+          "highlight": false
+        },
+        {
+          "label": "C├│ hß╗ç thß╗æng Chatbot AI giß║úi ─æ├íp hß╗ìc vi├¬n",
+          "dscons": "<p>C├│</p>",
+          "highlight": false,
+          "dsconsIcon": "check"
+        }
+      ]
+    },
+    {
+      "name": "≡ƒô₧GIß║óI ─É├üP & CAM Kß║╛T\t\t",
+      "items": [
+        {
+          "label": "Giß║úi ─æ├íp tr╞░ß╗¢c/sau kh├│a hß╗ìc",
+          "dscons": "<p>C├│</p>",
+          "highlight": false
+        },
+        {
+          "label": "&&Cam kß║┐t th├ánh thß║ío (kh├┤ng th├ánh thß║ío ho├án trß║ú 100% hß╗ìc ph├¡)&&",
+          "dscons": "<p>C├│</p>",
+          "highlight": false
+        }
+      ]
+    },
+    {
+      "name": "≡ƒÆ¼T╞»╞áNG T├üC & ─Éß╗èNH H╞»ß╗ÜNG",
+      "items": [
+        {
+          "label": "T╞░╞íng t├íc qua Zoom",
+          "dscons": "<p>DSCons c├│ ph╞░╞íng ph├íp gi├║p hß╗ìc vi├¬n li├¬n tß╗Ñc t╞░╞íng t├íc</p>",
+          "highlight": false
+        },
+        {
+          "label": "T╞░ vß║Ñn lß╗Ö tr├¼nh hß╗ìc",
+          "dscons": "<p>T╞░ vß║Ñn ─æß║ºy ─æß╗º lß╗Ö tr├¼nh, ─æ├áo s├óu v├áo tß╗½ng phß║ºn gi├║p hß╗ìc vi├¬n trang bß╗ï c├│ ─æß║ºy ─æß╗º kiß║┐n thß╗⌐c chuy├¬n s├óu</p>",
+          "highlight": false
+        }
+      ]
+    },
+    {
+      "name": "Γ¡ÉQUY M├ö TRUNG T├éM",
+      "items": [
+        {
+          "label": "Sß╗æ l╞░ß╗úng hß╗ìc vi├¬n ─æ├ú ─æ├áo tß║ío (Offline)",
+          "dscons": "<p>~~Khoß║úng 2.500 hß╗ìc vi├¬n~~</p>",
+          "highlight": false
+        },
+        {
+          "label": "Sß╗æ l╞░ß╗úng hß╗ìc vi├¬n ─æ├ú ─æ├áo tß║ío (Online)",
+          "dscons": "<p>;;Khoß║úng 20.000 hß╗ìc vi├¬n;;</p>",
+          "highlight": false
+        },
+        {
+          "label": "Sß╗æ l╞░ß╗úng doanh nghiß╗çp ─æ├ú ─æ├áo tß║ío",
+          "dscons": "<p>~~Khoß║úng 30 doanh nghiß╗çp~~</p>",
+          "highlight": false
+        }
+      ]
+    }
+  ],
+  "description": "H├úy ─æiß╗ün c├íc th├┤ng tin v├áo mß╗Ñc \"Trung t├óm kh├íc\" ─æß╗â AI tß╗▒ ─æß╗Öng ph├ón t├¡ch v├á ─æ╞░a ra lß╗¥i khuy├¬n ph├╣ hß╗úp vß╗¢i nhu cß║ºu cß╗ºa bß║ín. \n\nC├▓n nß║┐u bß║ín chß╗ë muß╗æn xem m├¼nh ph├╣ hß╗úp vß╗¢i kh├│a n├áy hay kh├┤ng th├¼ h├úy ─æiß╗ün v├áo mß╗Ñc \"Mß╗Ñc ti├¬u/nhu cß║ºu cß╗ºa bß║ín\" rß╗ôi bß║Ñm n├║t l├á ─æ╞░ß╗úc.",
+  "ctaDescription": "─Éß╗½ng lo, h├úy ─æß╗â ~~Trß╗ú l├╜ AI~~ tß╗▒ ─æß╗Öng ph├ón t├¡ch v├á so s├ính chi tiß║┐t gi├║p bß║ín ─æ╞░a ra quyß║┐t ─æß╗ïnh tß╗æt nhß║Ñt!"
+}
+
+// ===== SECTION: cta (visible: true) =====
+{
+  "href": "https://zalo.me/0917379181",
+  "title": "Mß╗ùi tuß║ºn kh├┤ng c├│ Revit, ─æß╗ông nghiß╗çp bß║ín ─æang bß╗Å xa th├¬m mß╗Öt bß║¡c",
+  "button": "Nhß║¡n Template + ─É─âng k├╜ hß╗ìc thß╗▒c chiß║┐n ┬╖ 3.900K",
+  "copyright": "┬⌐ 2026 DSCons Global Academy. All rights reserved.",
+  "statusText": "Kh├│a K4 ─æang bß║»t ─æß║ºu",
+  "description": "200+ kß╗╣ s╞░ ─æ├ú tß╗æt nghiß╗çp kh├│a DSCons v├á ─æang l├ám viß╗çc tß║íi Coteccons, H├▓a B├¼nh, REE M&E. Hß╗ì ─æang xuß║Ñt hß╗ô s╞í Shop Drawing trong 4 ng├áy trong khi bß║ín vß║½n ─æang ─æß║┐m fitting bß║▒ng tay. Tham gia ngay ─æß╗â nhß║¡n Template chuß║⌐n DSCons + k├¿m 1-1 Ultraview + 5 kh├│a hß╗ìc bonus (Trß╗ï gi├í 6.150K).",
+  "socialLinks": {
+    "zalo": "https://zalo.me/0917379181",
+    "website": "https://dscons.vn",
+    "youtube": "https://youtube.com",
+    "facebook": "https://facebook.com"
+  },
+  "supportLink": "https://zalo.me/0917379181",
+  "scheduleText": "Thß╗⌐ 3 - 5 (19h30 - 21h30)",
+  "countdownDate": "2026-05-15T19:30:00"
+}
+
+// ===== SECTION: curriculum (visible: true) =====
+{
+  "badge": "Lß╗ÿ TR├îNH ─É├ÇO Tß║áO",
+  "title": "~~12 Buß╗òi Thß╗▒c Chiß║┐n Xuy├¬n Suß╗æt Lß╗Ö Tr├¼nh~~",
+  "modules": [
+    {
+      "id": "m1",
+      "title": "MODULE 1 ΓÇó Dß╗░NG H├îNH 3D FULL C├üC Hß╗å C╞á ─ÉIß╗åN",
+      "lessons": [
+        {
+          "id": "01",
+          "desc": "<p><em>L├ám quen vß╗¢i giao diß╗çn phß║ºn mß╗üm v├á thiß║┐t lß║¡p nß╗ün tß║úng dß╗▒ ├ín ban ─æß║ºu.&nbsp;</em></p>",
+          "icon": "Monitor",
+          "title": "Tß╗òng quan kh├│a hß╗ìc & Khß╗ƒi tß║ío dß╗▒ ├ín",
+          "details": [
+            "L├ám quen giao diß╗çn, hß╗ç thß╗æng c├óy th╞░ mß╗Ñc v├á c├íc phß║ºn mß╗üm hß╗ù trß╗ú.",
+            "H╞░ß╗¢ng dß║½n c├íc nß╗Öi dung xuy├¬n suß╗æt kh├│a hß╗ìc",
+            "Thß╗▒c h├ánh x├óy dß╗▒ng m├┤ h├¼nh Kiß║┐n Tr├║c - Kß║┐t Cß║Ñu d╞░ß╗¢i g├│c nh├¼n Kß╗╣ s╞░ C╞í ─Éiß╗çn"
+          ]
+        },
+        {
+          "id": "02",
+          "desc": "<p><em>Bß║»t ─æß║ºu dß╗▒ng h├¼nh mß║íng l╞░ß╗¢i ß╗æng gi├│ c╞í bß║ún v├á kiß╗âm so├ít hiß╗ân thß╗ï.</em></p>",
+          "icon": "Monitor",
+          "title": "X├óy dß╗▒ng m├┤ h├¼nh HVAC - Duct (Phß║ºn 1)",
+          "details": [
+            "Kiß╗âm so├ít m├┤ h├¼nh th├┤ng qua View Template (mß║╖t bß║▒ng, mß║╖t cß║»t, 3D).",
+            "Xß╗¡ l├╜ bß║ún CAD, link v├áo m├┤ h├¼nh v├á ─æ╞░a vß╗ü mß╗æc tß╗ìa ─æß╗Ö phß╗æi hß╗úp.",
+            "Triß╗ân khai hß╗ç thß╗æng ß╗æng gi├│ t─âng ├íp sß║únh thang m├íy, trß╗Ñc ─æß╗⌐ng v├á ─æß║╖t cß╗¡a gi├│."
+          ]
+        },
+        {
+          "id": "03",
+          "desc": "<p><em>Ho├án thiß╗çn c├íc hß╗ç thß╗æng ß╗æng gi├│ phß╗⌐c tß║íp v├á kß║┐t nß╗æi thiß║┐t bß╗ï.</em></p>",
+          "icon": "Monitor",
+          "title": "X├óy dß╗▒ng m├┤ h├¼nh HVAC - Duct (Phß║ºn 2)",
+          "details": [
+            "Triß╗ân khai ß╗æng gi├│ h├║t kh├│i h├ánh lang, hß╗ç ß╗æng gi├│ t╞░╞íi v├á thß║úi vß╗ç sinh.",
+            "Triß╗ân khai hß╗ç ß╗æng gi├│ lß║ính cß║Ñp cho FCU, bß╗ìc ti├¬u ├óm v├á bß║ít mß╗üm.",
+            "Bß╗æ tr├¡ van gi├│, cß╗¡a gi├│, ß╗æng mß╗üm v├á ho├án thiß╗çn ß╗æng gi├│ 1 tß║ºng ─æiß╗ân h├¼nh."
+          ]
+        },
+        {
+          "id": "04",
+          "desc": "<p><em>Dß╗▒ng h├¼nh hß╗ç thß╗æng ─æ╞░ß╗¥ng ß╗æng n╞░ß╗¢c Chiller v├á n╞░ß╗¢c ng╞░ng.</em></p>",
+          "icon": "Monitor",
+          "title": "X├óy dß╗▒ng m├┤ h├¼nh HVAC - Pipe",
+          "details": [
+            "Triß╗ân khai m├┤ h├¼nh ß╗æng Chiller tß║íi trß╗Ñc kß╗╣ thuß║¡t v├á h├ánh lang.",
+            "Kß║┐t nß╗æi tay nh├ính Chiller v├áo FCU v├á bß╗æ tr├¡ cß╗Ñm van FCU.",
+            "Triß╗ân khai m├┤ h├¼nh n╞░ß╗¢c ng╞░ng, bß║½y n╞░ß╗¢c v├á bß╗ìc bß║úo ├┤n."
+          ]
+        },
+        {
+          "id": "05",
+          "desc": "<p><em style=\"color: rgb(248, 250, 252);\">Triß╗ân khai mß║íng l╞░ß╗¢i ─æ╞░ß╗¥ng ß╗æng chß╗»a ch├íy v├á cß║Ñp n╞░ß╗¢c sinh hoß║ít.</em></p>",
+          "icon": "Monitor",
+          "title": "X├óy dß╗▒ng m├┤ h├¼nh PCCC - Cß║Ñp n╞░ß╗¢c",
+          "details": [
+            "Triß╗ân khai m├┤ h├¼nh chß╗»a ch├íy Sprinkler v├á chß╗»a ch├íy v├ích t╞░ß╗¥ng.",
+            "Triß╗ân khai m├┤ h├¼nh cß║Ñp n╞░ß╗¢c phß║ºn trß╗Ñc v├á ß╗æng PPR v├áo c├íc ph├▓ng vß╗ç sinh.",
+            "Bß╗æ tr├¡ thiß║┐t bß╗ï vß╗ç sinh, cß╗Ñm van ph├▓ng v├á nh├ón bß║ún ph├▓ng ─æiß╗ân h├¼nh."
+          ]
+        },
+        {
+          "id": "06",
+          "desc": "<p><em>Ho├án thiß╗çn hß╗ç thß╗æng tho├ít n╞░ß╗¢c sinh hoß║ít v├á c├íc mß║íng l╞░ß╗¢i ─æiß╗çn c╞í bß║ún.</em></p>",
+          "icon": "Play",
+          "title": "X├óy dß╗▒ng m├┤ h├¼nh Tho├ít n╞░ß╗¢c & ─Éiß╗çn",
+          "details": [
+            "Triß╗ân khai ß╗æng tho├ít n╞░ß╗¢c trß╗Ñc ─æß╗⌐ng, th├┤ng h╞íi v├á ß╗æng trong ph├▓ng vß╗ç sinh.",
+            "Triß╗ân khai hß╗ç thß╗æng Thang m├íng c├íp v├á bß╗æ tr├¡ tß╗º ─æiß╗çn tß║ºng.",
+            "Bß╗æ tr├¡ ─æ├¿n Downlight h├ánh lang, thiß║┐t bß╗ï loa v├á b├ío kh├│i."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m2",
+      "title": "MODULE 2 ΓÇó QUß║óN L├¥ M├ö H├îNH V├Ç B├ôC T├üCH KHß╗ÉI L╞»ß╗óNG",
+      "lessons": [
+        {
+          "id": "07",
+          "desc": "<p><em>Sß╗¡ dß╗Ñng bß╗Ö lß╗ìc ─æß╗â kiß╗âm so├ít m├┤ h├¼nh dß╗▒ ├ín mß╗Öt c├ích chuy├¬n nghiß╗çp.&nbsp;</em></p>",
+          "icon": "Rocket",
+          "title": "Quß║ún l├╜ v├á x├óy dß╗▒ng Filter theo BEP",
+          "details": [
+            "Tß║ío lß║¡p bß╗Ö Filter quß║ún l├╜ dß╗▒ ├ín v├á bß╗Ö quy tß║»c ─æß║╖t t├¬n Filter.",
+            "X├óy dß╗▒ng bß╗Ö quy tß║»c lß╗ìc kß║┐ thß╗½a cho nhiß╗üu dß╗▒ ├ín v├á ├íp dß╗Ñng cho bß║ún vß║╜.",
+            "Sß╗¡ dß╗Ñng c├┤ng cß╗Ñ hß╗ù trß╗ú ─æß╗â quß║ún l├╜ m├áu sß║»c, ─æß╗Ö d├áy n├⌐t v├á kiß╗âu n├⌐t."
+          ]
+        },
+        {
+          "id": "08",
+          "desc": "<p><em>Thiß║┐t lß║¡p hiß╗ân thß╗ï ─æß╗ông bß╗Ö v├á b╞░ß╗¢c ─æß║ºu l├ám quen vß╗¢i b├│c t├ích khß╗æi l╞░ß╗úng.</em></p>",
+          "icon": "Rocket",
+          "title": "X├óy dß╗▒ng View Template v├á Thß╗æng k├¬ c╞í bß║ún",
+          "details": [
+            "Tß║ío lß║¡p, quß║ún l├╜ v├á sß╗¡ dß╗Ñng View Template cho mß║╖t bß║▒ng, mß║╖t cß║»t, 3D.",
+            "T├¼m hiß╗âu bß║ún chß║Ñt sß╗▒ t╞░╞íng t├íc giß╗»a m├┤ h├¼nh 3D v├á bß║úng thß╗æng k├¬.",
+            "Tß║ío lß║¡p mß╗Öt sß╗æ bß║úng thß╗æng k├¬ khß╗æi l╞░ß╗úng c╞í bß║ún tß╗½ m├┤ h├¼nh."
+          ]
+        },
+        {
+          "id": "09",
+          "desc": "<p><em>Tß╗æi ╞░u h├│a quy tr├¼nh t├¡nh to├ín v├á ph├ón loß║íi khß╗æi l╞░ß╗úng chi tiß║┐t.&nbsp;</em></p>",
+          "icon": "Rocket",
+          "title": "Thß╗æng k├¬ n├óng cao - X├óy dß╗▒ng Template thß╗æng k├¬",
+          "details": [
+            "Tß║ío lß║¡p Schedule Template phß╗Ñc vß╗Ñ quß║ún l├╜ v├á ─æß╗ông bß╗Ö cho nhiß╗üu dß╗▒ ├ín.",
+            "Combine th├┤ng sß╗æ v├á lß║¡p h├ám t├¡nh to├ín (─æß╗Ö d├áy t├┤n, m2 t├┤n, phß╗Ñ kiß╗çn).",
+            "Thß╗æng k├¬ ph├ón loß║íi theo tß║ºng, zone, khu vß╗▒c v├á tß╗½ng hß╗ç thß╗æng cß╗Ñ thß╗â."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m3",
+      "title": "MODULE 3 ΓÇó TRIß╗éN KHAI Bß║óN Vß║╝ V├Ç XUß║ñT Hß╗Æ S╞á",
+      "lessons": [
+        {
+          "id": "10",
+          "desc": "<p>Sß╗¡ dß╗Ñng c├┤ng cß╗Ñ ghi ch├║,tag ─æß╗â tr├¡ch xuß║Ñt th├┤ng tin kß╗╣ thuß║¡t l├¬n bß║ún vß║╜ 2D.</p>",
+          "icon": "Printer",
+          "title": "Triß╗ân khai v├á quß║ún l├╜ hß╗ô s╞í bß║ún vß║╜ (Phß║ºn 1)",
+          "details": [
+            "Tß║ío lß║¡p bß╗Ö Tag th├┤ng sß╗æ c╞í bß║ún v├á n├óng cao (c├│ lß╗ông gh├⌐p h├ám sß╗æ, tham biß║┐n).",
+            "Tß╗ò chß╗⌐c c├óy th╞░ mß╗Ñc dß╗» liß╗çu WIP, PUB, v├á Sheet set theo chuß║⌐n BEP.",
+            "Thiß║┐t lß║¡p ghi ch├║, k├╜ hiß╗çu bß║ún vß║╜ v├á tß║ío lß║¡p Legend ch├║ th├¡ch."
+          ]
+        },
+        {
+          "id": "11",
+          "desc": "<p><em>Ho├án thiß╗çn bß╗æ cß╗Ñc bß║ún vß║╜ v├áo khung t├¬n v├á tß║ío danh mß╗Ñc tß╗▒ ─æß╗Öng. </em></p>",
+          "icon": "Printer",
+          "title": "Triß╗ân khai v├á quß║ún l├╜ hß╗ô s╞í bß║ún vß║╜ (Phß║ºn 2)",
+          "details": [
+            "X├óy dß╗▒ng khung t├¬n, s╞í ─æß╗ô nguy├¬n l├╜ v├á danh mß╗Ñc bß║ún vß║╜ tß╗▒ ─æß╗Öng.",
+            "Tß║ío lß║¡p View 2D/3D, ─æ╞░a View v├áo Sheet v├á sß║»p xß║┐p bß╗æ cß╗Ñc c├ón ─æß╗æi.",
+            "Thiß║┐t lß║¡p Spot Elevation lß║Ñy cao ─æß╗Ö cho ß╗æng c├│ ─æß╗Ö dß╗æc."
+          ]
+        },
+        {
+          "id": "12",
+          "desc": "<p><em>huß║⌐n h├│a m├┤ h├¼nh ─æß╗â xuß║Ñt bß║ún, l╞░u trß╗» v├á in ß║Ñn b├án giao.&nbsp;</em></p>",
+          "icon": "Printer",
+          "title": "In ß║Ñn hß╗ô s╞í bß║ún vß║╜ sang CAD - PDF",
+          "details": [
+            "Thiß║┐t lß║¡p View Template hß╗ù trß╗ú xuß║Ñt bß║ún vß║╜ sang ─æß╗ïnh dß║íng PDF v├á CAD.",
+            "Tr├¼nh b├áy bß║ún vß║╜ tß╗òng mß║╖t bß║▒ng v├á chi tiß║┐t mß║╖t bß║▒ng, mß║╖t cß║»t cho ph├▓ng ─æiß╗ân h├¼nh.",
+            "Thiß║┐t lß║¡p Layer, m├áu sß║»c, kiß╗âu n├⌐t v├á xuß║Ñt hß╗ô s╞í ─æß╗ông loß║ít sang Autocad/PDF."
+          ]
+        }
+      ]
+    }
+  ],
+  "subtitle": "Lß╗▒a chß╗ìn linh hoß║ít: Tham gia Live Class (Tß╗æi Thß╗⌐ 3 & 6) HOß║╢C tß╗▒ hß╗ìc qua Video Record vß╗¢i sß╗▒ hß╗ù trß╗ú giß║úi ─æ├íp 24/7 tß╗½ AI v├á Giß║úng vi├¬n."
+}
+
+// ===== SECTION: faq (visible: true) =====
+{
+  "badge": "GIß║óI ─É├üP THß║«C Mß║«C",
+  "title": "Giß║úi ─æ├íp thß║»c mß║»c th╞░ß╗¥ng gß║╖p",
+  "questions": [
+    {
+      "a": "<p>Trung t├óm c├│ ph╞░╞íng ph├íp dß║íy hß╗ìc ─æß╗â kh├┤ng hß╗ìc vi├¬n n├áo bß╗ï bß╗Å lß║íi ph├¡a sau. Ng╞░ß╗¥i ─æ├ú c├│ kinh nghiß╗çm ng├ánh sß║╜ hiß╗âu ngay b├ái hß╗ìc, hß╗ìc nhanh h╞ín v├á ├íp dß╗Ñng ─æ╞░ß╗úc v├áo dß╗▒ ├ín ─æang l├ám ngay sau kh├│a. Nhiß╗üu hß╗ìc vi├¬n lß╗¢n tuß╗òi chia sß║╗ chß╗ë sau v├ái buß╗òi ─æ├ú thß║Ñy r├╡ lß╗úi ├¡ch trong c├┤ng viß╗çc thß╗▒c tß║┐.</p>",
+      "q": "T├┤i ─æ├ú lß╗¢n tuß╗òi, liß╗çu c├│ theo kß╗ïp c├┤ng nghß╗ç 3D (BIM) kh├┤ng?"
+    },
+    {
+      "a": "<p>Rß║Ñt n├¬n hß╗ìc. Biß║┐t Revit c╞í bß║ún nh╞░ng kh├┤ng c├│ quy tr├¼nh b├ái bß║ún l├á t├¼nh trß║íng phß╗ò biß║┐n ΓÇô l├ám ─æ╞░ß╗úc nh╞░ng chß║¡m, sai lß╗çch. Kh├│a hß╗ìc DSCons gi├║p hß╗ç thß╗æng h├│a lß║íi to├án bß╗Ö quy tr├¼nh tß╗½ dß╗▒ng h├¼nh ─æß║┐n triß╗ân khai hß╗ô s╞í ─æ├║ng chuß║⌐n thß╗▒c tß║┐. Hß╗ìc vi├¬n tr╞░ß╗¥ng hß╗úp n├áy th╞░ß╗¥ng tiß║┐n bß╗Ö rß║Ñt nhanh v├á th╞░ß╗¥ng ho├án th├ánh b├ái sß╗¢m nhß║Ñt lß╗¢p.  </p>",
+      "q": "T├┤i ─æ├ú biß║┐t d├╣ng Revit c╞í bß║ún nh╞░ng ch╞░a b├ái bß║ún, c├│ n├¬n hß╗ìc kh├┤ng?"
+    },
+    {
+      "a": "<p>C├│ 3 cam kß║┐t ch├¡nh:</p><p>1) Hß╗ìc lß║íi miß╗àn ph├¡ 1 lß║ºn nß║┐u bß║úo l╞░u hoß║╖c muß╗æn update kiß║┐n thß╗⌐c mß╗¢i; </p><p>2) Ho├án trß║ú 100% hß╗ìc ph├¡ nß║┐u kh├┤ng h├ái l├▓ng (kh├┤ng hß╗Åi l├╜ do); </p><p>3) Hß╗ù trß╗ú kß╗╣ thuß║¡t Revit trong suß╗æt qu├í tr├¼nh hß╗ìc v├á sau khi kß║┐t th├║c.  </p>",
+      "q": "Kh├│a hß╗ìc c├│ cam kß║┐t g├¼ vß╗¢i hß╗ìc vi├¬n?"
+    },
+    {
+      "a": "<p>─Éß╗â th├ánh thß║ío ─æ╞░ß╗úc kß╗╣ n─âng Revit MEPF th├¼ hß╗ìc vi├¬n cß║ºn trau ─æß╗òi kß╗╣ n─âng bß║▒ng c├ích l├ám b├ái tß║¡p vß╗ü nh├á. V├¼ vß║¡y, nß║┐u nh╞░ chß╗ë xß║┐p lß╗ïch v├áo cuß╗æi tuß║ºn th├¼ hß╗ìc vi├¬n sß║╜ kh├┤ng c├│ thß╗¥i gian l├ám b├ái tß║¡p vß╗ü nh├á. Do ─æ├│, Trung t├óm sß║╜ xß║┐p lß╗ïch hß╗ìc c├ích nhau ra, v├¡ dß╗Ñ: T3-T6, T2-T5.</p>",
+      "q": "Kh├│a hß╗ìc c├│ lß╗ïch hß╗ìc v├áo cuß╗æi tuß║ºn kh├┤ng ?"
+    },
+    {
+      "a": "<p>C├│. Sau khi ─æ├│ng hß╗ìc ph├¡, anh/chß╗ï ─æ╞░ß╗úc k├¡ch hoß║ít ngay c├íc kh├│a qu├á tß║╖ng tr├¬n website. C├│ thß╗â hß╗ìc tr╞░ß╗¢c c├íc kh├│a video ─æß╗â l├ám quen vß╗¢i Revit tr╞░ß╗¢c khi v├áo lß╗¢p Zoom.  </p>",
+      "q": "─É─âng k├╜ rß╗ôi nh╞░ng ch╞░a ─æß║┐n lß╗ïch khai giß║úng th├¼ c├│ thß╗â hß╗ìc g├¼ tr╞░ß╗¢c kh├┤ng?"
+    },
+    {
+      "a": "<p>C├│. Nh├│m Zalo lß╗¢p hß╗ìc vß║½n hoß║ít ─æß╗Öng sau kh├│a. Ngo├ái ra cß╗Öng ─æß╗ông DSCons c├│ nh├│m ri├¬ng vß╗¢i h├áng ngh├¼n kß╗╣ s╞░, anh/chß╗ï c├│ thß╗â hß╗Åi bß║Ñt cß╗⌐ l├║c n├áo. C├íc giß║úng vi├¬n v├á trß╗ú giß║úng vß║½n hß╗ù trß╗ú trong phß║ím vi c├│ thß╗â.  </p>",
+      "q": "Sau kh├│a hß╗ìc c├│ ─æ╞░ß╗úc hß╗ù trß╗ú kß╗╣ thuß║¡t l├óu d├ái kh├┤ng?"
+    },
+    {
+      "a": "<p>Anh/chß╗ï n├¬n ─æ├ính gi├í theo gi├í trß╗ï nhß║¡n ─æ╞░ß╗úc chß╗⌐ kh├┤ng chß╗ë nh├¼n v├áo con sß╗æ:</p><p>- 5 qu├á tß║╖ng trß╗ï gi├í 5.200K k├¿m theo</p><p>- Cam kß║┐t ho├án tiß╗ün 100% nß║┐u kh├┤ng h├ái l├▓ng</p><p>- Kß╗╣ n─âng Revit MEP sau hß╗ìc gi├║p t─âng thu nhß║¡p, mß╗ƒ c╞í hß╗Öi viß╗çc l├ám mß╗¢i</p><p><br></p><p>Nß║┐u kh├│a hß╗ìc ─æ├íp ß╗⌐ng ─æ╞░ß╗úc nhu cß║ºu cß╗ºa anh/chß╗ï th├¼ con sß╗æ ─æ├│ thß╗▒c ra l├á rß║Ñt hß╗úp l├╜.  </p>",
+      "q": "Hß╗ìc ph├¡ n├áy c├│ ─æang qu├í cao kh├┤ng ?"
+    }
+  ]
+}
+
+// ===== SECTION: header (visible: true) =====
+{
+  "cta": "Tham gia ngay ΓÇö C├▓n chß╗ù",
+  "logo": "DSCons",
+  "ctaHref": "https://zalo.me/0917379181",
+  "navLinks": [
+    {
+      "href": "#curriculum",
+      "name": "Ch╞░╞íng tr├¼nh"
+    },
+    {
+      "href": "#instructor",
+      "name": "Giß║úng vi├¬n"
+    },
+    {
+      "href": "#pricing",
+      "name": "Hß╗ìc ph├¡"
+    },
+    {
+      "href": "#faq",
+      "name": "FAQ"
+    }
+  ]
+}
+
+// ===== SECTION: hero (visible: true) =====
+{
+  "badge": "Thß╗▒c Chiß║┐n ΓÇö 200+ Kß╗╣ s╞░ ─æ├ú tß╗æt nghiß╗çp",
+  "title": "Th├ánh thß║ío Revit MEP & B├│c t├ích khß╗æi l╞░ß╗úng trong 6 Tuß║ºn",
+  "startDate": "Khai giß║úng: 15/05/2026",
+  "primaryCta": "Nhß║¡n lß╗Ö tr├¼nh hß╗ìc + Template chuß║⌐n miß╗àn ph├¡",
+  "description": "Bß║ín ─æang mß║Ñt 3-4 tiß║┐ng ─æß╗â dß╗▒ng mß╗Öt mß║╖t bß║▒ng Plumbing bß║▒ng tay? Trong khi ─æß╗ông nghiß╗çp xuß║Ñt nguy├¬n bß╗Ö hß╗ô s╞í Shop Drawing chß╗ë trong 4 ng├áy? Kh├│a hß╗ìc n├áy sß║╜ ─æ╞░a bß║ín tß╗½ zero ΓåÆ triß╗ân khai dß╗▒ ├ín thß╗▒c tß║┐ ΓÇö kh├┤ng hß╗ìc l├╜ thuyß║┐t su├┤ng, hß╗ìc lß║íi miß╗àn ph├¡.",
+  "scheduleText": "Lß╗ïch hß╗ìc: Thß╗⌐ 3 - 5 (19h30 - 21h30)",
+  "secondaryCta": "Xem 12 buß╗òi hß╗ìc chi tiß║┐t",
+  "primaryCtaHref": "https://zalo.me/0917379181",
+  "secondaryCtaHref": "#curriculum"
+}
+
+// ===== SECTION: instructor (visible: true) =====
+{
+  "bio": "Phß║ím Quang Huy - Chuy├¬n gia ─É├áo Tß║ío vß╗¢i 3 n─âm kinh nghiß╗çm thß╗▒c tiß╗àn. Trß╗ïnh Thß╗ï H├á Thu vß╗¢i th├óm ni├¬n BIM Manager h╞ín 7 n─âm. ─É├óy l├á cß║╖p ─æ├┤i v├áng gi├║p rß║Ñt nhiß╗üu lß╗⌐a k─⌐ s╞░ lß╗Öi ng╞░ß╗úc d├▓ng l├¬n vß╗ï tr├¡ thu nhß║¡p cao h╞ín.",
+  "name": "Phß║ím Quang Huy & Trß╗ïnh Thß╗ï H├á Thu",
+  "role": "Kß╗╣ S╞░ MEPF & BIM Manager",
+  "badge": "TEAM ─É├ÇO Tß║áO DSCons",
+  "title": "─Éß╗Öi Ng┼⌐ Thß╗▒c Chiß║┐n, Kh├┤ng Dß║íy L├╜ Thuyß║┐t Su├┤ng",
+  "imageUrl": "https://lebachhiep.com/_next/image?url=%2Fhiep.png&w=640&q=75",
+  "subtitle": "Huy & Thu ─æ├ú ─æ├áo tß║ío 200+ kß╗╣ s╞░ ─æang l├ám viß╗çc thß╗▒c tß║┐ tß║íi Coteccons, H├▓a B├¼nh, REE M&E, Searefico ΓÇö kh├┤ng phß║úi cam kß║┐t, ─æ├óy l├á hß╗ô s╞í c├│ thß╗â kiß╗âm chß╗⌐ng. Mß╗ùi hß╗ìc vi├¬n ─æ╞░ß╗úc k├¿m s├ít ─æß║┐n khi tß╗▒ tin triß╗ân khai dß╗▒ ├ín ─æß╗Öc lß║¡p.",
+  "videoUrl": "",
+  "achievements": [
+    {
+      "icon": "Rocket",
+      "text": "Cam kß║┐t chuß║⌐n ─æß║ºu ra: Cß╗ì x├ít tr├¬n dß╗▒ ├ín thß╗▒c tß║┐"
+    },
+    {
+      "icon": "Users",
+      "text": "Lß╗¢p hß╗ìc k├¿m s├ít sao, hß╗ù trß╗ú 1 k├¿m 1 sß╗¡a b├ái tß║¡p gß║»t gao"
+    },
+    {
+      "icon": "Award",
+      "text": "Gia nhß║¡p gia ─æ├¼nh Kß╗╣ s╞░ Thiß║┐t kß║┐ C&M ─æß╗Öc quyß╗ün"
+    },
+    {
+      "icon": "Code",
+      "text": "Kß╗ü vai s├ít c├ính, l╞░u h├¼nh video 100% thß╗¥i l╞░ß╗úng cho Hß╗ìc lß║íi"
+    }
+  ],
+  "achievementsHeading": "L├╜ do bß║ín n├¬n ─æß╗ông h├ánh c├╣ng DSCons"
+}
+
+// ===== SECTION: outcomes (visible: true) =====
+{
+  "badge": "SAU KH├ôA Hß╗îC Bß║áN ─Éß║áT ─É╞»ß╗óC",
+  "items": [
+    {
+      "icon": "AppWindow",
+      "title": "Xuß║Ñt bß╗Ö Shop Drawing trong 4 ng├áy thay v├¼ 2 tuß║ºn",
+      "description": "M├┤ h├¼nh Revit tß╗▒ ─æß╗Öng cß║»t mß║╖t bß║▒ng, mß║╖t cß║»t v├á g├ín tag annotation ΓÇö 1 ng╞░ß╗¥i l├ám ─æ╞░ß╗úc viß╗çc cß╗ºa cß║ú team vß║╜ tay."
+    },
+    {
+      "icon": "Bot",
+      "title": "B├│c t├ích khß╗æi l╞░ß╗úng tß╗▒ ─æß╗Öng ΓÇö kh├┤ng c├▓n ─æß║┐m tay",
+      "description": "Schedules & Quantities tß╗▒ cß╗Öng dß╗ôn khi bß║ín chß╗ënh model. Sai sß╗æ tß╗½ 15% (Excel tay) xuß╗æng c├▓n d╞░ß╗¢i 1%."
+    },
+    {
+      "icon": "Bug",
+      "title": "Ph├ít hiß╗çn va chß║ím tr╞░ß╗¢c khi ─æß╗ò b├¬ t├┤ng",
+      "description": "Navisworks clash detection t├¼m ra 100% xung ─æß╗Öt hß╗ç thß╗æng tr╞░ß╗¢c khi thi c├┤ng ΓÇö tr├ính chi ph├¡ ─æß╗Ñc ph├í 50-200 triß╗çu/dß╗▒ ├ín."
+    },
+    {
+      "icon": "PackageOpen",
+      "title": "Template & Family t├íi sß╗¡ dß╗Ñng ΓÇö l├ám dß╗▒ ├ín mß╗¢i trong v├ái giß╗¥",
+      "description": "Hß╗ç thß╗æng Template chuß║⌐n DSCons gi├║p r├║t ngß║»n 70% thß╗¥i gian thiß║┐t lß║¡p dß╗▒ ├ín. Bß║»t ─æß║ºu dß╗▒ng model ngay, kh├┤ng c├ái ─æß║╖t lß║íi tß╗½ ─æß║ºu."
+    },
+    {
+      "icon": "Rocket",
+      "title": "CV BIM Manager ΓÇö l╞░╞íng 20-30 triß╗çu trong tß║ºm tay",
+      "description": "Hß╗ìc vi├¬n DSCons ─æ├ú landing job tß║íi Coteccons, H├▓a B├¼nh, REE M&E. Kh├┤ng phß║úi hß╗⌐a hß║╣n ΓÇö ─æ├óy l├á hß╗ô s╞í thß╗▒c tß║┐."
+    },
+    {
+      "icon": "BrainCircuit",
+      "title": "T╞░ duy Coordination ΓÇö nh├¼n dß╗▒ ├ín tß╗½ g├│c ─æß╗Ö BIM Manager",
+      "description": "Hiß╗âu luß╗ông dß╗» liß╗çu tß╗½ m├┤ h├¼nh ΓåÆ hß╗ô s╞í ΓåÆ thi c├┤ng. Khi ─æß╗ông nghiß╗çp c├▓n ─æang hß╗Åi, bß║ín ─æ├ú biß║┐t nguy├¬n nh├ón v├á c├ích fix."
+    }
+  ],
+  "title": "Kß║┐t quß║ú thß║¡t ΓÇö kh├┤ng phß║úi lß╗¥i hß╗⌐a",
+  "description": "Hß╗ìc vi├¬n DSCons kh├┤ng chß╗ë biß║┐t d├╣ng phß║ºn mß╗üm ΓÇö hß╗ì r├║t ngß║»n thß╗¥i gian triß╗ân khai 50%, ph├ít hiß╗çn clash tr╞░ß╗¢c khi ─æß╗ò b├¬ t├┤ng, v├á tß╗▒ tin nhß║¡n dß╗▒ ├ín cao ß╗æc sau 6 tuß║ºn hß╗ìc."
+}
+
+// ===== SECTION: pain-points (visible: true) =====
+{
+  "badge": "C├ô PHß║óI Bß║áN ─ÉANG Gß║╢P Vß║ñN ─Éß╗Ç N├ÇY?",
+  "items": [
+    {
+      "title": "Thß╗⌐c ─æ├¬m fix lß╗ùi xung ─æß╗Öt m├á kh├┤ng biß║┐t nguy├¬n nh├ón tß╗½ ─æ├óu",
+      "description": "ß╗Éng n╞░ß╗¢c chß╗ông l├¬n dß║ºm th├⌐p, ß╗æng ─æiß╗çn cß║»t qua ß╗æng HVAC ΓÇö ph├ít hiß╗çn ra khi ─æ├ú thi c├┤ng xong, phß║úi ─æß╗Ñc ph├í to├án bß╗Ö. Mß╗Öt sai s├│t nh╞░ vß║¡y dß╗à tß╗æn 50-100 triß╗çu tiß╗ün sß╗¡a chß╗»a v├á mß║Ñt ─æiß╗âm nß║╖ng vß╗¢i chß╗º ─æß║ºu t╞░."
+    },
+    {
+      "title": "Mß║Ñt cß║ú buß╗òi loay hoay chß╗ë ─æß╗â dß╗▒ng mß╗Öt Family kh├┤ng ─æ├║ng chuß║⌐n",
+      "description": "T├¼m tr├¬n mß║íng kh├┤ng c├│, tß╗▒ vß║╜ th├¼ parameter sai hß║┐t. Deadline hß╗ìp kß╗╣ thuß║¡t ─æang ─æß║┐n gß║ºn m├á Family thiß║┐t bß╗ï vß║½n ch╞░a xong ΓÇö phß║úi xin gia hß║ín, mß║Ñt uy t├¡n tr╞░ß╗¢c cß║ú team."
+    },
+    {
+      "title": "B├│c t├ích bß║▒ng Excel xong sß║┐p vß║½n trß║ú lß║íi v├¼ sai sß╗æ l╞░ß╗úng",
+      "description": "─Éß║┐m tay tß╗½ng ─æoß║ín ß╗æng, tß╗½ng fitting ΓÇö mß╗Åi mß║»t m├á vß║½n sai. Mß╗ùi lß║ºn chß╗ënh thiß║┐t kß║┐ l├á phß║úi ─æß║┐m lß║íi tß╗½ ─æß║ºu. Sai dß╗▒ to├ín 5% l├á c├│ thß╗â th├óm hß╗Ñt h├áng chß╗Ñc triß╗çu tr├¬n dß╗▒ ├ín lß╗¢n."
+    },
+    {
+      "title": "CV ─æß║ºy l├╜ thuyß║┐t nh╞░ng kh├┤ng c├│ dß╗▒ ├ín Revit n├áo ─æß╗â show",
+      "description": "Phß╗Ång vß║Ñn BIM Coordinator tß║íi Coteccons, Ho├á B├¼nh ΓÇö nh├á tuyß╗ân dß╗Ñng hß╗Åi: 'Anh ─æ├ú triß╗ân khai dß╗▒ ├ín n├áo bß║▒ng Revit ch╞░a?' Im lß║╖ng 3 gi├óy l├á ─æß╗º ─æß╗â biß║┐t kß║┐t quß║ú phß╗Ång vß║Ñn rß╗ôi."
+    }
+  ],
+  "title": "Chß║Ñm dß╗⌐t nhß╗»ng nß╗ùi ─æau n├áy ΓÇö tr╞░ß╗¢c khi ch├║ng chß║Ñm dß╗⌐t sß╗▒ nghiß╗çp cß╗ºa bß║ín",
+  "techLogos": [
+    {
+      "id": "logo-1",
+      "image": "https://svgl.app/library/nvidia-wordmark-light.svg",
+      "className": "h-7 w-auto",
+      "description": ""
+    },
+    {
+      "id": "logo-2",
+      "image": "https://svgl.app/library/supabase_wordmark_light.svg",
+      "className": "h-7 w-auto",
+      "description": ""
+    },
+    {
+      "id": "logo-3",
+      "image": "https://svgl.app/library/openai_wordmark_light.svg",
+      "className": "h-7 w-auto",
+      "description": ""
+    },
+    {
+      "id": "logo-4",
+      "image": "https://svgl.app/library/turso-wordmark-light.svg",
+      "className": "h-7 w-auto",
+      "description": ""
+    },
+    {
+      "id": "logo-5",
+      "image": "https://svgl.app/library/vercel_wordmark.svg",
+      "className": "h-7 w-auto",
+      "description": ""
+    },
+    {
+      "id": "logo-6",
+      "image": "https://svgl.app/library/github_wordmark_light.svg",
+      "className": "h-7 w-auto",
+      "description": ""
+    }
+  ],
+  "techLogosHeading": "C├┤ng cß╗Ñ v├á c├┤ng nghß╗ç trong kh├│a hß╗ìc"
+}
+
+// ===== SECTION: pricing (visible: true) =====
+{
+  "badge": "Bß║óNG GI├ü ─Éß║ªU T╞»",
+  "title": "─Éß║ºu t╞░ ngay - Khai mß╗ƒ sß╗▒ nghiß╗çp",
+  "packages": [
+    {
+      "name": "G├│i Video quay sß║╡n",
+      "price": "2.500K",
+      "features": [
+        "Truy cß║¡p to├án bß╗Ö video b├ái giß║úng",
+        "Thß╗▒c h├ánh tr├¬n dß╗▒ ├ín mß║½u",
+        "Tham gia cß╗Öng ─æß╗ông hß╗ìc vi├¬n",
+        "Hß╗ù trß╗ú giß║úi ─æ├íp trong Cß╗Öng ─Éß╗ông"
+      ],
+      "buttonHref": "https://zalo.me/0394784284",
+      "buttonText": "Li├¬n hß╗ç t╞░ vß║Ñn",
+      "description": "Ph├╣ hß╗úp cho sinh vi├¬n hoß║╖c ng╞░ß╗¥i mß╗¢i bß║»t ─æß║ºu l├ám quen vß╗¢i Revit MEP.",
+      "isRecommended": false
+    },
+    {
+      "name": "**G├│i Thß╗▒c Chiß║┐n**",
+      "price": "3.900K",
+      "features": [
+        "Mß╗ìi quyß╗ün lß╗úi cß╗ºa G├│i Video quay sß║╡n",
+        "H╞░ß╗¢ng dß║½n hß╗ìc thß╗º c├┤ng kß║┐t hß╗úp vß╗¢i Tool ─æß╗â l├ám viß╗çc hiß╗çu quß║ú h╞ín",
+        "Family Revit MEP trß╗ìn bß╗Ö",
+        "C├│ chß║Ñm b├ái, chß╗»a b├ái theo tß╗½ng buß╗òi hß╗ìc",
+        "Hß╗ù trß╗ú 1-1 kh├┤ng giß╗¢i hß║ín thß╗¥i gian",
+        "Cß║Ñp ─æß║ºy ─æß╗º Chß╗⌐ng nhß║¡n sau khi Tß╗æt nghiß╗çp"
+      ],
+      "buttonHref": "https://zalo.me/0394784284",
+      "buttonText": "─É─âng k├╜ ngay",
+      "description": "Lß╗▒a chß╗ìn tß╗æt nhß║Ñt cho kß╗╣ s╞░ muß╗æn l├ám chß╗º Revit MEP v├á triß╗ân khai dß╗▒ ├ín thß╗▒c tß║┐.",
+      "isRecommended": true
+    },
+    {
+      "name": "&&G├│i Combo&&",
+      "price": "6.400K",
+      "features": [
+        "Mß╗ìi quyß╗ün lß╗úi cß╗ºa g├│i Thß╗▒c Chiß║┐n",
+        "Mua kh├│a Combine chß╗ë vß╗¢i gi├í 50%: 2.500K",
+        "Tß║╖ng k├¿m kh├│a: \"Thiß║┐t lß║¡p Template triß╗ân khai dß╗▒ ├ín C╞í ─æiß╗çn\"",
+        "Tß║╖ng k├¿m kh├│a: \"Thiß║┐t kß║┐ CV kiß╗âu mß╗¢i & Kß╗╣ n─âng phß╗Ång vß║Ñn hiß╗çu quß║ú\""
+      ],
+      "badgeText": "chuy├¬n s├óu",
+      "badgeColor": "#ff0000",
+      "buttonHref": "https://zalo.me/0394784284",
+      "buttonText": "Li├¬n hß╗ç t╞░ vß║Ñn",
+      "description": "Kh├│a hß╗ìc gi├║p hß╗ìc vi├¬n nß║»m ─æ╞░ß╗úc to├án bß╗Ö quy tr├¼nh Triß╗ân khai 1 dß╗▒ ├ín C╞í ─Éiß╗çn.",
+      "isRecommended": true
+    }
+  ],
+  "originalPrice": "Chß╗ë tß╗½ 30 ph├║t mß╗ùi ng├áy - Hß╗ìc theo tiß║┐n ─æß╗Ö c├í nh├ón cß╗ºa bß║ín."
+}
+
+// ===== SECTION: settings (visible: true) =====
+{
+  "admin": {
+    "role": "Admin",
+    "email": "huy17012001huy@gmail.com"
+  },
+  "api_key": "AIzaSyAvPVuNIGzgzAev0XUA7DiZfU9yftZ1fUc",
+  "favicon": "https://ixsoouxbldvpyglrbiua.supabase.co/storage/v1/object/public/landing_images/uploads/m32evr2oc9c_1776456318271.png",
+  "tracking": {
+    "heatmap_url": ""
+  },
+  "exit_popup": {
+    "title": "─Éß╗½ng bß╗Å lß╗í c╞í hß╗Öi th─âng tiß║┐n!",
+    "enabled": true,
+    "buttonLink": "https://online.dscons.vn/tang-50-mo-hinh-revit-mep/",
+    "buttonText": "Nhß║¡n t├ái liß╗çu ngay",
+    "footerText": "DSCons Global Academy ΓÇö Revit MEP Thß╗▒c Chiß║┐n",
+    "description": "─Éß╗â lß║íi email ─æß╗â nhß║¡n ngay bß╗Ö t├ái liß╗çu Revit MEP Miß╗àn ph├¡ v├á ╞░u ─æ├úi ─æß║╖c biß╗çt.",
+    "showEmailField": false
+  },
+  "site_title": "DSCons - Revit MEP thß╗▒c chiß║┐n",
+  "webhook_url": ""
+}
+
+// ===== SECTION: social (visible: true) =====
+{
+  "badge": "SAU KH├ôA Hß╗îC",
+  "items": [
+    {
+      "icon": "AppWindow",
+      "title": "Th├ánh thß║ío dß╗▒ng h├¼nh 3D to├án diß╗çn 4 hß╗ç c╞í ─æiß╗çn",
+      "description": "<p><em>Th├ánh thß║ío triß╗ân khai m├┤ h├¼nh trß╗▒c quan cho hß╗ç thß╗æng HVAC, Cß║Ñp tho├ít n╞░ß╗¢c, PCCC v├á ─Éiß╗çn tß╗½ bß║ún vß║╜ CAD.</em></p>"
+    },
+    {
+      "icon": "Bot",
+      "title": "L├ám chß╗º quy tr├¼nh quß║ún l├╜ m├┤ h├¼nh theo chuß║⌐n BIM (BEP)",
+      "description": "<p><em>L├ám chß╗º View Template v├á Filter, tß╗ò chß╗⌐c dß╗» liß╗çu dß╗▒ ├ín b├ái bß║ún, chuy├¬n nghiß╗çp theo chuß║⌐n BEP.</em></p>"
+    },
+    {
+      "icon": "Bug",
+      "title": "B├│c t├ích khß╗æi l╞░ß╗úng (BOQ) tß╗▒ ─æß╗Öng v├á chuß║⌐n x├íc tuyß╗çt ─æß╗æi",
+      "description": "<p><em>Chß║Ñm dß╗⌐t viß╗çc ─æß║┐m thß╗º c├┤ng. Sß╗¡ dß╗Ñng Schedule ─æß╗â thß╗æng k├¬ vß║¡t t╞░, phß╗Ñ kiß╗çn nhanh ch├│ng v├á ch├¡nh x├íc 100%.</em></p>"
+    },
+    {
+      "icon": "PackageOpen",
+      "title": "Tr├¼nh b├áy hß╗ô s╞í bß║ún vß║╜ (Shopdrawing) chuy├¬n nghiß╗çp",
+      "description": "<p><em style=\"color: rgb(248, 250, 252);\">Tß╗▒ thiß║┐t lß║¡p Tag, ghi ch├║, rß║úi k├¡ch th╞░ß╗¢c v├á ho├án thiß╗çn bß║ún vß║╜ mß║╖t bß║▒ng, mß║╖t cß║»t v├áo khung t├¬n chuß║⌐n.</em></p>"
+    },
+    {
+      "icon": "Rocket",
+      "title": "Kiß╗âm so├ít kß╗╣ n─âng xuß║Ñt bß║ún v├á in ß║Ñn hß╗ô s╞í h├áng loß║ít",
+      "description": "<p><em>Quß║ún l├╜ danh mß╗Ñc bß║ún vß║╜ th├┤ng minh, tß╗▒ ─æß╗Öng xuß║Ñt h├áng loß║ít sang PDF/CAD vß╗¢i thiß║┐t lß║¡p Layer chuß║⌐n x├íc.</em></p>"
+    },
+    {
+      "icon": "BrainCircuit",
+      "title": "Tß╗▒ tin thß╗▒c chiß║┐n v├á n├óng cao lß╗úi thß║┐ cß║ính tranh",
+      "description": "<p><em>Chuyß╗ân ─æß╗òi ho├án to├án sang t╞░ duy BIM, tß╗▒ tin l├ám dß╗▒ ├ín thß╗▒c tß║┐ hoß║╖c ghi ─æiß╗âm vß╗¢i nh├á tuyß╗ân dß╗Ñng MEP.</em></p>"
+    }
+  ],
+  "title": "Tß╗▒ tin b╞░ß╗¢c v├áo c├íc dß╗▒ ├ín thß╗▒c tß║┐",
+  "description": "Bß║ín sß║╜ dß╗⌐t ─æiß╗âm ─æ╞░ß╗úc nß╗ùi sß╗ú phß║ºn mß╗üm mß╗¢i, tß╗▒ tß╗▒ b╞░ß╗¢c v├áo quy tr├¼nh tß╗▒ ─æß╗Öng h├│a cß╗ºa c├íc dß╗▒ ├ín lß╗¢n (BIM). Kh├┤ng c├▓n cß║únh thß╗⌐c ─æ├¬m sß╗¡a CAD."
+}
+
+// ===== SECTION: testimonials (visible: true) =====
+{
+  "badge": "─É├üNH GI├ü THß╗░C Tß║╛",
+  "title": "Tß╗½ trß║úi nghiß╗çm cß╗ºa Hß╗ìc vi├¬n",
+  "partners": [
+    {
+      "name": "C├┤ng ty NDT",
+      "logoUrl": "https://gacoltd.com/wp-content/uploads/2022/08/Untitled-13.png"
+    },
+    {
+      "name": "c├┤ng ty Hawee",
+      "logoUrl": "https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/company_logos/mQLky1707DmNILkW6Gt9iPnPfN71lXfE_1640850405____f5049ca3ab887402c5faae99e71f96ad.png"
+    },
+    {
+      "name": "C├┤ng ty CDC",
+      "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_nUb7Nmg-99M5eQlgJwrLETJ1Gq1fuEBBFA&s"
+    },
+    {
+      "name": "C├┤ng ty intech",
+      "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaWXLfL5UTxyDAtetl3zia4fLWYfVluZF0uA&s"
+    },
+    {
+      "name": "C├┤ng ty KANdenko",
+      "logoUrl": "https://www.vietnamworks.com/_next/image?url=https%3A%2F%2Fimages.vietnamworks.com%2Fpictureofcompany%2Fd2%2F11136742.png&w=3840&q=75"
+    },
+    {
+      "name": "C├┤ng ty WOnbang",
+      "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTveZ05YTGPTuf03k3askdTQR0KOCD4rMt_ng&s"
+    },
+    {
+      "name": "C├┤ng ty H├á H├╣ng",
+      "logoUrl": "https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/company_logos/cong-ty-tnhh-ha-hung-5cad61a478927.jpg"
+    },
+    {
+      "name": "C├┤ng ty EMC",
+      "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0oj-GZ2zco38MOcz3axsInPB4FSBtyJERxw&s"
+    }
+  ],
+  "textItems": [
+    {
+      "name": "L├¬ Ho├áng Anh",
+      "role": "BIM Manager",
+      "content": "<p>Tr╞░ß╗¢c ─æ├óy team t├┤i mß║Ñt 2 tuß║ºn cho 1 bß╗Ö hß╗ô s╞í Shop Drawing. Sau khi ├íp dß╗Ñng quy tr├¼nh Revit MEP thß╗▒c chiß║┐n cß╗ºa DSCons, thß╗¥i gian giß║úm xuß╗æng c├▓n 4 ng├áy. Hiß╗çu quß║ú kinh tß║┐ thß║Ñy r├╡ ngay lß║¡p tß╗⌐c!</p>"
+    },
+    {
+      "name": "Nguyß╗àn Thanh S╞ín",
+      "role": "Kß╗╣ s╞░ MEP",
+      "content": "<p>Kh├│a hß╗ìc kh├┤ng chß╗ë dß║íy lß╗çnh, m├á dß║íy t╞░ duy xß╗¡ l├╜ xuß║Ñt khß╗æi l╞░ß╗úng ch├¡nh x├íc 99%. ─É├óy l├á bß╗ç ph├│ng gi├║p t├┤i ─æß║ít mß╗⌐c l╞░╞íng cao sau 1 n─âm theo ─æuß╗òi BIM.</p>"
+    },
+    {
+      "name": "Phß║ím Th├║y Hß║▒ng",
+      "role": "Kß╗╣ s╞░ thiß║┐t kß║┐ ─Éiß╗çn",
+      "content": "<p>L├á nß╗» kß╗╣ s╞░, t├┤i tß╗½ng e ngß║íi Revit kh├│. Nh╞░ng sß╗▒ hß╗ù trß╗ú 1-1 Ultraview cß╗ºa DSCons ─æ├ú gi├║p t├┤i l├ám chß╗º phß║ºn mß╗üm chß╗ë sau 1 th├íng. Giß╗¥ t├┤i tß╗▒ tin triß╗ân khai dß╗▒ ├ín cao tß║ºng.</p>"
+    },
+    {
+      "name": "Trß║ºn Minh Quang",
+      "role": "BIM Coordinator",
+      "content": "<p>Hß╗ç thß╗æng b├ái giß║úng rß║Ñt 'thß╗▒c chiß║┐n', s├ít vß╗¢i thß╗▒c tß║┐ thi c├┤ng tß║íi Viß╗çt Nam. ─Éß║╖c biß╗çt bß╗Ö Template chuß║⌐n gi├║p t├┤i r├║t ngß║»n 70% thß╗¥i gian thiß║┐t lß║¡p dß╗▒ ├ín ban ─æß║ºu.</p>"
+    },
+    {
+      "name": "─Éß║╖ng Huy Ho├áng",
+      "role": "Freelancer MEP Designer",
+      "content": "<p>Tß╗½ khi c├│ kß╗╣ n─âng Revit MEP chuy├¬n s├óu, t├┤i nhß║¡n ─æ╞░ß╗úc nhiß╗üu job dß╗▒ ├ín n╞░ß╗¢c ngo├ái h╞ín. Thu nhß║¡p thß╗Ñ ─æß╗Öng cß╗ºa t├┤i t─âng ─æ├íng kß╗â nhß╗¥ tß╗æc ─æß╗Ö xß╗¡ l├╜ bß║ún vß║╜ cß╗▒c nhanh.</p>"
+    },
+    {
+      "name": "Tr╞░╞íng Ngß╗ìc Bß║úo",
+      "role": "Sinh vi├¬n n─âm cuß╗æi - ─ÉH B├ích Khoa",
+      "content": "<p>Cß║úm ╞ín DSCons ─æ├ú gi├║p em c├│ chß╗⌐ng chß╗ë uy t├¡n v├á kß╗╣ n─âng thß╗▒c tß║┐. Nhß╗¥ ─æ├│, em ─æ├ú tr├║ng tuyß╗ân ngay khi ch╞░a nhß║¡n bß║▒ng tß╗æt nghiß╗çp.</p>"
+    },
+    {
+      "name": "Nguyß╗àn Hß╗»u T├ái",
+      "role": "Gi├ím ─æß╗æc kß╗╣ thuß║¡t ",
+      "content": "<p>T├┤i cß╗¡ 5 nh├ón sß╗▒ ─æi hß╗ìc v├á kß║┐t quß║ú v╞░ß╗út mong ─æß╗úi. Quy tr├¼nh l├ám viß╗çc cß╗ºa team ─æß╗ông bß╗Ö ho├án to├án, chß║Ñt l╞░ß╗úng hß╗ô s╞í thiß║┐t kß║┐ n├óng tß║ºm chuy├¬n nghiß╗çp hß║│n.</p>"
+    },
+    {
+      "name": "L├╜ V─ân Thß║»ng",
+      "role": "Gi├ím s├ít c╞í ─æiß╗çn (M&E)",
+      "content": "<p>Hiß╗âu Revit gi├║p t├┤i quß║ún l├╜ thß║ºu phß╗Ñ tß╗æt h╞ín. Viß╗çc soi va chß║ím tr├¬n m├┤ h├¼nh 3D tr╞░ß╗¢c khi ra c├┤ng tr╞░ß╗¥ng gi├║p giß║úm thiß╗âu 90% lß╗ùi ─æß╗Ñc ph├í, sß╗¡a chß╗»a.</p>"
+    }
+  ],
+  "videoItems": [
+    {
+      "name": "Tß║í Thß╗ï L╞░╞íng",
+      "role": "Kß╗╣ s╞░ PCCC",
+      "videoUrl": "https://drive.google.com/file/d/18g65oTK00kNtWrQpj98apxNDupUdcHfT/view?usp=sharing",
+      "thumbnailUrl": "https://drive.google.com/file/d/1-mdGWbM0hvEDRaEtn8RpxwyQS-m5B1A9/view?usp=sharing"
+    },
+    {
+      "name": "Nguyß╗àn Tß║Ñt ─Éß║ít",
+      "role": "Kß╗╣ s╞░ BIM",
+      "videoUrl": "https://drive.google.com/file/d/12AdqN2UJF0QWxtSpw8bXgqT19PoIOuGP/view?usp=sharing",
+      "thumbnailUrl": "https://drive.google.com/file/d/1BSXSvxxG30p7THfxCzh7jGkSX3NvquoV/view?usp=sharing"
+    },
+    {
+      "name": "Nguyß╗àn Thß╗ï H├á",
+      "role": "Kß╗╣ s╞░ Cß║Ñp Tho├ít n╞░ß╗¢c",
+      "videoUrl": "https://drive.google.com/file/d/1vyI2qToyWJ1nIUUm37OrTedNJOcz0g_y/view?usp=sharing"
+    },
+    {
+      "name": "L╞░u Tiß║┐n Ph├ít",
+      "role": "Kß╗╣ s╞░ ─Éiß╗çn",
+      "videoUrl": "https://drive.google.com/file/d/1uqzkl2SVoSBl0xyqB_1ygY0Dv3daYeQV/view?usp=sharing"
+    }
+  ],
+  "partnersRow2": [
+    {
+      "name": "c├┤ng ty jgc",
+      "logoUrl": "https://itviec.com/rails/active_storage/representations/proxy/eyJfcmFpbHMiOnsiZGF0YSI6Nzk5OTE3LCJwdXIiOiJibG9iX2lkIn19--1968b32156d870ec0e1d2a881507dc9dd570a87a/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJwbmciLCJyZXNpemVfdG9fbGltaXQiOlszMDAsMzAwXX0sInB1ciI6InZhcmlhdGlvbiJ9fQ==--aa1464e8e6bcd982de6964c22807119ec733febd/jgc-vietnam-logo.png"
+    },
+    {
+      "name": "C├┤ng ty PCS1",
+      "logoUrl": "https://psc1.com/images/config/logo_meta_1611403560.jpg"
+    },
+    {
+      "name": "C├┤ng ty T&E",
+      "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0aeglQqwxJcHjq3Ayss4cEzv0Q0NBXm003A&s"
+    },
+    {
+      "name": "C├┤ng ty PTL",
+      "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3jF5nZ3IffaevKnn4LIqO2FqcBZMaszM5Ng&s"
+    },
+    {
+      "name": "C├┤ng ty Th├ánh Nam",
+      "logoUrl": "https://cdn1.vieclam24h.vn/upload/files_cua_nguoi_dung/logo/2015/02/25/1424834836_LOGO_Thanh_Nam.jpg"
+    },
+    {
+      "name": "C├┤ng ty zme",
+      "logoUrl": "https://careerviet.vn/_next/image?url=https%3A%2F%2Fimages.careerviet.vn%2Femployer_folders%2Flot0%2F241490%2F15185572b989a2639b92c5cb8a.jpg&w=256&q=75"
+    },
+    {
+      "name": "C├┤ng ty PTN",
+      "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT84O7US1LwOHbfAE8jwNtb6LdUWYjSTCbvzA&s"
+    }
+  ],
+  "partnersRow3": [
+    {
+      "name": "C├┤ng ty MDA",
+      "logoUrl": "https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/company_logos/EzM1grc5Bgxj9eFOWwj4N6ZiR1Oh4l4k_1654911877____b5a79e91a5802629380ccf70815cec84.png"
+    },
+    {
+      "name": "C├┤ng ty kinden",
+      "logoUrl": "https://www.cic.com.vn/upload_images/images/2022/06/17/kinden.jpg"
+    },
+    {
+      "name": "C├┤ng ty taikisha",
+      "logoUrl": "https://www.taikishavietnam.com.vn/upload/upload-images/logo-revise-800x.JPG"
+    },
+    {
+      "name": "C├┤ng ty MEDA",
+      "logoUrl": "https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/company_logos/AB6qSZxO9FcpT0TSGVA3WuXJpVQjhaFf_1739602123____4307c409517a934bdb92765cb8f35931.jpg"
+    },
+    {
+      "name": "C├┤ng ty AIT",
+      "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVrSNGtYMmJDYRKYddo9pnhBzO_-P5Mloj6A&s"
+    },
+    {
+      "name": "C├┤ng ty obayashi",
+      "logoUrl": "https://www.vietnamworks.com/_next/image?url=https%3A%2F%2Fimages.vietnamworks.com%2Fpictureofcompany%2Ffb%2F11382164.png&w=3840&q=75"
+    },
+    {
+      "name": "C├┤ng ty A Design",
+      "logoUrl": "https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/company_logos/74QeiOjeCyevPLh90Ffh7I5XGIk8Haao_1748925774____650dc2282f4e4cb7b5934ea45d0b7b09.jpg"
+    }
+  ]
+}
+
+// ===== TOTAL SECTIONS: 15 =====
+// Sections: benefits, bonus, comparison, cta, curriculum, faq, header, hero, instructor, outcomes, pain-points, pricing, settings, social, testimonials

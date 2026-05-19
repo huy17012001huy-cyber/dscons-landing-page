@@ -121,7 +121,7 @@ export default function Instructor({ data: previewData }: { data?: any }) {
           >
             <h3 className="text-[20px] font-bold mb-6 text-foreground">{instructor.achievementsHeading}</h3>
             <div className="flex flex-col space-y-6">
-              {instructor.achievements.map((item: any, index: number) => (
+              {(instructor.achievements || []).map((item: any, index: number) => (
                 <div key={index} className="flex items-start gap-4 group">
                   <div className="text-primary mt-0.5 shrink-0">
                     {renderIcon(item.icon)}

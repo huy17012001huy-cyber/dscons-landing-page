@@ -1075,7 +1075,7 @@ export default function Dashboard() {
                       </Button>
                     </div>
                     
-                    {faqForm.questions.map((item, index) => (
+                    {(faqForm.questions || []).map((item: any, index: number) => (
                       <div key={index} className="p-4 border rounded-md bg-muted/20 relative group">
                         <Button 
                           variant="destructive" 
@@ -1908,7 +1908,7 @@ export default function Dashboard() {
                       </Button>
                     </div>
                     
-                    {benefitsForm.items.map((item, index) => (
+                    {(benefitsForm.items || []).map((item: any, index: number) => (
                       <div key={index} className="p-4 border rounded-md bg-muted/20 relative group">
                         <Button 
                           variant="destructive" 
@@ -1969,7 +1969,7 @@ export default function Dashboard() {
                       </Button>
                     </div>
                     
-                    {curriculumForm.modules.map((module, mIndex) => (
+                    {(curriculumForm.modules || []).map((module: any, mIndex: number) => (
                       <div key={mIndex} className="p-4 border-[2px] border-primary/20 rounded-lg bg-background relative">
                         <div className="flex items-center gap-2 mb-4 pr-16">
                           <input 
@@ -1994,7 +1994,7 @@ export default function Dashboard() {
                         </div>
 
                         <div className="space-y-4 pl-4 border-l-2 border-border ml-2">
-                          {module.lessons.map((lesson, lIndex) => (
+                          {(module.lessons || []).map((lesson: any, lIndex: number) => (
                             <div key={lIndex} className="p-3 border rounded-md bg-muted/30">
                               <div className="flex flex-col gap-2 mb-2">
                                 <div className="flex items-center gap-2">
@@ -2048,7 +2048,7 @@ export default function Dashboard() {
                                     setCurriculumForm({...curriculumForm, modules: newMods});
                                   }}>+ Thêm ý</span>
                                 </div>
-                                {lesson.details.map((detail, dIndex) => (
+                                {(lesson.details || []).map((detail: any, dIndex: number) => (
                                   <div key={dIndex} className="flex items-center gap-1 mb-1">
                                     <span className="opacity-50">-</span>
                                     <input type="text" className="flex-1 border-b bg-transparent px-1 focus:outline-none" value={detail} onChange={(e) => {
@@ -2111,7 +2111,7 @@ export default function Dashboard() {
                         + Thêm thẻ
                       </Button>
                     </div>
-                    {socialForm.items.map((item, index) => (
+                    {(socialForm.items || []).map((item: any, index: number) => (
                       <div key={index} className="p-4 border rounded-md relative bg-muted/30">
                         <Button 
                           variant="ghost" size="sm" 
