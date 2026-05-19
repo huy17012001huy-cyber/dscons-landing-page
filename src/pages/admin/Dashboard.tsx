@@ -768,6 +768,52 @@ export default function Dashboard() {
                         <input type="text" className="flex h-10 w-full border rounded-md px-3 bg-background text-sm" placeholder="VD: Lịch học: Thứ 3 - 5 (19h30 - 21h30)" value={(heroForm as any).scheduleText || ""} onChange={(e) => setHeroForm({...heroForm, scheduleText: e.target.value} as any)} />
                       </div>
                     </div>
+                    
+                    <div className="space-y-3 p-4 border rounded-md bg-muted/5">
+                      <label className="text-sm font-medium uppercase text-primary">Các hộp Thống kê (Stats)</label>
+                      <p className="text-xs text-muted-foreground mb-2">Các thông số nổi bật hiển thị dưới nút bấm (VD: 2000+ Kỹ sư tốt nghiệp).</p>
+                      {(heroForm.stats || []).map((stat: any, index: number) => (
+                        <div key={index} className="flex gap-2 items-center">
+                          <input 
+                            type="text" 
+                            className="flex h-9 w-1/3 border rounded-md px-3 bg-background text-sm font-bold" 
+                            placeholder="Số liệu (VD: 2000+)" 
+                            value={stat.value || ""} 
+                            onChange={(e) => {
+                              const newStats = [...(heroForm.stats || [])];
+                              newStats[index].value = e.target.value;
+                              setHeroForm({...heroForm, stats: newStats});
+                            }} 
+                          />
+                          <input 
+                            type="text" 
+                            className="flex h-9 w-full border rounded-md px-3 bg-background text-sm" 
+                            placeholder="Mô tả (VD: Kỹ sư tốt nghiệp)" 
+                            value={stat.label || ""} 
+                            onChange={(e) => {
+                              const newStats = [...(heroForm.stats || [])];
+                              newStats[index].label = e.target.value;
+                              setHeroForm({...heroForm, stats: newStats});
+                            }} 
+                          />
+                          <Button variant="ghost" size="icon" className="h-9 w-9 text-red-500 hover:text-red-600 hover:bg-red-500/10" onClick={() => {
+                            const newStats = [...(heroForm.stats || [])];
+                            newStats.splice(index, 1);
+                            setHeroForm({...heroForm, stats: newStats});
+                          }}>
+                            Xóa
+                          </Button>
+                        </div>
+                      ))}
+                      <Button variant="outline" size="sm" className="w-full mt-2" onClick={() => {
+                        setHeroForm({
+                          ...heroForm,
+                          stats: [...(heroForm.stats || []), { value: "100%", label: "Mô tả mới" }]
+                        });
+                      }}>
+                        + Thêm hộp thống kê
+                      </Button>
+                    </div>
 
                     <div className="flex items-center gap-4 p-4 border rounded-md bg-muted/10">
                        <div className="flex items-center gap-2">
