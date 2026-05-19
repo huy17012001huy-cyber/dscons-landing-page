@@ -2566,7 +2566,7 @@ export default function Dashboard() {
                             </label>
                             <div className="relative group">
                               <input type="color" className="h-9 w-14 rounded-md border-2 border-muted bg-background p-0.5 cursor-pointer hover:border-primary/50 transition-all overflow-hidden" 
-                                value={pkg.badgeColor || "#1978DC"} onChange={(e) => {
+                                value={pkg.badgeColor || (pkgIndex === 0 ? "#059669" : pkgIndex === 1 ? "#1978DC" : "#DC2626")} onChange={(e) => {
                                   const newPackages = [...pricingForm.packages];
                                   newPackages[pkgIndex].badgeColor = e.target.value;
                                   setPricingForm({...pricingForm, packages: newPackages});
