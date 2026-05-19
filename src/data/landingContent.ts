@@ -21,7 +21,7 @@ export const landingData: any = {
     startDate: "15/05/2026",
     scheduleText: "Thứ 3 - 5 (19h30 - 21h30)",
     stats: [
-      { value: "200+", label: "Kỹ sư tốt nghiệp" },
+      { value: "2000+", label: "Kỹ sư tốt nghiệp" },
       { value: "6 Tuần", label: "Thực chiến" },
       { value: "12 Buổi", label: "Học sâu" },
       { value: "100%", label: "Dự án thực tế" }
