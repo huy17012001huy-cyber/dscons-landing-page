@@ -630,7 +630,16 @@ export default function Dashboard() {
                       <div className="flex items-center justify-between">
                         <label className="text-sm font-medium">Links Menu Điều Hướng</label>
                         <Button variant="outline" size="sm" onClick={() => {
-                          const firstSection = landingData.pageSections[0];
+                          const pageSectionsList = landingData.pageSections || [
+                            { id: "hero", title: "Hero" },
+                            { id: "pain-points", title: "Nỗi đau" },
+                            { id: "benefits", title: "Lợi ích" },
+                            { id: "curriculum", title: "Chương trình" },
+                            { id: "instructor", title: "Giảng viên" },
+                            { id: "pricing", title: "Học phí" },
+                            { id: "faq", title: "FAQ" }
+                          ];
+                          const firstSection = pageSectionsList[0];
                           setHeaderForm({
                             ...headerForm, 
                             navLinks: [
@@ -663,7 +672,16 @@ export default function Dashboard() {
                               const selectedId = e.target.value;
                               newLinks[index].href = "#" + selectedId;
                               
-                              const matchedSection = landingData.pageSections.find(s => s.id === selectedId);
+                              const pageSectionsList = landingData.pageSections || [
+                                { id: "hero", title: "Hero" },
+                                { id: "pain-points", title: "Nỗi đau" },
+                                { id: "benefits", title: "Lợi ích" },
+                                { id: "curriculum", title: "Chương trình" },
+                                { id: "instructor", title: "Giảng viên" },
+                                { id: "pricing", title: "Học phí" },
+                                { id: "faq", title: "FAQ" }
+                              ];
+                              const matchedSection = pageSectionsList.find((s: any) => s.id === selectedId);
                               if (matchedSection) {
                                 newLinks[index].name = matchedSection.title;
                               }
@@ -671,7 +689,15 @@ export default function Dashboard() {
                               setHeaderForm({...headerForm, navLinks: newLinks});
                             }}
                           >
-                            {landingData.pageSections.map(s => (
+                            {(landingData.pageSections || [
+                                { id: "hero", title: "Hero" },
+                                { id: "pain-points", title: "Nỗi đau" },
+                                { id: "benefits", title: "Lợi ích" },
+                                { id: "curriculum", title: "Chương trình" },
+                                { id: "instructor", title: "Giảng viên" },
+                                { id: "pricing", title: "Học phí" },
+                                { id: "faq", title: "FAQ" }
+                            ]).map((s: any) => (
                               <option key={s.id} value={s.id}>{s.title}</option>
                             ))}
                           </select>
