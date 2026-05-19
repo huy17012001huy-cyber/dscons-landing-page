@@ -57,61 +57,75 @@ export default function Pricing({ data: previewData }: { data?: any }) {
               ? "md:grid-cols-2 max-w-4xl" 
               : "max-w-md"
         }`}>
-          {pricing.packages?.map((pkg: any, index: number) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-              whileHover={{ y: -8, scale: 1.02 }}
-              className="relative group h-full"
+          {pricing.packages?.map((pkg: any, index: number) => {
+            const isMiddle = index === 1;
+            const pkgColor = pkg.badgeColor || (index === 0 ? "#059669" : isMiddle ? "#1978DC" : "#DC2626");
+            const badgeText = pkg.badgeText || (isMiddle ? "Khuyến Nghị" : null);
+            
+            return (
+            <div 
+              key={index} 
+              className={`relative h-full transition-all duration-500 ${
+                isMiddle 
+                  ? 'lg:scale-[1.12] lg:-translate-y-4 z-30' 
+                  : 'lg:scale-95 z-10 hover:z-20 hover:scale-100'
+              }`}
             >
-              {/* Khung viền dải sáng Gradient chạy vòng tròn */}
-              {(pkg.isRecommended || pkg.badgeText) && (
-                <div className="absolute -inset-[3px] rounded-[26px] overflow-hidden pointer-events-none z-0">
-                  <div 
-                    className="absolute inset-[-100%] animate-border-spin opacity-100"
-                    style={{ 
-                      background: `conic-gradient(from 0deg, 
-                        transparent 0%, 
-                        transparent 35%, 
-                        ${pkg.badgeColor || "#1978DC"} 45%, 
-                        #ffffff 50%, 
-                        ${pkg.badgeColor || "#1978DC"} 55%, 
-                        transparent 65%, 
-                        transparent 100%)` 
-                    }}
-                  />
-                </div>
-              )}
-
-              {/* Nhãn (Badge) - Đặt ở z-index cao nhất */}
-              {(pkg.isRecommended || pkg.badgeText) && (
-                <div 
-                  className="absolute top-0 right-6 transform -translate-y-1/2 px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest text-white shadow-xl z-50 ring-2 ring-background"
-                  style={{ backgroundColor: pkg.badgeColor || (pkg.isRecommended ? "#1978DC" : "#6B7280") }}
-                >
-                  {pkg.badgeText || "Khuyến Nghị"}
-                </div>
-              )}
-
-              {/* Nội dung chính của gói */}
-              <div 
-                className={`relative flex flex-col h-full rounded-[22px] bg-card p-8 transition-all duration-500 z-10 ${
-                  (pkg.isRecommended || pkg.badgeText) 
-                    ? "shadow-[0_20px_50px_rgba(0,0,0,0.2)]" 
-                    : "border-2 border-border shadow-sm hover:border-primary/30"
-                }`}
-                style={ (pkg.isRecommended || pkg.badgeText) ? {
-                  borderColor: 'transparent'
-                } : {}}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                whileHover={{ y: -8 }}
+                className="relative group h-full"
               >
-                {/* Hiệu ứng Glow khi hover */}
+              {/* Khung viền và Card chính */}
+              <div 
+                className={`relative h-full w-full rounded-[26px] p-[2px] ${isMiddle ? 'shadow-[0_20px_60px_rgba(0,0,0,0.3)]' : 'shadow-lg hover:shadow-xl'}`}
+              >
+                {/* Lớp viền nền */}
+                <div className="absolute inset-0 rounded-[26px] overflow-hidden z-0">
+                  {isMiddle ? (
+                    /* Viền xoay kép siêu tốc cho gói giữa */
+                    <div 
+                      className="absolute inset-[-100%] animate-[spin_3s_linear_infinite]"
+                      style={{ 
+                        background: `conic-gradient(from 0deg, transparent 0%, transparent 35%, ${pkgColor} 45%, #ffffff 50%, transparent 50%, transparent 85%, ${pkgColor} 95%, #ffffff 100%)` 
+                      }}
+                    />
+                  ) : (
+                    /* Viền Gradient tỏa sáng nhịp thở cho gói hai bên */
+                    <div 
+                      className="absolute inset-0 animate-pulse"
+                      style={{ 
+                        background: `linear-gradient(135deg, ${pkgColor}, ${pkgColor}50, ${pkgColor})`,
+                        opacity: 0.9
+                      }}
+                    />
+                  )}
+                </div>
+
+                {/* Nội dung chính của gói (Inner Card) - Bắt buộc dùng bg-card đặc (không trong suốt) để che ánh sáng bên trong */}
                 <div 
-                  className="absolute -inset-2 opacity-0 group-hover:opacity-10 transition-opacity duration-500 blur-3xl z-[-1] pointer-events-none"
-                  style={{ backgroundColor: pkg.badgeColor || "#1978DC" }}
-                />
+                  className="relative flex flex-col h-full rounded-[24px] p-8 z-10 bg-card"
+                >
+                  {/* Nhãn (Badge) - Thụt hẳn vào bên trong góc phải */}
+                  {badgeText && (
+                    <div 
+                      className="absolute top-5 right-5 px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest text-white shadow-lg z-50"
+                      style={{ backgroundColor: pkgColor }}
+                    >
+                      {badgeText}
+                    </div>
+                  )}
+
+                  {/* Hiệu ứng Glow thường trực chìm dưới nền (Chỉ Gói Giữa) */}
+                  <div 
+                    className={`absolute -inset-4 transition-opacity duration-500 blur-[50px] z-[-1] pointer-events-none ${
+                      isMiddle ? 'opacity-20' : 'opacity-0 group-hover:opacity-10'
+                    }`}
+                    style={{ backgroundColor: pkgColor }}
+                  />
 
                 <div className="mb-6 flex-1">
                   <h3 className="text-2xl font-bold mb-3 tracking-tight" dangerouslySetInnerHTML={{ __html: formatTextGradients(pkg.name) }} />
@@ -150,11 +164,11 @@ export default function Pricing({ data: previewData }: { data?: any }) {
                     >
                       <div 
                         className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 transition-all duration-300 group-hover/item:scale-125 group-hover/item:shadow-[0_0_15px_rgba(255,255,255,0.2)]"
-                        style={{ backgroundColor: (pkg.isRecommended || pkg.badgeText) ? `${pkg.badgeColor || "#1978DC"}30` : 'rgba(255,255,255,0.05)' }}
+                        style={{ backgroundColor: `${pkgColor}30` }}
                       >
                         <Check 
-                          className={`w-3.5 h-3.5 flex-shrink-0 transition-transform duration-500 group-hover/item:rotate-[360deg] ${(pkg.isRecommended || pkg.badgeText) ? '' : 'text-muted-foreground'}`} 
-                          style={{ color: (pkg.isRecommended || pkg.badgeText) ? (pkg.badgeColor || "#1978DC") : undefined }}
+                          className="w-3.5 h-3.5 flex-shrink-0 transition-transform duration-500 group-hover/item:rotate-[360deg]" 
+                          style={{ color: pkgColor }}
                         />
                       </div>
                       <span className="text-sm md:text-[15px] font-medium leading-snug transition-colors duration-300 group-hover/item:text-foreground" dangerouslySetInnerHTML={{ __html: formatTextGradients(step) }} />
@@ -163,26 +177,25 @@ export default function Pricing({ data: previewData }: { data?: any }) {
                 </motion.ul>
 
                 <div className="space-y-3">
-                  <a
-                    href={pkg.buttonHref || pricing.buttonHref || "#pricing"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`w-full flex items-center justify-center h-14 rounded-2xl font-black text-[16px] uppercase tracking-wider transition-all duration-500 relative overflow-hidden group shadow-md ${
-                      (pkg.isRecommended || pkg.badgeText)
-                        ? "text-white hover:shadow-xl hover:-translate-y-0.5" 
-                        : "bg-primary/10 text-primary hover:bg-primary/20"
-                    }`}
-                    style={ (pkg.isRecommended || pkg.badgeText) ? { 
-                      background: `linear-gradient(135deg, ${pkg.badgeColor || "#1978DC"} 0%, ${pkg.badgeColor ? pkg.badgeColor + 'DD' : "#145DAA"} 100%)`
-                    } : {}}
-                  >
-                    <span className="relative z-10">{pkg.buttonText || "Đăng ký ngay"}</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:animate-shimmer" />
-                  </a>
+                    <a
+                      href={pkg.buttonHref || pricing.buttonHref || "#pricing"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-center h-14 rounded-2xl font-black text-[16px] uppercase tracking-wider transition-all duration-500 relative overflow-hidden group shadow-md text-white hover:shadow-xl hover:-translate-y-0.5"
+                      style={{ 
+                        background: `linear-gradient(135deg, ${pkgColor} 0%, ${pkgColor}DD 100%)`
+                      }}
+                    >
+                      <span className="relative z-10">{pkg.buttonText || "Đăng ký ngay"}</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                    </a>
+                  </div>
                 </div>
               </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            </div>
+            );
+          })}
         </div>
       </div>
     </section>

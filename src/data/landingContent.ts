@@ -115,7 +115,7 @@ export const landingData: any = {
         buttonText: "Đăng ký ngay",
         isRecommended: false,
         badgeText: "Tiết kiệm",
-        badgeColor: "#6B7280"
+        badgeColor: "#059669"
       },
       {
         name: "Gói LIVE CLASS",
