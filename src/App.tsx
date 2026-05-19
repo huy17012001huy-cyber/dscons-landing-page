@@ -8,6 +8,7 @@ import AuthGuard from "@/components/admin/AuthGuard";
 import Login from "@/pages/admin/Login";
 import Dashboard from "@/pages/admin/Dashboard";
 import Index from "./pages/Index.tsx";
+import RegisterPage from "./pages/RegisterPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
             </Route>
 
             {/* Dynamic Landing Pages */}
+            <Route path="/dang-ky" element={<RegisterPage />} />
             <Route path="/:slug" element={<Index />} />
 
             {/* Catch-all */}
