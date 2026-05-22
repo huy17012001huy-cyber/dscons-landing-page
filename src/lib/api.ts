@@ -252,6 +252,35 @@ export const getCompetitorQueries = async () => {
   return data;
 };
 
+export const saveChatbotQuestion = async (queryText: string, category: string = "Gõ tự do") => {
+  try {
+    const { error } = await supabase
+      .from("chatbot_questions")
+      .insert({
+        query_text: queryText,
+        category: category
+      });
+    if (error) {
+      console.error("Supabase insert chatbot_questions error:", error);
+    }
+  } catch (err) {
+    console.error("Error saving chatbot question:", err);
+  }
+};
+
+export const getChatbotQuestions = async () => {
+  const { data, error } = await supabase
+    .from("chatbot_questions")
+    .select("*")
+    .order("created_at", { ascending: false });
+  
+  if (error) {
+    console.error("Error fetching chatbot questions:", error);
+    return [];
+  }
+  return data;
+};
+
 export const uploadImage = async (file: File): Promise<string | null> => {
   try {
     const fileExt = file.name.split('.').pop() || "png";

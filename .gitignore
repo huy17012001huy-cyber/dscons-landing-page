@@ -10,7 +10,15 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+# Secrets and local configurations
+.env
+.env.*
 *.local
+
+# Databases, temporary assets and scrap scripts
+*.db
+*.xlsx
+scratch/
 
 # Editor directories and files
 .vscode/*

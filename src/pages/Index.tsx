@@ -12,6 +12,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getSectionData, recordPageView, getLandingPageBySlug } from "@/lib/api";
 import { AnimatePresence } from "framer-motion";
 import { PageProvider } from "@/contexts/PageContext";
+import ChatbotWidget from "@/components/landing/ChatbotWidget";
 
 // Lazy load non-critical sections
 const PainPoints = lazy(() => import("@/components/sections/PainPoints"));
@@ -126,6 +127,7 @@ const Index = () => {
           </main>
           
           <Footer data={settings} />
+          <ChatbotWidget />
         </div>
       </div>
     </PageProvider>
