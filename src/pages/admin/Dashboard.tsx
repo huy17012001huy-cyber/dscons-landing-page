@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { 
   LogOut, LayoutDashboard, Type, ImageIcon, List, Settings, Save, UploadCloud, 
   EyeOff, Loader2, Eye, X, Gift, Key, Globe, LayoutTemplate, AlertCircle, 
-  CheckCircle2, Check, RotateCcw, Map, Trophy, Users, MessageSquare, CreditCard, HelpCircle, 
+  CheckCircle2, Check, RotateCcw, Map, Trophy, Layers, Users, MessageSquare, CreditCard, HelpCircle, 
   Scale, MousePointerClick, Palette, Bot, ChevronDown, ChevronUp, Video, Trash2, Tag, Download, Calendar
 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -30,6 +30,9 @@ import { landingData } from "@/data/landingContent";
 import { IconSelector } from "@/components/admin/IconSelector";
 import { LandingPageManager } from "@/components/admin/LandingPageManager";
 import { AccountManager } from "@/components/admin/AccountManager";
+import { CRMProducts } from "@/components/admin/CRMProducts";
+import { CRMCustomers } from "@/components/admin/CRMCustomers";
+import { CRMOrders } from "@/components/admin/CRMOrders";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import * as XLSX from "xlsx";
@@ -515,6 +518,43 @@ export default function Dashboard() {
           </div>
 
           <div className="mt-8 space-y-1">
+            <p className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Quản lý CRM &amp; Bán hàng</p>
+            <button 
+              onClick={() => setActiveSection("crm-products")}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors ${
+                activeSection === "crm-products" 
+                  ? "bg-primary text-primary-foreground shadow-sm" 
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+            >
+              <Layers className="w-4 h-4" />
+              Khóa học (Products)
+            </button>
+            <button 
+              onClick={() => setActiveSection("crm-customers")}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors ${
+                activeSection === "crm-customers" 
+                  ? "bg-primary text-primary-foreground shadow-sm" 
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+            >
+              <Users className="w-4 h-4" />
+              Khách hàng (Customers)
+            </button>
+            <button 
+              onClick={() => setActiveSection("crm-orders")}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors ${
+                activeSection === "crm-orders" 
+                  ? "bg-primary text-primary-foreground shadow-sm" 
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+            >
+              <CreditCard className="w-4 h-4" />
+              Đơn hàng (Orders)
+            </button>
+          </div>
+
+          <div className="mt-8 space-y-1">
             <p className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Hệ thống</p>
             <button 
               onClick={() => setActiveSection("settings")}
@@ -552,31 +592,47 @@ export default function Dashboard() {
         <header className="h-16 flex items-center justify-between px-8 border-b bg-background sticky top-0 z-10 shrink-0">
           <div className="flex items-center gap-3">
             <h2 className="text-xl font-semibold">
-              {sections.find(s => s.id === activeSection)?.name}
+              {activeSection === "crm-products" 
+                ? "Quản lý Gói Khóa học" 
+                : activeSection === "crm-customers" 
+                ? "Quản lý Khách hàng & Học viên" 
+                : activeSection === "crm-orders" 
+                ? "Quản lý Đơn hàng & Thanh toán" 
+                : activeSection === "settings" 
+                ? "Cài đặt Landing Page" 
+                : sections.find(s => s.id === activeSection)?.name}
             </h2>
           </div>
           
-          <div className="flex items-center gap-3">
-            <Button variant="outline" size="sm" onClick={handleToggleVisibility} className="gap-2 text-muted-foreground border-dashed">
-              <EyeOff className="w-4 h-4" /> {sectionData?.is_visible === false ? "Đang Ẩn" : "Ẩn Section này"}
-            </Button>
-            <div className="w-px h-6 bg-border mx-2"></div>
-            <Button variant="outline" size="sm" onClick={handleSaveDraft} className="gap-2">
-              <Save className="w-4 h-4" /> Lưu nháp
-            </Button>
-            <Button size="sm" onClick={handlePublish} className="gap-2 bg-green-600 hover:bg-green-700 text-white">
-              <UploadCloud className="w-4 h-4" /> Xuất bản (Publish)
-            </Button>
-          </div>
+          {sections.some(s => s.id === activeSection) && (
+            <div className="flex items-center gap-3">
+              <Button variant="outline" size="sm" onClick={handleToggleVisibility} className="gap-2 text-muted-foreground border-dashed">
+                <EyeOff className="w-4 h-4" /> {sectionData?.is_visible === false ? "Đang Ẩn" : "Ẩn Section này"}
+              </Button>
+              <div className="w-px h-6 bg-border mx-2"></div>
+              <Button variant="outline" size="sm" onClick={handleSaveDraft} className="gap-2">
+                <Save className="w-4 h-4" /> Lưu nháp
+              </Button>
+              <Button size="sm" onClick={handlePublish} className="gap-2 bg-green-600 hover:bg-green-700 text-white">
+                <UploadCloud className="w-4 h-4" /> Xuất bản (Publish)
+              </Button>
+            </div>
+          )}
         </header>
 
         {/* Content Area & Live Preview Split */}
         <div className="flex-1 overflow-hidden flex relative">
           {/* Left Panel: Form */}
-          <div className={`${activeSection === "settings" || activeSection === "system-settings" || (activeSection === "comparison" && comparisonActiveTab === "history") ? "w-full" : activeSection === "comparison" ? "w-[40%]" : "w-[500px]"} flex-shrink-0 overflow-y-auto border-r border-border bg-card/50 transition-all duration-300`}>
+          <div className={`${activeSection === "settings" || activeSection === "system-settings" || activeSection === "crm-products" || activeSection === "crm-customers" || activeSection === "crm-orders" || (activeSection === "comparison" && comparisonActiveTab === "history") ? "w-full" : activeSection === "comparison" ? "w-[40%]" : "w-[500px]"} flex-shrink-0 overflow-y-auto border-r border-border bg-card/50 transition-all duration-300`}>
             <div className="p-6 border-b bg-muted/40 sticky top-0 z-10 backdrop-blur-sm">
-              <h3 className="font-semibold text-lg">Chỉnh sửa nội dung</h3>
-              <p className="text-sm text-muted-foreground">Thay đổi nội dung text, hình ảnh cho vùng {activeSection === "settings" ? "Cài đặt hệ thống" : sections.find(s => s.id === activeSection)?.name}.</p>
+              <h3 className="font-semibold text-lg">
+                {activeSection.startsWith("crm-") ? "Quản lý dữ liệu CRM" : "Chỉnh sửa nội dung"}
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                {activeSection.startsWith("crm-") 
+                  ? "Xem và quản lý thông tin bán hàng trực tiếp" 
+                  : `Thay đổi nội dung text, hình ảnh cho vùng ${activeSection === "settings" ? "Cài đặt hệ thống" : sections.find(s => s.id === activeSection)?.name}.`}
+              </p>
             </div>
             
             <div className="p-6">
@@ -2916,6 +2972,18 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
+              ) : activeSection === "crm-products" ? (
+                <div className="pb-12">
+                  <CRMProducts />
+                </div>
+              ) : activeSection === "crm-customers" ? (
+                <div className="pb-12">
+                  <CRMCustomers />
+                </div>
+              ) : activeSection === "crm-orders" ? (
+                <div className="pb-12">
+                  <CRMOrders />
+                </div>
               ) : (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground">Khu vực kéo thả và chỉnh sửa linh kiện cho <span className="font-bold text-foreground">{activeSection === "settings" ? "Cài đặt giao diện" : sections.find((s: any) => s.id === activeSection)?.name}</span> đang được xây dựng.</p>
@@ -2925,7 +2993,7 @@ export default function Dashboard() {
             </div>
           </div>
                     {/* Right Panel: Live Preview */}
-          {activeSection !== "settings" && activeSection !== "system-settings" && !(activeSection === "comparison" && comparisonActiveTab === "history") && (
+          {activeSection !== "settings" && activeSection !== "system-settings" && activeSection !== "crm-products" && activeSection !== "crm-customers" && activeSection !== "crm-orders" && !(activeSection === "comparison" && comparisonActiveTab === "history") && (
             <div className="flex-1 w-full bg-background relative isolate overflow-x-hidden overflow-y-auto">
                {activeSection === "header" && (
                   <div className="pointer-events-none origin-top-left scale-[0.8] w-[125%] h-full">
