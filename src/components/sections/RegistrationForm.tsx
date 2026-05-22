@@ -527,7 +527,7 @@ const RegistrationForm = () => {
                       {/* Cột 1: Mã QR nhận tiền tự động điền thông số */}
                       <div className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-white/10">
                         <img 
-                          src={`https://qr.sepay.vn/img?acc=${BANK_ACCOUNT}&bank=${BANK_CODE}&amount=${registrationData.amount}&des=DS${registrationData.phone}`}
+                          src={`https://qr.sepay.vn/img?acc=${BANK_ACCOUNT}&bank=${BANK_CODE}&amount=${registrationData.amount}&des=SEVQR%20DS${registrationData.phone}`}
                           alt="VietQR Code" 
                           className="w-64 h-64 object-contain"
                         />
@@ -545,7 +545,7 @@ const RegistrationForm = () => {
                           <div className="flex justify-between"><span className="text-muted-foreground">Khách hàng:</span><span className="font-semibold">{registrationData.name}</span></div>
                           <div className="flex justify-between"><span className="text-muted-foreground">Mã đơn hàng:</span><span className="font-semibold text-primary">{registrationData.orderId}</span></div>
                           <div className="flex justify-between"><span className="text-muted-foreground">Học phí cần đóng:</span><span className="font-extrabold text-white text-base">{registrationData.amount.toLocaleString()} VNĐ</span></div>
-                          <div className="flex justify-between"><span className="text-muted-foreground">Nội dung bắt buộc:</span><span className="font-extrabold text-amber-400 text-base font-mono">DS{registrationData.phone}</span></div>
+                          <div className="flex justify-between"><span className="text-muted-foreground">Nội dung bắt buộc:</span><span className="font-extrabold text-amber-400 text-base font-mono">SEVQR DS{registrationData.phone}</span></div>
                         </div>
 
                         <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl text-xs space-y-2">
