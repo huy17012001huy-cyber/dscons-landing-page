@@ -70,8 +70,8 @@ const RegistrationForm = () => {
   const [paymentCompleted, setPaymentCompleted] = useState<boolean>(false);
 
   // Thông tin ngân hàng của bạn - hãy cấu hình đúng số tài khoản và tên ngân hàng nhận tiền
-  const BANK_ACCOUNT = "102871034456"; 
-  const BANK_CODE = "VietinBank"; 
+  const BANK_ACCOUNT = "105870479657"; 
+  const BANK_CODE = "VietinBank";  
 
   // Polling cơ sở dữ liệu Supabase để tự động phát hiện trạng thái đơn hàng thành công
   useEffect(() => {
