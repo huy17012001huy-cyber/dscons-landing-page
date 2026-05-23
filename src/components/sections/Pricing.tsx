@@ -1,15 +1,36 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { landingData } from "@/data/landingContent";
 import { Check } from "lucide-react";
 import { getSectionData } from "@/lib/api";
 import { usePageContext } from "@/contexts/PageContext";
 import { formatTextGradients } from "@/lib/textUtils";
+import { supabase } from "@/lib/supabase";
 
 export default function Pricing({ data: previewData }: { data?: any }) {
   const { pageId } = usePageContext();
   const [pricing, setPricing] = useState(landingData.pricing);
   const [isVisible, setIsVisible] = useState(true);
+  const [zaloLink, setZaloLink] = useState("https://zalo.me/0394784284");
+
+  useEffect(() => {
+    const fetchZaloLink = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("system_settings")
+          .select("value")
+          .eq("key", "zalo_link")
+          .single();
+        if (data && data.value) {
+          setZaloLink(data.value);
+        }
+      } catch (err) {
+        console.error("Lỗi khi tải Zalo link từ database:", err);
+      }
+    };
+    fetchZaloLink();
+  }, []);
 
   useEffect(() => {
     if (previewData) {
@@ -30,6 +51,20 @@ export default function Pricing({ data: previewData }: { data?: any }) {
   }, [previewData]);
 
   if (!isVisible) return null;
+
+  const getPackageId = (pkgName: string) => {
+    const name = pkgName.toLowerCase();
+    if (name.includes("thực chiến") || name.includes("thuc chien") || name.includes("live")) {
+      return "revit-mep-thuc-chien";
+    }
+    if (name.includes("combo")) {
+      return "revit-mep-combo";
+    }
+    if (name.includes("all") || name.includes("kèm") || name.includes("1-1") || name.includes("chuyên gia") || name.includes("video")) {
+      return "revit-mep-all-in-one";
+    }
+    return "revit-mep-combo"; // fallback default
+  };
 
   return (
     <section id="pricing" className="py-24 px-4 bg-muted/50">
@@ -176,20 +211,36 @@ export default function Pricing({ data: previewData }: { data?: any }) {
                   ))}
                 </motion.ul>
 
-                <div className="space-y-3">
-                    <a
-                      href={pkg.buttonHref || pricing.buttonHref || "#pricing"}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full flex items-center justify-center h-14 rounded-2xl font-black text-[16px] uppercase tracking-wider transition-all duration-500 relative overflow-hidden group shadow-md text-white hover:shadow-xl hover:-translate-y-0.5"
-                      style={{ 
-                        background: `linear-gradient(135deg, ${pkgColor} 0%, ${pkgColor}DD 100%)`
-                      }}
-                    >
-                      <span className="relative z-10">{pkg.buttonText || "Đăng ký ngay"}</span>
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:animate-shimmer" />
-                    </a>
-                  </div>
+                <div className="space-y-3 mt-auto">
+                  {/* Nút 1: THANH TOÁN NGAY (CTA Chính) */}
+                  <Link
+                    to={`/dang-ky?package=${getPackageId(pkg.name)}`}
+                    className="w-full flex items-center justify-center h-14 rounded-2xl font-black text-[16px] uppercase tracking-wider transition-all duration-500 relative overflow-hidden group shadow-md text-white hover:shadow-xl hover:-translate-y-0.5 cursor-pointer"
+                    style={{ 
+                      background: `linear-gradient(135deg, ${pkgColor} 0%, ${pkgColor}DD 100%)`
+                    }}
+                  >
+                    <span className="relative z-10">Thanh toán ngay 💳</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                  </Link>
+
+                  {/* Nút 2: CẦN TƯ VẤN THÊM (CTA Phụ) */}
+                  <a
+                    href={zaloLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex items-center justify-center h-12 rounded-2xl font-bold text-[14px] uppercase tracking-wider transition-all duration-500 relative overflow-hidden group border hover:shadow-md hover:-translate-y-0.5 cursor-pointer bg-transparent hover:bg-muted/10"
+                    style={{ 
+                      borderColor: `${pkgColor}60`,
+                      color: pkgColor
+                    }}
+                  >
+                    <svg className="w-4 h-4 mr-2 fill-current" viewBox="0 0 24 24">
+                      <path d="M12.003 2C6.48 2 2 6.04 2 11.02c0 2.94 1.57 5.53 4.02 7.15-.17.65-.63 2.4-1.04 3.79-.1.35.1.72.46.72.1 0 .21-.02.3-.08 1.48-.96 4.39-2.9 5.25-3.48.33.04.66.07 1.01.07 5.52 0 10-4.04 10-9.02C22.003 6.04 17.52 2 12.003 2z" />
+                    </svg>
+                    <span className="relative z-10">Cần tư vấn thêm</span>
+                  </a>
+                </div>
                 </div>
               </div>
               </motion.div>

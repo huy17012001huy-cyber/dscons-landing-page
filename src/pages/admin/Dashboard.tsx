@@ -19,11 +19,13 @@ import {
   LogOut, LayoutDashboard, Type, ImageIcon, List, Settings, Save, UploadCloud, 
   EyeOff, Loader2, Eye, X, Gift, Key, Globe, LayoutTemplate, AlertCircle, 
   CheckCircle2, Check, RotateCcw, Map, Trophy, Layers, Users, MessageSquare, CreditCard, HelpCircle, 
-  Scale, MousePointerClick, Palette, Bot, ChevronDown, ChevronUp, Video, Trash2, Tag, Download, Calendar
+  Scale, MousePointerClick, Palette, Bot, ChevronDown, ChevronUp, Video, Trash2, Tag, Download, Calendar,
+  Mail, Send
 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { getLandingPages, getSectionData, saveDraft, publishSection, getCompetitorQueries, toggleVisibility, SectionData, getPageStats } from "@/lib/api";
+import { supabase } from "@/lib/supabase";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { formatTextGradients } from "@/lib/utils";
 import { landingData } from "@/data/landingContent";
@@ -53,6 +55,135 @@ export default function Dashboard() {
   const [isDark, setIsDark] = useState(true);
   const [showApiKey, setShowApiKey] = useState(false);
   const [historyDateFilter, setHistoryDateFilter] = useState("");
+
+  // Cấu hình hệ thống động (Supabase system_settings)
+  const [systemSettings, setSystemSettings] = useState({
+    zalo_link: "https://zalo.me/0394784284",
+    bank_account: "105870479657",
+    bank_code: "VietinBank",
+    bank_owner: "PHAM QUANG HUY",
+    resend_api_key: "",
+    resend_sender_email: "onboarding@resend.dev",
+    is_test_mode: "true"
+  });
+  const [isSavingSystemSettings, setIsSavingSystemSettings] = useState(false);
+
+  // Cấu hình mẫu email động (Supabase email_templates)
+  const [emailTemplates, setEmailTemplates] = useState<any[]>([]);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>("waitlist-welcome");
+  const [templateSubject, setTemplateSubject] = useState("");
+  const [templateHtml, setTemplateHtml] = useState("");
+  const [isLoadingTemplates, setIsLoadingTemplates] = useState(false);
+  const [isSavingTemplate, setIsSavingTemplate] = useState(false);
+  const [testEmailTarget, setTestEmailTarget] = useState("");
+  const [isSendingTestEmail, setIsSendingTestEmail] = useState(false);
+
+  useEffect(() => {
+    if (emailTemplates.length > 0) {
+      const current = emailTemplates.find(t => t.id === selectedTemplateId);
+      if (current) {
+        setTemplateSubject(current.subject);
+        setTemplateHtml(current.html_content);
+      }
+    }
+  }, [selectedTemplateId, emailTemplates]);
+
+  const handleSaveSystemSettings = async () => {
+    setIsSavingSystemSettings(true);
+    const toastId = toast.loading("Đang lưu cấu hình hệ thống...");
+    try {
+      const updatePromises = Object.entries(systemSettings).map(([key, value]) => {
+        return supabase
+          .from("system_settings")
+          .upsert({ key, value, updated_at: new Date() }, { onConflict: "key" });
+      });
+
+      const results = await Promise.all(updatePromises);
+      const errors = results.filter(r => r.error);
+      
+      if (errors.length > 0) {
+        throw new Error("Lỗi khi lưu một số trường cấu hình.");
+      }
+
+      toast.success("Đã lưu tất cả cấu hình hệ thống thành công!", { id: toastId });
+    } catch (err: any) {
+      console.error("Lỗi lưu cấu hình hệ thống:", err);
+      toast.error(err.message || "Lỗi khi lưu cấu hình hệ thống", { id: toastId });
+    } finally {
+      setIsSavingSystemSettings(false);
+    }
+  };
+
+  const handleSaveTemplate = async () => {
+    setIsSavingTemplate(true);
+    const toastId = toast.loading("Đang lưu mẫu email...");
+    try {
+      const { error } = await supabase
+        .from("email_templates")
+        .update({
+          subject: templateSubject,
+          html_content: templateHtml,
+          updated_at: new Date()
+        })
+        .eq("id", selectedTemplateId);
+
+      if (error) throw error;
+
+      setEmailTemplates(prev => prev.map(t => t.id === selectedTemplateId ? { ...t, subject: templateSubject, html_content: templateHtml } : t));
+      toast.success("Lưu mẫu email thành công!", { id: toastId });
+    } catch (err: any) {
+      console.error("Lỗi khi lưu mẫu email:", err);
+      toast.error(err.message || "Lỗi lưu mẫu email", { id: toastId });
+    } finally {
+      setIsSavingTemplate(false);
+    }
+  };
+
+  const handleSendTestTemplateEmail = async () => {
+    if (!testEmailTarget) {
+      toast.error("Vui lòng điền địa chỉ email nhận test!");
+      return;
+    }
+    setIsSendingTestEmail(true);
+    const toastId = toast.loading(`Đang gửi email test tới ${testEmailTarget}...`);
+    try {
+      let response;
+      if (selectedTemplateId === "order-confirmation") {
+        response = await fetch("/api/send-order-confirm", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: testEmailTarget,
+            customerName: "Học Viên Test",
+            productName: "Combo Revit MEP Thực Chiến",
+            amount: 6400000,
+            downloadUrl: "https://drive.google.com/drive/folders/2_revit_mep_combo_gifts_fake"
+          })
+        });
+      } else {
+        response = await fetch("/api/send-sequence", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: `${testEmailTarget}+test`,
+            name: "Học Viên Test"
+          })
+        });
+      }
+
+      const resData = await response.json();
+      if (!response.ok) {
+        throw new Error(resData.error || "Gửi email test thất bại");
+      }
+
+      toast.success("Đã kích hoạt gửi thử nghiệm thành công! Hãy kiểm tra hòm thư.", { id: toastId });
+    } catch (err: any) {
+      console.error("Lỗi gửi thử nghiệm mẫu email:", err);
+      toast.error(err.message || "Gửi email test thất bại", { id: toastId });
+    } finally {
+      setIsSendingTestEmail(false);
+    }
+  };
 
   const filteredQueries = historyDateFilter 
     ? competitorQueries.filter(q => {
@@ -92,7 +223,7 @@ export default function Dashboard() {
     { id: "faq", name: "FAQ", icon: <HelpCircle className="w-4 h-4" /> },
     { id: "comparison", name: "Bảng So Sánh", icon: <Scale className="w-4 h-4" /> },
     { id: "cta", name: "Bottom CTA", icon: <MousePointerClick className="w-4 h-4" /> },
-    { id: "system-settings", name: "Cài đặt giao diện", icon: <Palette className="w-4 h-4" /> },
+    { id: "theme-settings", name: "Cài đặt giao diện", icon: <Palette className="w-4 h-4" /> },
   ];
 
   // Form states
@@ -110,9 +241,9 @@ export default function Dashboard() {
   });
   const [comparisonActiveTab, setComparisonActiveTab] = useState<"config" | "history">("config");
   const [faqForm, setFaqForm] = useState(landingData.faq);
-  const [testimonialsForm, setTestimonialsForm] = useState(landingData.testimonials);
-  const [benefitsForm, setBenefitsForm] = useState(landingData.solution);
-  const [socialForm, setSocialForm] = useState(landingData.outcomes);
+  const [testimonialsForm, setTestimonialsForm] = useState(landingData.testimonials || { badge: "", title: "", textItems: [], videoItems: [], partners: [], partnersRow2: [], partnersRow3: [] });
+  const [benefitsForm, setBenefitsForm] = useState(landingData.solution || landingData.benefits || { badge: "", title: "", items: [] });
+  const [socialForm, setSocialForm] = useState(landingData.outcomes || { badge: "", title: "", description: "", items: [] });
   const [curriculumForm, setCurriculumForm] = useState(landingData.curriculum);
 
   const [settingsForm, setSettingsForm] = useState({
@@ -172,13 +303,47 @@ export default function Dashboard() {
         ]);
         if (hData?.draft_content) setHeaderForm(prev => ({ ...prev, ...hData.draft_content }));
         if (hrData?.draft_content) setHeroForm(prev => ({ ...prev, ...hrData.draft_content }));
-      } else if (activeSection === "settings" || activeSection === "system-settings") {
+      } else if (activeSection === "settings" || activeSection === "theme-settings") {
         const [sData, stats] = await Promise.all([
           getSectionData("settings", activePageId),
           getPageStats()
         ]);
         if (sData?.draft_content) setSettingsForm(prev => ({ ...prev, ...sData.draft_content }));
         if (stats) setPageStats(stats);
+      } else if (activeSection === "system-settings") {
+        try {
+          const { data, error } = await supabase.from("system_settings").select("*");
+          if (data && !error) {
+            const newSettings: any = {};
+            data.forEach(item => {
+              newSettings[item.key] = item.value;
+            });
+            setSystemSettings(prev => ({ ...prev, ...newSettings }));
+          }
+        } catch (err) {
+          console.error("Lỗi khi tải system_settings từ database:", err);
+        }
+      } else if (activeSection === "email-templates") {
+        setIsLoadingTemplates(true);
+        try {
+          const { data, error } = await supabase
+            .from("email_templates")
+            .select("*")
+            .order("id");
+          
+          if (data && !error) {
+            setEmailTemplates(data);
+            const current = data.find(t => t.id === selectedTemplateId);
+            if (current) {
+              setTemplateSubject(current.subject);
+              setTemplateHtml(current.html_content);
+            }
+          }
+        } catch (err) {
+          console.error("Lỗi khi tải mẫu email từ database:", err);
+        } finally {
+          setIsLoadingTemplates(false);
+        }
       } else {
         const data = await getSectionData(activeSection, activePageId);
         if (data) {
@@ -227,6 +392,27 @@ export default function Dashboard() {
           if (activeSection === "benefits" && data.draft_content) setBenefitsForm(prev => ({ ...prev, ...data.draft_content }));
           if (activeSection === "social" && data.draft_content) setSocialForm(prev => ({ ...prev, ...data.draft_content }));
           if (activeSection === "curriculum" && data.draft_content) setCurriculumForm(prev => ({ ...prev, ...data.draft_content }));
+        } else {
+          // Khởi tạo lại sectionData mặc định để tránh lưu vết của tab cũ
+          setSectionData({
+            id: activeSection,
+            page_id: activePageId,
+            is_visible: true,
+            draft_content: null,
+            published_content: null
+          } as any);
+
+          // Nạp lại dữ liệu gốc từ landingData y như landing page
+          if (activeSection === "pain-points") setPainPointsForm(landingData.painPoints);
+          if (activeSection === "bonus") setBonusForm((landingData as any).bonus || { title: "Đừng bỏ lỡ cơ hội thăng tiến!", features: [] });
+          if (activeSection === "instructor") setInstructorForm(landingData.instructor);
+          if (activeSection === "pricing") setPricingForm(landingData.pricing);
+          if (activeSection === "cta") setCtaForm(landingData.bottomCta);
+          if (activeSection === "faq") setFaqForm(landingData.faq);
+          if (activeSection === "testimonials") setTestimonialsForm(landingData.testimonials || { badge: "", title: "", textItems: [], videoItems: [], partners: [], partnersRow2: [], partnersRow3: [] });
+          if (activeSection === "benefits") setBenefitsForm(landingData.solution || landingData.benefits || { badge: "", title: "", items: [] });
+          if (activeSection === "social") setSocialForm(landingData.outcomes || { badge: "", title: "", description: "", items: [] });
+          if (activeSection === "curriculum") setCurriculumForm(landingData.curriculum);
         }
       }
       setIsLoading(false);
@@ -314,7 +500,7 @@ export default function Dashboard() {
         return;
       }
 
-      if (activeSection === "settings" || activeSection === "system-settings") {
+      if (activeSection === "settings" || activeSection === "theme-settings") {
         await saveDraft("settings", settingsForm, activePageId);
         toast.success("Thao tác thành công!");
         return;
@@ -352,7 +538,7 @@ export default function Dashboard() {
         return;
       }
 
-      if (activeSection === "settings" || activeSection === "system-settings") {
+      if (activeSection === "settings" || activeSection === "theme-settings") {
         await publishSection("settings", settingsForm, true, activePageId);
         toast.success("Thao tác thành công!");
         return;
@@ -564,8 +750,30 @@ export default function Dashboard() {
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
             >
-              <Settings className="w-4 h-4" />
+              <Globe className="w-4 h-4" />
               Cài đặt Landing Page
+            </button>
+            <button 
+              onClick={() => setActiveSection("system-settings")}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors ${
+                activeSection === "system-settings" 
+                  ? "bg-primary text-primary-foreground shadow-sm" 
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+            >
+              <Settings className="w-4 h-4" />
+              Cấu hình chuyển khoản &amp; API
+            </button>
+            <button 
+              onClick={() => setActiveSection("email-templates")}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors ${
+                activeSection === "email-templates" 
+                  ? "bg-primary text-primary-foreground shadow-sm" 
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+            >
+              <Mail className="w-4 h-4" />
+              Quản lý Mẫu Email
             </button>
           </div>
         </div>
@@ -604,7 +812,7 @@ export default function Dashboard() {
             </h2>
           </div>
           
-          {sections.some(s => s.id === activeSection) && (
+          {sections.some(s => s.id === activeSection) && activeSection !== "system-settings" && activeSection !== "email-templates" && (
             <div className="flex items-center gap-3">
               <Button variant="outline" size="sm" onClick={handleToggleVisibility} className="gap-2 text-muted-foreground border-dashed">
                 <EyeOff className="w-4 h-4" /> {sectionData?.is_visible === false ? "Đang Ẩn" : "Ẩn Section này"}
@@ -623,7 +831,7 @@ export default function Dashboard() {
         {/* Content Area & Live Preview Split */}
         <div className="flex-1 overflow-hidden flex relative">
           {/* Left Panel: Form */}
-          <div className={`${activeSection === "settings" || activeSection === "system-settings" || activeSection === "crm-products" || activeSection === "crm-customers" || activeSection === "crm-orders" || (activeSection === "comparison" && comparisonActiveTab === "history") ? "w-full" : activeSection === "comparison" ? "w-[40%]" : "w-[500px]"} flex-shrink-0 overflow-y-auto border-r border-border bg-card/50 transition-all duration-300`}>
+          <div className={`${activeSection === "settings" || activeSection === "system-settings" || activeSection === "theme-settings" || activeSection === "email-templates" || activeSection === "crm-products" || activeSection === "crm-customers" || activeSection === "crm-orders" || (activeSection === "comparison" && comparisonActiveTab === "history") ? "w-full" : activeSection === "comparison" ? "w-[40%]" : "w-[500px]"} flex-shrink-0 overflow-y-auto border-r border-border bg-card/50 transition-all duration-300`}>
             <div className="p-6 border-b bg-muted/40 sticky top-0 z-10 backdrop-blur-sm">
               <h3 className="font-semibold text-lg">
                 {activeSection.startsWith("crm-") ? "Quản lý dữ liệu CRM" : "Chỉnh sửa nội dung"}
@@ -2569,24 +2777,19 @@ export default function Dashboard() {
                                 newPackages[pkgIndex].description = e.target.value;
                                 setPricingForm({...pricingForm, packages: newPackages});
                               }} />
-                          </div>
-                          <div className="grid gap-2">
-                            <label className="text-xs font-medium">Text nút bấm</label>
-                            <input type="text" className="flex h-9 w-full rounded-md border bg-background px-3 text-sm" 
-                              value={pkg.buttonText || "Liên hệ đăng ký ngay"} onChange={(e) => {
-                                const newPackages = [...pricingForm.packages];
-                                newPackages[pkgIndex].buttonText = e.target.value;
-                                setPricingForm({...pricingForm, packages: newPackages});
-                              }} />
-                          </div>
-                          <div className="grid gap-2">
-                            <label className="text-xs font-medium text-primary">Link nút bấm</label>
-                            <input type="text" className="flex h-9 w-full rounded-md border border-primary/30 bg-background px-3 text-sm font-mono" 
-                              value={pkg.buttonHref || ""} onChange={(e) => {
-                                const newPackages = [...pricingForm.packages];
-                                newPackages[pkgIndex].buttonHref = e.target.value;
-                                setPricingForm({...pricingForm, packages: newPackages});
-                              }} placeholder="VD: https://zalo.me/..." />
+                          <div className="grid gap-2 md:col-span-2 p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-1">
+                            <span className="text-xs font-bold text-primary flex items-center gap-1">
+                              <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                              </span>
+                              Tự động đồng bộ giao diện nút bấm kép
+                            </span>
+                            <p className="text-[11px] text-muted-foreground leading-relaxed">
+                              Hệ thống tự động hiển thị <strong>2 nút bấm kép</strong> y hệt ngoài landing page:<br />
+                              • <strong>Thanh toán ngay:</strong> Tự động dẫn tới trang đăng ký và kích hoạt sẵn gói tương ứng.<br />
+                              • <strong>Cần tư vấn thêm:</strong> Tự động kết nối tới link Zalo anh đã cấu hình tại tab Cấu hình chuyển khoản & API.
+                            </p>
                           </div>
                         </div>
 
@@ -2692,23 +2895,261 @@ export default function Dashboard() {
                   {/* Admin Account */}
                   <AccountManager currentUser={user} />
                 </div>
-              ) : activeSection === "system-settings" ? (
-                <div className="space-y-8 pb-12">
-                  {/* API & Webhook Config */}
-                  <div className="bg-card p-6 rounded-xl border shadow-sm space-y-4">
-                    <h3 className="text-lg font-bold flex items-center gap-2">
-                      <Settings className="w-5 h-5 text-primary" /> Cấu hình Hệ thống
+              ) : activeSection === "theme-settings" ? (
+                <div className="space-y-8 pb-12 text-foreground">
+                  {/* Cài đặt SEO & Cơ bản */}
+                  <div className="bg-card p-6 rounded-2xl border border-border/50 shadow-sm space-y-4">
+                    <h3 className="text-lg font-bold flex items-center gap-2 text-primary">
+                      <Globe className="w-5 h-5" /> Cấu hình Cơ bản &amp; SEO
                     </h3>
-                    <div className="grid gap-4">
+                    <p className="text-xs text-muted-foreground">Các cấu hình định danh cơ bản của trang web phục vụ tìm kiếm Google và các kết nối bóc tách tự động.</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-muted-foreground">Google/AI API Key (Dùng cho Bảng So Sánh)</label>
+                        <label className="text-sm font-medium">Tiêu đề Trang Web (SEO Title)</label>
+                        <input 
+                          type="text" 
+                          className="flex h-10 w-full rounded-xl border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all font-semibold" 
+                          value={settingsForm.site_title || ""} 
+                          onChange={(e) => setSettingsForm({...settingsForm, site_title: e.target.value})}
+                          placeholder="VD: DSCons Global Academy — Revit MEP"
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <label className="text-sm font-medium">Đường dẫn Favicon (Icon Tab)</label>
+                        <input 
+                          type="text" 
+                          className="flex h-10 w-full rounded-xl border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all font-mono" 
+                          value={settingsForm.favicon || ""} 
+                          onChange={(e) => setSettingsForm({...settingsForm, favicon: e.target.value})}
+                          placeholder="https://..."
+                        />
+                      </div>
+                    </div>
+                    <div className="grid gap-2 pt-2">
+                      <label className="text-sm font-medium">Đường dẫn Webhook kết toán tự động (SePay / Automation)</label>
+                      <div className="flex gap-2">
+                        <input 
+                          type="text" 
+                          className="flex-1 h-10 rounded-xl border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all font-mono" 
+                          value={settingsForm.webhook_url || ""} 
+                          onChange={(e) => setSettingsForm({...settingsForm, webhook_url: e.target.value})}
+                          placeholder="https://api.sepay.vn/webhooks/..."
+                        />
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          className="h-10 rounded-xl font-bold flex items-center gap-2 whitespace-nowrap"
+                          onClick={async () => {
+                            if (!settingsForm.webhook_url) {
+                              toast.error("Vui lòng điền Webhook URL trước!");
+                              return;
+                            }
+                            const toastId = toast.loading("Đang gửi test tới Webhook...");
+                            try {
+                              const res = await fetch(settingsForm.webhook_url, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                  event: "test_webhook",
+                                  timestamp: new Date().toISOString(),
+                                  test_by: "DSCons Admin Panel",
+                                  message: "Kết nối kiểm tra thông suốt!"
+                                })
+                              });
+                              if (res.ok) {
+                                toast.success("Đã gửi test Webhook thành công!", { id: toastId });
+                              } else {
+                                throw new Error(`Mã lỗi: ${res.status}`);
+                              }
+                            } catch (err: any) {
+                              console.error(err);
+                              toast.error(`Gửi test thất bại: ${err.message}`, { id: toastId });
+                            }
+                          }}
+                        >
+                          Gửi test Webhook 🔌
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Cấu hình Exit Popup */}
+                  <div className="bg-card p-6 rounded-2xl border border-border/50 shadow-sm space-y-4">
+                    <div className="flex items-center justify-between border-b pb-2">
+                      <h3 className="text-lg font-bold flex items-center gap-2 text-primary">
+                        <MousePointerClick className="w-5 h-5" /> Cấu hình Exit Popup (Giữ chân khách hàng)
+                      </h3>
+                      <Switch 
+                        checked={settingsForm.exit_popup?.enabled} 
+                        onCheckedChange={(checked) => setSettingsForm({
+                          ...settingsForm,
+                          exit_popup: {
+                            ...settingsForm.exit_popup,
+                            enabled: checked
+                          }
+                        })}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground">Popup xuất hiện khi khách hàng di chuyển chuột ra khỏi trang chủ hoặc có ý định tắt tab.</p>
+
+                    <div className="grid gap-4 pt-2">
+                      <div className="grid gap-2">
+                        <label className="text-sm font-medium">Tiêu đề Popup</label>
+                        <input 
+                          type="text" 
+                          className="flex h-10 w-full rounded-xl border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all font-bold" 
+                          value={settingsForm.exit_popup?.title || ""} 
+                          onChange={(e) => setSettingsForm({
+                            ...settingsForm,
+                            exit_popup: {
+                              ...settingsForm.exit_popup,
+                              title: e.target.value
+                            }
+                          })}
+                        />
+                      </div>
+
+                      <div className="grid gap-2">
+                        <label className="text-sm font-medium">Nội dung mô tả</label>
+                        <textarea 
+                          className="w-full rounded-xl border bg-background p-3 text-sm focus:ring-2 focus:ring-primary/20 transition-all" 
+                          rows={3}
+                          value={settingsForm.exit_popup?.description || ""} 
+                          onChange={(e) => setSettingsForm({
+                            ...settingsForm,
+                            exit_popup: {
+                              ...settingsForm.exit_popup,
+                              description: e.target.value
+                            }
+                          })}
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid gap-2">
+                          <label className="text-sm font-medium">Text trên nút bấm</label>
+                          <input 
+                            type="text" 
+                            className="flex h-10 w-full rounded-xl border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all" 
+                            value={settingsForm.exit_popup?.buttonText || ""} 
+                            onChange={(e) => setSettingsForm({
+                              ...settingsForm,
+                              exit_popup: {
+                                ...settingsForm.exit_popup,
+                                buttonText: e.target.value
+                              }
+                            })}
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <label className="text-sm font-medium font-mono text-primary">Đường dẫn nút bấm (Để trống nếu dùng form email)</label>
+                          <input 
+                            type="text" 
+                            className="flex h-10 w-full rounded-xl border border-primary/20 bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all font-mono" 
+                            value={settingsForm.exit_popup?.buttonLink || ""} 
+                            onChange={(e) => setSettingsForm({
+                              ...settingsForm,
+                              exit_popup: {
+                                ...settingsForm.exit_popup,
+                                buttonLink: e.target.value
+                              }
+                            })}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid gap-2">
+                          <label className="text-sm font-medium">Dòng chân trang (Footer Text)</label>
+                          <input 
+                            type="text" 
+                            className="flex h-10 w-full rounded-xl border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all" 
+                            value={settingsForm.exit_popup?.footerText || ""} 
+                            onChange={(e) => setSettingsForm({
+                              ...settingsForm,
+                              exit_popup: {
+                                ...settingsForm.exit_popup,
+                                footerText: e.target.value
+                              }
+                            })}
+                          />
+                        </div>
+                        <div className="flex items-center justify-between p-3 bg-muted/40 border rounded-xl">
+                          <span className="text-sm font-medium">Hiển thị ô nhập Email thu thập Leads</span>
+                          <Switch 
+                            checked={settingsForm.exit_popup?.showEmailField} 
+                            onCheckedChange={(checked) => setSettingsForm({
+                              ...settingsForm,
+                              exit_popup: {
+                                ...settingsForm.exit_popup,
+                                showEmailField: checked
+                              }
+                            })}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : activeSection === "system-settings" ? (
+                <div className="space-y-8 pb-12 text-foreground">
+                  {/* Cấu hình cổng chuyển khoản */}
+                  <div className="bg-card p-6 rounded-2xl border border-border/50 shadow-sm space-y-4">
+                    <h3 className="text-lg font-bold flex items-center gap-2 text-primary">
+                      <CreditCard className="w-5 h-5" /> Cấu hình cổng chuyển khoản (VietQR)
+                    </h3>
+                    <p className="text-xs text-muted-foreground">Các thông tin ngân hàng hiển thị trên QR code ngoài Landing Page.</p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="grid gap-2">
+                        <label className="text-sm font-medium">Mã ngân hàng (Bank Code)</label>
+                        <input 
+                          type="text" 
+                          className="flex h-10 w-full rounded-xl border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all" 
+                          value={systemSettings.bank_code} 
+                          onChange={(e) => setSystemSettings({...systemSettings, bank_code: e.target.value})}
+                          placeholder="VD: VietinBank, Techcombank..."
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <label className="text-sm font-medium">Số tài khoản nhận tiền</label>
+                        <input 
+                          type="text" 
+                          className="flex h-10 w-full rounded-xl border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all font-mono" 
+                          value={systemSettings.bank_account} 
+                          onChange={(e) => setSystemSettings({...systemSettings, bank_account: e.target.value})}
+                          placeholder="Nhập số tài khoản..."
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <label className="text-sm font-medium">Tên chủ tài khoản ngân hàng</label>
+                        <input 
+                          type="text" 
+                          className="flex h-10 w-full rounded-xl border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all uppercase" 
+                          value={systemSettings.bank_owner} 
+                          onChange={(e) => setSystemSettings({...systemSettings, bank_owner: e.target.value.toUpperCase()})}
+                          placeholder="VD: PHAM QUANG HUY..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Cấu hình Resend */}
+                  <div className="bg-card p-6 rounded-2xl border border-border/50 shadow-sm space-y-4">
+                    <h3 className="text-lg font-bold flex items-center gap-2 text-primary">
+                      <Mail className="w-5 h-5" /> Cấu hình Email gửi tự động (Resend API)
+                    </h3>
+                    <p className="text-xs text-muted-foreground">Quản lý API Key và địa chỉ gửi email sequence chào mừng học viên đăng ký.</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid gap-2">
+                        <label className="text-sm font-medium">Resend API Key</label>
                         <div className="relative">
                           <input 
                             type={showApiKey ? "text" : "password"} 
-                            className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm pr-10" 
-                            value={settingsForm.api_key} 
-                            onChange={(e) => setSettingsForm({...settingsForm, api_key: e.target.value})}
-                            placeholder="Nhập API Key..."
+                            className="flex h-10 w-full rounded-xl border bg-background px-3 py-2 text-sm pr-10 focus:ring-2 focus:ring-primary/20 transition-all font-mono" 
+                            value={systemSettings.resend_api_key} 
+                            onChange={(e) => setSystemSettings({...systemSettings, resend_api_key: e.target.value})}
+                            placeholder="re_xxxxxxxxxxxxxx..."
                           />
                           <button
                             type="button"
@@ -2720,118 +3161,74 @@ export default function Dashboard() {
                         </div>
                       </div>
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-muted-foreground">Webhook URL (Make/n8n) - Nhận Lead Email</label>
+                        <label className="text-sm font-medium">Địa chỉ Email người gửi (Sender Email)</label>
                         <input 
-                          type="text" 
-                          className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm" 
-                          value={settingsForm.webhook_url} 
-                          onChange={(e) => setSettingsForm({...settingsForm, webhook_url: e.target.value})}
-                          placeholder="https://hook.make.com/..."
+                          type="email" 
+                          className="flex h-10 w-full rounded-xl border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all font-mono" 
+                          value={systemSettings.resend_sender_email} 
+                          onChange={(e) => setSystemSettings({...systemSettings, resend_sender_email: e.target.value})}
+                          placeholder="onboarding@resend.dev"
                         />
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-dashed">
-                        <div className="grid gap-2">
-                          <label className="text-sm font-medium">Tiêu đề trang (SEO Title)</label>
-                          <input 
-                            type="text" 
-                            className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm font-bold" 
-                            value={settingsForm.site_title || ""} 
-                            onChange={(e) => setSettingsForm({...settingsForm, site_title: e.target.value})}
-                            placeholder="VD: DSCons - Revit MEP Thực Chiến"
-                          />
-                        </div>
-                        <div className="grid gap-2">
-                          <label className="text-sm font-medium">Favicon / Logo (Tab trình duyệt)</label>
-                          <ImageUpload 
-                            value={settingsForm.favicon || ""} 
-                            onChange={(url) => setSettingsForm({...settingsForm, favicon: url})}
-                          />
-                        </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Exit Popup Config */}
-                  <div className="bg-card p-6 rounded-xl border shadow-sm space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-bold flex items-center gap-2">
-                        <ImageIcon className="w-5 h-5 text-primary" /> Câu hỏit-Intent Popup
-                      </h3>
-                      <Switch 
-                        checked={settingsForm.exit_popup.enabled} 
-                        onCheckedChange={(checked) => setSettingsForm({
-                          ...settingsForm, 
-                          exit_popup: { ...settingsForm.exit_popup, enabled: checked }
-                        })} 
-                      />
-                    </div>
-                    <div className="grid gap-4">
+                  {/* Cài đặt Zalo và Chế độ Test */}
+                  <div className="bg-card p-6 rounded-2xl border border-border/50 shadow-sm space-y-4">
+                    <h3 className="text-lg font-bold flex items-center gap-2 text-primary">
+                      <Settings className="w-5 h-5" /> Zalo Tư vấn &amp; Trạng thái Hệ thống
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium">Tiêu đề</label>
+                        <label className="text-sm font-medium">Đường dẫn liên hệ Zalo tư vấn</label>
                         <input 
                           type="text" 
-                          className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm font-bold" 
-                          value={settingsForm.exit_popup.title} 
-                          onChange={(e) => setSettingsForm({
-                            ...settingsForm, 
-                            exit_popup: { ...settingsForm.exit_popup, title: e.target.value }
-                          })}
+                          className="flex h-10 w-full rounded-xl border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all font-mono" 
+                          value={systemSettings.zalo_link} 
+                          onChange={(e) => setSystemSettings({...systemSettings, zalo_link: e.target.value})}
+                          placeholder="https://zalo.me/..."
                         />
                       </div>
-                      <div className="grid gap-2">
-                        <label className="text-sm font-medium">Mô tả nội dung</label>
-                        <textarea 
-                          className="flex min-h-[80px] w-full rounded-md border bg-background px-3 py-2 text-sm" 
-                          value={settingsForm.exit_popup.description} 
-                          onChange={(e) => setSettingsForm({
-                            ...settingsForm, 
-                            exit_popup: { ...settingsForm.exit_popup, description: e.target.value }
-                          })}
-                        />
-                      </div>
-                      <div className="flex items-center gap-2">
-                         <input 
-                           type="checkbox" 
-                           id="show-email"
-                           checked={settingsForm.exit_popup.showEmailField}
-                           onChange={(e) => setSettingsForm({
-                             ...settingsForm, 
-                             exit_popup: { ...settingsForm.exit_popup, showEmailField: e.target.checked }
-                           })}
-                         />
-                         <label htmlFor="show-email" className="text-sm font-medium">Hiển thị ô nhập Email thu thập thông tin</label>
-                      </div>
-                      
-                      {!settingsForm.exit_popup.showEmailField && (
-                        <div className="grid gap-2 pt-2 animate-in slide-in-from-top-2">
-                          <label className="text-sm font-medium text-primary">Link điều hướng khi click nút</label>
-                          <input 
-                            type="text" 
-                            className="flex h-10 w-full rounded-md border-primary/30 bg-background px-3 py-2 text-sm font-mono" 
-                            value={settingsForm.exit_popup.buttonLink || ""} 
-                            onChange={(e) => setSettingsForm({
-                              ...settingsForm, 
-                              exit_popup: { ...settingsForm.exit_popup, buttonLink: e.target.value }
-                            })}
-                            placeholder="https://zalo.me/... hoặc link tài liệu"
-                          />
+                      <div className="flex items-center justify-between p-4 bg-primary/5 border border-primary/20 rounded-2xl">
+                        <div className="space-y-0.5">
+                          <h4 className="text-sm font-bold text-primary flex items-center gap-1.5">
+                            <span className="relative flex h-2 w-2">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                            </span>
+                            Chế độ Test Thanh Toán (2.000đ)
+                          </h4>
+                          <p className="text-xs text-muted-foreground">Khi bật, giá tiền trên QR code chuyển khoản sẽ tự động chuyển thành 2.000đ để anh Huy test đối soát ngân hàng thật.</p>
                         </div>
-                      )}
-                      
-                      <div className="grid gap-2 pt-2">
-                        <label className="text-sm font-medium">Dòng text chân Popup</label>
-                        <input 
-                          type="text" 
-                          className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm" 
-                          value={settingsForm.exit_popup.footerText || ""} 
-                          onChange={(e) => setSettingsForm({
-                            ...settingsForm, 
-                            exit_popup: { ...settingsForm.exit_popup, footerText: e.target.value }
-                          })}
-                          placeholder="VD: DSCons Global Academy..."
+                        <Switch 
+                          checked={systemSettings.is_test_mode === "true"} 
+                          onCheckedChange={(checked) => setSystemSettings({
+                            ...systemSettings, 
+                            is_test_mode: checked ? "true" : "false"
+                          })} 
                         />
                       </div>
                     </div>
+                  </div>
+
+                  <div className="flex justify-end pt-4">
+                    <Button 
+                      onClick={handleSaveSystemSettings}
+                      disabled={isSavingSystemSettings}
+                      className="bg-primary hover:bg-primary/90 text-white font-bold h-12 px-8 rounded-xl shadow-lg shadow-primary/20 flex items-center gap-2"
+                    >
+                      {isSavingSystemSettings ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          Đang lưu cấu hình...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="w-4 h-4" />
+                          Lưu Cấu Hình Hệ Thống 💾
+                        </>
+                      )}
+                    </Button>
                   </div>
                 </div>
               ) : activeSection === "cta" ? (
@@ -2984,6 +3381,129 @@ export default function Dashboard() {
                 <div className="pb-12">
                   <CRMOrders />
                 </div>
+              ) : activeSection === "email-templates" ? (
+                <div className="space-y-6 pb-12 text-foreground">
+                  <div className="bg-card p-6 rounded-2xl border border-border/50 shadow-sm space-y-4">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div>
+                        <h3 className="text-lg font-bold flex items-center gap-2">
+                          <Mail className="w-5 h-5 text-primary" /> Thiết kế &amp; Quản lý Mẫu Email Tự động
+                        </h3>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Chỉnh sửa tiêu đề và biên tập nội dung HTML của chuỗi 3 email sequence và email xác nhận đơn hàng gửi cho học viên.
+                        </p>
+                      </div>
+                    </div>
+
+                    {isLoadingTemplates ? (
+                      <div className="flex flex-col items-center justify-center py-12 space-y-4">
+                        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                        <p className="text-sm text-muted-foreground">Đang tải danh sách mẫu email...</p>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
+                        {/* Cột 1: Danh sách các Mẫu */}
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Danh sách các mẫu email</label>
+                          <div className="space-y-1.5">
+                            {emailTemplates.map((template) => (
+                              <button
+                                key={template.id}
+                                onClick={() => setSelectedTemplateId(template.id)}
+                                className={`w-full text-left p-3.5 rounded-xl transition-all border flex flex-col gap-1.5 ${
+                                  selectedTemplateId === template.id
+                                    ? "bg-primary/10 border-primary text-primary"
+                                    : "bg-background/50 border-border/50 hover:bg-muted text-muted-foreground hover:text-foreground"
+                                }`}
+                              >
+                                <span className="font-bold text-sm">{template.name}</span>
+                                <span className="text-[10px] font-mono opacity-80 uppercase tracking-wider">{template.id}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Cột 2 & 3: Biên tập Nội dung mẫu đã chọn */}
+                        <div className="lg:col-span-2 space-y-4 border-t lg:border-t-0 lg:border-l border-border/40 lg:pl-6 pt-4 lg:pt-0">
+                          <div className="grid gap-2">
+                            <label className="text-sm font-semibold">Tiêu đề Email (Subject)</label>
+                            <input
+                              type="text"
+                              className="flex h-11 w-full rounded-xl border bg-background px-4 py-2 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all"
+                              value={templateSubject}
+                              onChange={(e) => setTemplateSubject(e.target.value)}
+                              placeholder="Tiêu đề email..."
+                            />
+                            <p className="text-[10px] text-muted-foreground">Hỗ trợ điền tham số động: **{`{{name}}`}** (Tên học viên), **{`{{product_name}}`}** (Tên khóa học).</p>
+                          </div>
+
+                          <div className="grid gap-2">
+                            <label className="text-sm font-semibold">Nội dung HTML Email</label>
+                            <textarea
+                              rows={15}
+                              className="w-full rounded-xl border bg-background p-4 text-xs font-mono focus:ring-2 focus:ring-primary/20 transition-all resize-y"
+                              value={templateHtml}
+                              onChange={(e) => setTemplateHtml(e.target.value)}
+                              placeholder="Biên tập mã HTML..."
+                            />
+                            <p className="text-[10px] text-muted-foreground">Hãy viết mã HTML chuẩn chỉnh cho email. Bạn có thể sử dụng các biến **{`{{name}}`}**, **{`{{product_name}}`}**, **{`{{amount}}`}**, **{`{{download_url}}`}** tương ứng với từng mẫu email.</p>
+                          </div>
+
+                          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-dashed">
+                            {/* Khu vực Gửi Thử Nghiệm */}
+                            <div className="flex items-center gap-2 w-full sm:w-auto">
+                              <input
+                                type="email"
+                                className="h-9 px-3 rounded-lg border bg-background text-xs w-full sm:w-48 font-mono focus:ring-1 focus:ring-primary"
+                                placeholder="Email nhận test..."
+                                value={testEmailTarget}
+                                onChange={(e) => setTestEmailTarget(e.target.value)}
+                              />
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                disabled={isSendingTestEmail}
+                                onClick={handleSendTestTemplateEmail}
+                                className="h-9 rounded-lg text-xs font-semibold whitespace-nowrap"
+                              >
+                                {isSendingTestEmail ? (
+                                  <>
+                                    <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" />
+                                    Đang gửi...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Send className="w-3.5 h-3.5 mr-1.5" />
+                                    Gửi Test
+                                  </>
+                                )}
+                              </Button>
+                            </div>
+
+                            {/* Lưu Mẫu */}
+                            <Button
+                              onClick={handleSaveTemplate}
+                              disabled={isSavingTemplate}
+                              className="bg-primary hover:bg-primary/90 text-white font-bold h-11 px-6 rounded-xl shadow-md w-full sm:w-auto flex items-center gap-1.5 justify-center"
+                            >
+                              {isSavingTemplate ? (
+                                <>
+                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                  Đang lưu...
+                                </>
+                              ) : (
+                                <>
+                                  <Save className="w-4 h-4" />
+                                  Lưu Mẫu Email 💾
+                                </>
+                              )}
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               ) : (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground">Khu vực kéo thả và chỉnh sửa linh kiện cho <span className="font-bold text-foreground">{activeSection === "settings" ? "Cài đặt giao diện" : sections.find((s: any) => s.id === activeSection)?.name}</span> đang được xây dựng.</p>
@@ -2993,7 +3513,7 @@ export default function Dashboard() {
             </div>
           </div>
                     {/* Right Panel: Live Preview */}
-          {activeSection !== "settings" && activeSection !== "system-settings" && activeSection !== "crm-products" && activeSection !== "crm-customers" && activeSection !== "crm-orders" && !(activeSection === "comparison" && comparisonActiveTab === "history") && (
+          {activeSection !== "settings" && activeSection !== "system-settings" && activeSection !== "theme-settings" && activeSection !== "email-templates" && activeSection !== "crm-products" && activeSection !== "crm-customers" && activeSection !== "crm-orders" && !(activeSection === "comparison" && comparisonActiveTab === "history") && (
             <div className="flex-1 w-full bg-background relative isolate overflow-x-hidden overflow-y-auto">
                {activeSection === "header" && (
                   <div className="pointer-events-none origin-top-left scale-[0.8] w-[125%] h-full">

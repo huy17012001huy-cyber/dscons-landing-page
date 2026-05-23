@@ -166,5 +166,43 @@ export const landingData: any = {
       phone: "0917.379.181",
       address: "Hà Nội"
     }
+  },
+  // Khởi tạo các khóa mặc định để tránh crash cho Admin Dashboard khi nạp ban đầu
+  solution: {
+    badge: "GIẢI PHÁP TỪ DSCONS",
+    title: "Nắm vững Revit MEPF trọn vẹn — Từ Zero đến Hero",
+    items: [
+      { title: "Thành thạo dựng hình 3D Full các hệ", description: "Lên mô hình chính xác, kiểm soát mọi chi tiết hệ thống từ Điện, Nước, Điều hòa đến Chữa cháy." },
+      { title: "Bóc tách khối lượng hoàn toàn tự động", description: "Sử dụng Schedule để thống kê vật tư, phụ kiện nhanh chóng và chính xác 100%." },
+      { title: "Tạo lập hồ sơ bản vẽ Shopdrawing", description: "Tự thiết lập Tag, ghi chú, rải kích thước và hoàn thiện bản vẽ mặt bằng, mặt cắt chuyên nghiệp." },
+      { title: "Tuyệt chiêu phối hợp quản lý dự án (BIM)", description: "Xuất bản vẽ mượt mà sang CAD, PDF và sử dụng Navisworks để xử lý va chạm tối ưu." }
+    ]
+  },
+  outcomes: {
+    badge: "KẾT QUẢ THỰC TẾ",
+    title: "Sở hữu năng lực vượt trội sau khóa học",
+    description: "Bạn sẽ không chỉ học lý thuyết, mà sẽ tự tay triển khai trọn vẹn dự án cơ điện thực tế.",
+    items: [
+      { icon: "ShieldCheck", title: "Làm chủ 100% quy trình BIM", description: "Hiểu rõ vai trò của Revit trong quy trình BIM, cách quản lý và phối hợp mô hình." },
+      { icon: "FileText", title: "Bản vẽ Shopdrawing chuẩn chỉ", description: "Tự tạo lập bản vẽ kỹ thuật chuyên nghiệp, ghi chú, rải tag tự động siêu tốc." },
+      { icon: "Zap", title: "Giải quyết mọi va chạm cơ điện", description: "Sử dụng Navisworks tìm lỗi thiết kế và xử lý va chạm thực tế từ công trường." }
+    ]
+  },
+  testimonials: {
+    badge: "HỌC VIÊN NÓI VỀ CHÚNG TÔI",
+    title: "1.000+ Kỹ sư Cơ điện đã thay đổi tư duy & thăng tiến",
+    textItems: [
+      { name: "Nguyễn Văn Hùng", role: "Kỹ sư MEP - Coteccons", content: "Khóa học cực kỳ thực tế. Trước đây tôi mất cả ngày bóc khối lượng, nay chỉ cần 30 phút." },
+      { name: "Trần Thanh Sơn", role: "BIM Modeler - Hòa Bình", content: "Tôi đã tìm được việc làm tốt ngay sau khi hoàn thành khóa học nhờ bộ hồ sơ dự án thực tế." }
+    ],
+    videoItems: [
+      { name: "Lê Minh Đức", role: "Kỹ sư Cơ điện", videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
+    ],
+    partners: [
+      { name: "Coteccons", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/2/2e/Coteccons_Logo.png" },
+      { name: "Hoa Binh", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a9/HBC_Logo.png" }
+    ],
+    partnersRow2: [],
+    partnersRow3: []
   }
 };

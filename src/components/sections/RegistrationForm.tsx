@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Send, User, Phone, Briefcase, AlertCircle, Target, CheckCircle2, CreditCard, BookOpen, Gift, ShieldCheck, Check, Sparkles, QrCode, RefreshCw } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
+import { Send, User, Phone, Mail, Briefcase, AlertCircle, Target, CheckCircle2, CreditCard, BookOpen, Gift, ShieldCheck, Check, Sparkles, QrCode, RefreshCw } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 const PACKAGES = [
@@ -52,9 +53,20 @@ const PACKAGES = [
 ];
 
 const RegistrationForm = () => {
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [selectedPackage, setSelectedPackage] = useState<string>("revit-mep-combo");
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+
+  useEffect(() => {
+    const pkgParam = searchParams.get("package");
+    if (pkgParam) {
+      const found = PACKAGES.find(p => p.id === pkgParam || p.id.toLowerCase().includes(pkgParam.toLowerCase()) || pkgParam.toLowerCase().includes(p.id.toLowerCase()));
+      if (found) {
+        setSelectedPackage(found.id);
+      }
+    }
+  }, [searchParams]);
   
   // Thông tin đăng ký lưu trữ tạm thời để tạo đơn hàng
   const [registrationData, setRegistrationData] = useState<{
@@ -69,13 +81,42 @@ const RegistrationForm = () => {
   const [isTestMode, setIsTestMode] = useState<boolean>(true);
   const [paymentCompleted, setPaymentCompleted] = useState<boolean>(false);
 
-  // Thông tin ngân hàng của bạn - hãy cấu hình đúng số tài khoản và tên ngân hàng nhận tiền
-  const BANK_ACCOUNT = "105870479657"; 
-  const BANK_CODE = "VietinBank";  
+  // Cấu hình ngân hàng & test mode động từ database
+  const [BANK_ACCOUNT, setBankAccount] = useState<string>("105870479657");
+  const [BANK_CODE, setBankCode] = useState<string>("VietinBank");
+  const [bankOwner, setBankOwner] = useState<string>("PHAM QUANG HUY");
+
+  useEffect(() => {
+    const fetchSystemSettings = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("system_settings")
+          .select("key, value");
+        
+        if (data && !error) {
+          const testModeVal = data.find(s => s.key === "is_test_mode")?.value;
+          const bankAccVal = data.find(s => s.key === "bank_account")?.value;
+          const bankCodeVal = data.find(s => s.key === "bank_code")?.value;
+          const bankOwnerVal = data.find(s => s.key === "bank_owner")?.value;
+
+          if (testModeVal !== undefined) {
+            setIsTestMode(testModeVal === "true");
+          }
+          if (bankAccVal) setBankAccount(bankAccVal);
+          if (bankCodeVal) setBankCode(bankCodeVal);
+          if (bankOwnerVal) setBankOwner(bankOwnerVal);
+        }
+      } catch (err) {
+        console.error("Lỗi khi tải cấu hình hệ thống từ Supabase:", err);
+      }
+    };
+
+    fetchSystemSettings();
+  }, []);
 
   // Polling cơ sở dữ liệu Supabase để tự động phát hiện trạng thái đơn hàng thành công
   useEffect(() => {
-    let intervalId: any;
+    let intervalId: ReturnType<typeof setInterval> | undefined;
     if (step === 3 && registrationData && !paymentCompleted) {
       intervalId = setInterval(async () => {
         try {
@@ -122,6 +163,7 @@ const RegistrationForm = () => {
     const formData = new FormData(form);
     const name = formData.get("Họ và tên") as string;
     const phone = formData.get("Số điện thoại") as string;
+    const email = formData.get("Email") as string;
     const role = formData.get("Đối tượng") as string;
     const painpoint = formData.get("Khó khăn gặp phải") as string;
     const goal = formData.get("Kỹ năng mong muốn") as string;
@@ -136,14 +178,38 @@ const RegistrationForm = () => {
 
     try {
       // 1. Thêm/Cập nhật thông tin học viên vào Supabase
+      const { data: existingCustomer } = await supabase
+        .from("customers")
+        .select("emails_sent")
+        .eq("phone", phone)
+        .maybeSingle();
+
+      const isTest = email.toLowerCase().includes('+test');
+      const newRegEmails = isTest
+        ? ["Email 1: Chào mừng (Waitlist)", "Email 2: Bài học xương máu (Nurture)", "Email 3: Chốt lộ trình (Sales)"]
+        : ["Email 1: Chào mừng (Waitlist)"];
+
+      const emailsList = existingCustomer?.emails_sent 
+        ? existingCustomer.emails_sent.split(",").map(e => e.trim()).filter(Boolean) 
+        : [];
+
+      newRegEmails.forEach(e => {
+        if (!emailsList.includes(e)) {
+          emailsList.push(e);
+        }
+      });
+      const finalEmails = emailsList.join(", ");
+
       const { error: customerError } = await supabase
         .from("customers")
         .upsert({
           name: name,
           phone: phone,
+          email: email,
           role: role,
           painpoint: painpoint,
-          goal: goal
+          goal: goal,
+          emails_sent: finalEmails
         }, { onConflict: "phone" });
 
       if (customerError) throw customerError;
@@ -164,6 +230,23 @@ const RegistrationForm = () => {
         });
 
       if (orderError) throw orderError;
+
+      // 3.5. Kích hoạt gửi chuỗi email qua Resend API bảo mật
+      try {
+        await fetch('/api/send-sequence', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            name: name
+          })
+        });
+        console.log("Email sequence triggered successfully.");
+      } catch (emailErr) {
+        console.error("Lỗi kích hoạt gửi email sequence:", emailErr);
+      }
 
       // 4. Lưu thông tin đăng ký để hiển thị QR thanh toán
       setRegistrationData({
@@ -413,6 +496,22 @@ const RegistrationForm = () => {
                         id="phone"
                         name="Số điện thoại"
                         placeholder="Nhập số điện thoại có sử dụng Zalo..."
+                        className="w-full h-12 px-4 rounded-xl bg-muted/50 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
+                      />
+                    </div>
+
+                    {/* Email */}
+                    <div className="space-y-2">
+                      <label htmlFor="email" className="text-sm font-medium text-foreground flex items-center gap-2">
+                        <Mail className="w-4 h-4 text-primary" />
+                        Địa chỉ Email của bạn là gì? <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        required
+                        type="email"
+                        id="email"
+                        name="Email"
+                        placeholder="Ví dụ: nguyenvana@gmail.com..."
                         className="w-full h-12 px-4 rounded-xl bg-muted/50 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none"
                       />
                     </div>

@@ -5,13 +5,33 @@ import { Button } from "@/components/ui/button";
 import { 
   CreditCard, Search, RefreshCw, CheckCircle, Clock, Plus, X, 
   ArrowRightLeft, FileSpreadsheet, Calendar, User, Phone, Check, 
-  HelpCircle, Sparkles, DollarSign, Package
+  HelpCircle, Sparkles, DollarSign, Package, Mail
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  stock: number;
+  download_url?: string;
+}
+
+interface Order {
+  id: string;
+  customer_phone: string;
+  customer_name: string;
+  product_id?: string;
+  amount: number;
+  status: string;
+  sepay_transaction_id?: string;
+  payment_date?: string;
+  created_at: string;
+}
+
 export function CRMOrders() {
-  const [orders, setOrders] = useState<any[]>([]);
-  const [products, setProducts] = useState<any[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -20,6 +40,7 @@ export function CRMOrders() {
   // Manual Add Order Form States
   const [newCustomerName, setNewCustomerName] = useState("");
   const [newCustomerPhone, setNewCustomerPhone] = useState("");
+  const [newCustomerEmail, setNewCustomerEmail] = useState("");
   const [newProductId, setNewProductId] = useState("");
   const [newAmount, setNewAmount] = useState<number>(0);
   const [newStatus, setNewStatus] = useState("completed");
@@ -47,9 +68,10 @@ export function CRMOrders() {
         setNewProductId(productsRes.data[0].id);
         setNewAmount(productsRes.data[0].price);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : "Không thể tải dữ liệu đơn hàng";
       console.error("Error fetching CRM orders:", err);
-      toast.error(err.message || "Không thể tải dữ liệu đơn hàng");
+      toast.error(errorMsg);
     } finally {
       setIsLoading(false);
     }
@@ -69,7 +91,7 @@ export function CRMOrders() {
   };
 
   // 1. manual status toggle function (pending -> completed)
-  const handleManualComplete = async (order: any) => {
+  const handleManualComplete = async (order: Order) => {
     try {
       // Begin manual completion sequence
       // A. Decrement product stock if order is currently pending
@@ -100,11 +122,56 @@ export function CRMOrders() {
 
       if (orderErr) throw orderErr;
 
+      // C. Truy vấn email học viên để tự động gửi email xác nhận khóa học qua Resend API
+      try {
+        const { data: customer } = await supabase
+          .from("customers")
+          .select("email, emails_sent")
+          .eq("phone", order.customer_phone)
+          .single();
+
+        if (customer && customer.email) {
+          const selectedProd = products.find(p => p.id === order.product_id);
+          if (selectedProd) {
+            await fetch('/api/send-order-confirm', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                email: customer.email,
+                customerName: order.customer_name,
+                productName: selectedProd.name,
+                amount: order.amount,
+                downloadUrl: selectedProd.download_url || "https://drive.google.com/drive/folders/2_revit_mep_combo_gifts_fake"
+              })
+            });
+            console.log("Đã gửi email xác nhận tự động khi bù đơn thành công.");
+
+            // Cập nhật emails_sent trong database
+            const emailsList = customer.emails_sent 
+              ? customer.emails_sent.split(",").map(e => e.trim()).filter(Boolean) 
+              : [];
+            
+            if (!emailsList.includes("Xác nhận đơn hàng (Order Confirm)")) {
+              emailsList.push("Xác nhận đơn hàng (Order Confirm)");
+              await supabase
+                .from("customers")
+                .update({ emails_sent: emailsList.join(", ") })
+                .eq("phone", order.customer_phone);
+            }
+          }
+        }
+      } catch (emailErr) {
+        console.error("Lỗi gửi email xác nhận đơn hàng khi bù đơn:", emailErr);
+      }
+
       toast.success(`Đơn hàng ${order.id} đã được xác nhận hoàn tất thành công!`);
       fetchData(); // reload
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : "Lỗi xác nhận thanh toán";
       console.error("Manual confirmation error:", err);
-      toast.error(err.message || "Lỗi xác nhận thanh toán");
+      toast.error(errorMsg);
     }
   };
 
@@ -118,12 +185,29 @@ export function CRMOrders() {
 
     try {
       // A. Upsert Customer details (checks phone uniqueness)
+      const { data: existingCustomer } = await supabase
+        .from("customers")
+        .select("emails_sent")
+        .eq("phone", newCustomerPhone)
+        .maybeSingle();
+
+      let finalEmails = existingCustomer?.emails_sent || "";
+      if (newStatus === "completed" && newCustomerEmail) {
+        const emailsList = finalEmails ? finalEmails.split(",").map(e => e.trim()).filter(Boolean) : [];
+        if (!emailsList.includes("Xác nhận đơn hàng (Order Confirm)")) {
+          emailsList.push("Xác nhận đơn hàng (Order Confirm)");
+          finalEmails = emailsList.join(", ");
+        }
+      }
+
       const { data: customerData, error: custErr } = await supabase
         .from("customers")
         .upsert({
           name: newCustomerName,
           phone: newCustomerPhone,
-          role: "Kỹ sư đã đi làm" // default for manual panel entry
+          email: newCustomerEmail,
+          role: "Kỹ sư đã đi làm", // default for manual panel entry
+          emails_sent: finalEmails
         }, { onConflict: "phone" })
         .select()
         .single();
@@ -147,7 +231,32 @@ export function CRMOrders() {
 
       if (orderErr) throw orderErr;
 
-      // C. Decrement product stock if order status is completed
+      // C. Trigger order confirmation email if completed and email is provided
+      if (newStatus === "completed" && newCustomerEmail) {
+        const selectedProd = products.find(p => p.id === newProductId);
+        if (selectedProd) {
+          try {
+            await fetch('/api/send-order-confirm', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                email: newCustomerEmail,
+                customerName: newCustomerName,
+                productName: selectedProd.name,
+                amount: newAmount,
+                downloadUrl: selectedProd.download_url || "https://drive.google.com/drive/folders/2_revit_mep_combo_gifts_fake"
+              })
+            });
+            console.log("Đã gửi email xác nhận khi tạo đơn hàng mới thành công.");
+          } catch (emailErr) {
+            console.error("Lỗi gửi email xác nhận khi tạo đơn hàng mới:", emailErr);
+          }
+        }
+      }
+
+      // D. Decrement product stock if order status is completed
       if (newStatus === "completed") {
         const selectedProd = products.find(p => p.id === newProductId);
         if (selectedProd) {
@@ -165,15 +274,17 @@ export function CRMOrders() {
       // Reset state
       setNewCustomerName("");
       setNewCustomerPhone("");
+      setNewCustomerEmail("");
       if (products.length > 0) {
         setNewProductId(products[0].id);
         setNewAmount(products[0].price);
       }
       
       fetchData(); // reload
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : "Lỗi tạo đơn hàng mới";
       console.error("Create manual order error:", err);
-      toast.error(err.message || "Lỗi tạo đơn hàng mới");
+      toast.error(errorMsg);
     }
   };
 
@@ -283,6 +394,20 @@ export function CRMOrders() {
                     className="h-9 w-full rounded-lg border bg-background px-3 text-sm focus:ring-2 focus:ring-primary/20 transition-all font-mono"
                     value={newCustomerPhone}
                     onChange={(e) => setNewCustomerPhone(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-muted-foreground flex items-center gap-1">
+                    <Mail className="w-3.5 h-3.5" /> Địa chỉ Email *
+                  </label>
+                  <input 
+                    type="email" 
+                    required
+                    placeholder="VD: nguyenvana@gmail.com"
+                    className="h-9 w-full rounded-lg border bg-background px-3 text-sm focus:ring-2 focus:ring-primary/20 transition-all"
+                    value={newCustomerEmail}
+                    onChange={(e) => setNewCustomerEmail(e.target.value)}
                   />
                 </div>
 

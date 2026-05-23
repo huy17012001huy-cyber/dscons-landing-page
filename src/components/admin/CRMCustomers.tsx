@@ -3,13 +3,26 @@ import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { 
-  Users, Search, RefreshCw, GraduationCap, Briefcase, Eye, ChevronDown, ChevronUp, AlertCircle, Target
+  Users, Search, RefreshCw, GraduationCap, Briefcase, Eye, ChevronDown, ChevronUp, AlertCircle, Target, Mail
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+interface Customer {
+  id: string;
+  name: string;
+  phone: string;
+  email?: string;
+  role?: string;
+  painpoint?: string;
+  goal?: string;
+  emails_sent?: string;
+  created_at: string;
+}
+
 export function CRMCustomers() {
-  const [customers, setCustomers] = useState<any[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [sendingTestId, setSendingTestId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -24,11 +37,70 @@ export function CRMCustomers() {
 
       if (error) throw error;
       setCustomers(data || []);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : "Không thể tải danh sách học viên";
       console.error("Error fetching customers:", err);
-      toast.error(err.message || "Không thể tải danh sách học viên");
+      toast.error(errorMsg);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleSendTestSequence = async (customer: Customer) => {
+    if (!customer.email) {
+      toast.error("Học viên không có địa chỉ email để gửi!");
+      return;
+    }
+    
+    setSendingTestId(customer.id);
+    toast.info(`Đang gửi test sequence gồm 3 email tới ${customer.email}...`);
+
+    try {
+      const response = await fetch("/api/send-sequence", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: `${customer.email}+test`,
+          name: customer.name
+        })
+      });
+
+      const resData = await response.json();
+      if (!response.ok) {
+        throw new Error(resData.error || "Gửi email thất bại");
+      }
+
+      // Cập nhật emails_sent trong DB
+      const currentList = customer.emails_sent
+        ? customer.emails_sent.split(",").map(e => e.trim()).filter(Boolean)
+        : [];
+      
+      const newEmails = ["Welcome Email", "Nurture Email 1", "Sales Email 1"];
+      const updatedList = [...currentList];
+      newEmails.forEach(e => {
+        if (!updatedList.includes(e)) {
+          updatedList.push(e);
+        }
+      });
+
+      const emailsSentStr = updatedList.join(", ");
+      
+      const { error: updateError } = await supabase
+        .from("customers")
+        .update({ emails_sent: emailsSentStr })
+        .eq("id", customer.id);
+
+      if (updateError) {
+        console.error("Lỗi cập nhật log email trong DB:", updateError);
+      }
+
+      toast.success("Đã kích hoạt gửi thành công 3 email test sequence!");
+      fetchCustomers(); // Làm mới danh sách để hiển thị badge đã cập nhật
+    } catch (err: any) {
+      console.error("Lỗi khi gửi test sequence:", err);
+      toast.error(err.message || "Gửi test sequence thất bại");
+    } finally {
+      setSendingTestId(null);
     }
   };
 
@@ -44,7 +116,8 @@ export function CRMCustomers() {
   const filteredCustomers = customers.filter(c => {
     const matchesSearch = 
       c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.phone.includes(searchTerm);
+      c.phone.includes(searchTerm) ||
+      (c.email && c.email.toLowerCase().includes(searchTerm.toLowerCase()));
     
     const matchesRole = 
       roleFilter === "all" || 
@@ -142,7 +215,9 @@ export function CRMCustomers() {
                   <tr className="bg-muted/40 border-b border-border/40 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     <th className="py-3.5 px-4">Họ và Tên</th>
                     <th className="py-3.5 px-4">Số điện thoại</th>
+                    <th className="py-3.5 px-4">Email</th>
                     <th className="py-3.5 px-4">Đối tượng</th>
+                    <th className="py-3.5 px-4">Email đã gửi</th>
                     <th className="py-3.5 px-4">Ngày đăng ký</th>
                     <th className="py-3.5 px-4 text-right">Chi tiết</th>
                   </tr>
@@ -151,6 +226,10 @@ export function CRMCustomers() {
                   {filteredCustomers.map((customer) => {
                     const isExpanded = expandedId === customer.id;
                     const isStudent = customer.role?.toLowerCase().includes("sinh viên");
+                    const emailsList = customer.emails_sent
+                      ? customer.emails_sent.split(",").map(e => e.trim()).filter(Boolean)
+                      : [];
+                    const emailsCount = emailsList.length;
                     
                     return (
                       <React.Fragment key={customer.id}>
@@ -166,6 +245,9 @@ export function CRMCustomers() {
                           <td className="py-4 px-4 font-mono text-muted-foreground">
                             {customer.phone}
                           </td>
+                          <td className="py-4 px-4 text-muted-foreground">
+                            {customer.email || "—"}
+                          </td>
                           <td className="py-4 px-4">
                             <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs border ${
                               isStudent 
@@ -174,6 +256,16 @@ export function CRMCustomers() {
                             }`}>
                               {isStudent ? <GraduationCap className="w-3.5 h-3.5" /> : <Briefcase className="w-3.5 h-3.5" />}
                               {customer.role || "Chưa chọn"}
+                            </span>
+                          </td>
+                          <td className="py-4 px-4">
+                            <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
+                              emailsCount > 0 
+                                ? "bg-blue-500/10 text-blue-500 border-blue-500/20" 
+                                : "bg-muted text-muted-foreground border-border/40"
+                            }`}>
+                              <Mail className="w-3.5 h-3.5" />
+                              {emailsCount} email
                             </span>
                           </td>
                           <td className="py-4 px-4 text-xs text-muted-foreground">
@@ -194,32 +286,81 @@ export function CRMCustomers() {
                         <AnimatePresence>
                           {isExpanded && (
                             <tr>
-                              <td colSpan={5} className="p-0 border-none bg-muted/5">
+                              <td colSpan={7} className="p-0 border-none bg-muted/5">
                                 <motion.div 
                                   initial={{ opacity: 0, height: 0 }}
                                   animate={{ opacity: 1, height: "auto" }}
                                   exit={{ opacity: 0, height: 0 }}
                                   transition={{ duration: 0.2 }}
-                                  className="px-6 py-4 border-b border-border/30 grid grid-cols-1 md:grid-cols-2 gap-6"
+                                  className="px-6 py-4 border-b border-border/30 space-y-4"
                                 >
-                                  <div className="space-y-2 p-4 bg-background/50 rounded-xl border border-border/30">
-                                    <div className="flex items-center gap-2 text-xs font-bold text-amber-500 uppercase tracking-wider">
-                                      <AlertCircle className="w-4 h-4" />
-                                      <span>Khó khăn / Rào cản lớn nhất</span>
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-2 p-4 bg-background/50 rounded-xl border border-border/30">
+                                      <div className="flex items-center gap-2 text-xs font-bold text-amber-500 uppercase tracking-wider">
+                                        <AlertCircle className="w-4 h-4" />
+                                        <span>Khó khăn / Rào cản lớn nhất</span>
+                                      </div>
+                                      <p className="text-sm text-foreground leading-relaxed pl-6 italic">
+                                        "{customer.painpoint || "Không chia sẻ khó khăn nào"}"
+                                      </p>
                                     </div>
-                                    <p className="text-sm text-foreground leading-relaxed pl-6 italic">
-                                      "{customer.painpoint || "Không chia sẻ khó khăn nào"}"
-                                    </p>
+
+                                    <div className="space-y-2 p-4 bg-background/50 rounded-xl border border-border/30">
+                                      <div className="flex items-center gap-2 text-xs font-bold text-sky-500 uppercase tracking-wider">
+                                        <Target className="w-4 h-4" />
+                                        <span>Mong muốn đạt được sau khóa học</span>
+                                      </div>
+                                      <p className="text-sm text-foreground leading-relaxed pl-6 italic">
+                                        "{customer.goal || "Không chia sẻ mong muốn nào"}"
+                                      </p>
+                                    </div>
                                   </div>
 
+                                  {/* Lịch sử gửi Email */}
                                   <div className="space-y-2 p-4 bg-background/50 rounded-xl border border-border/30">
-                                    <div className="flex items-center gap-2 text-xs font-bold text-sky-500 uppercase tracking-wider">
-                                      <Target className="w-4 h-4" />
-                                      <span>Mong muốn đạt được sau khóa học</span>
+                                    <div className="flex items-center justify-between gap-2 text-xs font-bold text-blue-500 uppercase tracking-wider">
+                                      <div className="flex items-center gap-2">
+                                        <Mail className="w-4 h-4" />
+                                        <span>Lịch sử gửi Email tự động ({emailsCount})</span>
+                                      </div>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        disabled={sendingTestId === customer.id}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleSendTestSequence(customer);
+                                        }}
+                                        className="h-7 rounded-lg px-2.5 text-[11px] font-bold border-primary/30 hover:bg-primary/5 text-primary transition-all flex items-center gap-1"
+                                      >
+                                        {sendingTestId === customer.id ? (
+                                          <>
+                                            <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                                            Đang gửi...
+                                          </>
+                                        ) : (
+                                          <>
+                                            <Mail className="w-3 h-3" />
+                                            Gửi test sequence (3 email)
+                                          </>
+                                        )}
+                                      </Button>
                                     </div>
-                                    <p className="text-sm text-foreground leading-relaxed pl-6 italic">
-                                      "{customer.goal || "Không chia sẻ mong muốn nào"}"
-                                    </p>
+                                    {emailsCount === 0 ? (
+                                      <p className="text-xs text-muted-foreground pl-6 italic">
+                                        Chưa gửi email nào cho học viên này.
+                                      </p>
+                                    ) : (
+                                      <div className="pl-6 space-y-2 pt-1">
+                                        {emailsList.map((emailName, index) => (
+                                          <div key={index} className="flex items-center gap-2 text-sm text-foreground">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+                                            <span className="font-medium">{emailName}</span>
+                                            <span className="text-[10px] text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded-md border border-blue-500/20 font-semibold uppercase">Đã gửi</span>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    )}
                                   </div>
                                 </motion.div>
                               </td>

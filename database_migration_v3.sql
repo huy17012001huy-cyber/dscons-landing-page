@@ -21,9 +21,11 @@ CREATE TABLE public.customers (
   id uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   name text NOT NULL,
   phone text NOT NULL UNIQUE,
+  email text,
   role text,
   painpoint text,
   goal text,
+  emails_sent text DEFAULT '',
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now())
 );
 
