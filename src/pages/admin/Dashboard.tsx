@@ -2777,6 +2777,7 @@ export default function Dashboard() {
                                 newPackages[pkgIndex].description = e.target.value;
                                 setPricingForm({...pricingForm, packages: newPackages});
                               }} />
+                          </div>
                           <div className="grid gap-2 md:col-span-2 p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-1">
                             <span className="text-xs font-bold text-primary flex items-center gap-1">
                               <span className="relative flex h-2 w-2">
