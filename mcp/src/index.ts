@@ -395,8 +395,11 @@ app.post('/mcp', async (req, res) => {
   try {
     await mcpServer.connect(mockTransport);
     
-    // Give the event loop a tiny tick to process the message and capture the response
-    await new Promise(resolve => setTimeout(resolve, 5));
+    // Wait for the response to be captured (max 5000ms timeout)
+    const startTime = Date.now();
+    while (responses.length === 0 && Date.now() - startTime < 5000) {
+      await new Promise(resolve => setTimeout(resolve, 10));
+    }
     
     await mcpServer.close();
 
