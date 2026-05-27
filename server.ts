@@ -55,9 +55,9 @@ app.post('/api/send-sequence', vercelCompat(sendSequenceHandler));
 app.post('/api/sepay-webhook', vercelCompat(sepayWebhookHandler));
 
 // Phục vụ các file tĩnh của React nếu chạy chung cổng (hoặc để Nginx tự phục vụ)
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(process.cwd(), 'dist')));
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
 });
 
 app.listen(PORT, () => {
