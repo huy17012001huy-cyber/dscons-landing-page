@@ -3,61 +3,42 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
 import { createMcpExpressApp } from '@modelcontextprotocol/sdk/server/express.js';
 import * as z from 'zod';
-import sqlite3 from 'sqlite3';
-import path from 'path';
-import fs from 'fs';
 import dotenv from 'dotenv';
 
-// Load environment variables (to know port of main site, etc.)
+// Load environment variables (to know port of main site, and Supabase credentials)
 dotenv.config();
 
-// Determine SQLite brain.db path dynamically
-let dbPath = path.join(process.cwd(), '..', 'brain.db');
-if (!fs.existsSync(dbPath)) {
-  dbPath = path.join(__dirname, '..', '..', 'brain.db');
-}
-if (!fs.existsSync(dbPath)) {
-  dbPath = 'e:\\ANTIGRAVITY\\DSCons_Landing Page_Zoom\\brain.db';
+const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || '';
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error(`[${new Date().toISOString()}] [CRITICAL] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY in environment!`);
+} else {
+  console.log(`[${new Date().toISOString()}] MCP Server initialized to connect directly to Supabase REST API: ${supabaseUrl}`);
 }
 
-console.log(`[${new Date().toISOString()}] Target SQLite Database path: ${dbPath}`);
-
-// Initialize SQLite connection
-const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
-  if (err) {
-    console.error(`[${new Date().toISOString()}] Database connection error:`, err.message);
-  } else {
-    console.log(`[${new Date().toISOString()}] Connected to SQLite database: ${dbPath}`);
+// Supabase API Fetch Helper
+async function supabaseFetch(path: string, options: any = {}) {
+  const url = `${supabaseUrl}/rest/v1/${path}`;
+  const headers = {
+    'apikey': supabaseAnonKey,
+    'Authorization': `Bearer ${supabaseAnonKey}`,
+    'Content-Type': 'application/json',
+    ...options.headers
+  };
+  const res = await fetch(url, {
+    ...options,
+    headers
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Supabase API error (${res.status}): ${text}`);
   }
-});
-
-// SQLite async wrappers
-const dbAll = (sql: string, params: any[] = []): Promise<any[]> => {
-  return new Promise((resolve, reject) => {
-    db.all(sql, params, (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
-    });
-  });
-};
-
-const dbGet = (sql: string, params: any[] = []): Promise<any> => {
-  return new Promise((resolve, reject) => {
-    db.get(sql, params, (err, row) => {
-      if (err) reject(err);
-      else resolve(row);
-    });
-  });
-};
-
-const dbRun = (sql: string, params: any[] = []): Promise<{ lastID: number; changes: number }> => {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (err) reject(err);
-      else resolve({ lastID: this.lastID, changes: this.changes });
-    });
-  });
-};
+  if (res.status === 204) {
+    return null;
+  }
+  return res.json();
+}
 
 // Helper for logger
 const logAction = (toolName: string, params: any) => {
@@ -78,57 +59,70 @@ const createMcpServer = () => {
 
   // Tool 1: get_business_summary
   server.registerTool('get_business_summary', {
-    description: 'Retrieve dynamic business reports (registrations, sales, revenue, and remaining stocks) for a given time range.',
+    description: 'Retrieve dynamic business reports (registrations, sales, revenue, and remaining stocks) for a given time range directly from Supabase.',
     inputSchema: {
       time_range: z.enum(['today', 'yesterday', 'week', 'month']).default('today').describe('Filtering range for reporting metrics')
     }
   }, async ({ time_range }) => {
     logAction('get_business_summary', { time_range });
     try {
-      // Generate date filter SQL
-      let dateFilter = "date(created_at) = date('now')";
+      let dateQuery = "";
       let rangeLabel = "Hôm nay";
       
-      if (time_range === 'yesterday') {
-        dateFilter = "date(created_at) = date('now', '-1 day')";
+      if (time_range === 'today') {
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+        dateQuery = `&created_at=gte.${todayStart.toISOString()}`;
+      } else if (time_range === 'yesterday') {
+        const yesterdayStart = new Date();
+        yesterdayStart.setDate(yesterdayStart.getDate() - 1);
+        yesterdayStart.setHours(0, 0, 0, 0);
+        const yesterdayEnd = new Date();
+        yesterdayEnd.setDate(yesterdayEnd.getDate() - 1);
+        yesterdayEnd.setHours(23, 59, 59, 999);
+        dateQuery = `&created_at=gte.${yesterdayStart.toISOString()}&created_at=lte.${yesterdayEnd.toISOString()}`;
         rangeLabel = "Hôm qua";
       } else if (time_range === 'week') {
-        dateFilter = "created_at >= datetime('now', '-7 days')";
+        const weekStart = new Date();
+        weekStart.setDate(weekStart.getDate() - 7);
+        dateQuery = `&created_at=gte.${weekStart.toISOString()}`;
         rangeLabel = "7 ngày gần đây";
       } else if (time_range === 'month') {
-        dateFilter = "created_at >= datetime('now', '-30 days')";
+        const monthStart = new Date();
+        monthStart.setDate(monthStart.getDate() - 30);
+        dateQuery = `&created_at=gte.${monthStart.toISOString()}`;
         rangeLabel = "30 ngày gần đây";
       }
 
       // Query 1: Waitlist leads count
-      const leadsCountRow = await dbGet(`SELECT count(*) as count FROM customers WHERE ${dateFilter}`);
-      const leadsCount = leadsCountRow?.count || 0;
+      const leads = await supabaseFetch(`customers?select=id${dateQuery}`);
+      const leadsCount = leads?.length || 0;
 
       // Query 2: Completed orders metrics
-      const salesRow = await dbGet(`SELECT count(*) as count, sum(amount) as revenue FROM orders WHERE status = 'completed' AND ${dateFilter}`);
-      const ordersCompleted = salesRow?.count || 0;
-      const revenue = salesRow?.revenue || 0;
+      const completedOrders = await supabaseFetch(`orders?status=eq.completed&select=amount${dateQuery}`);
+      const ordersCompleted = completedOrders?.length || 0;
+      const revenue = (completedOrders || []).reduce((sum: number, o: any) => sum + Number(o.amount || 0), 0);
 
       // Query 3: Pending orders count
-      const pendingRow = await dbGet(`SELECT count(*) as count FROM orders WHERE status = 'pending' AND ${dateFilter}`);
-      const ordersPending = pendingRow?.count || 0;
+      const pendingOrders = await supabaseFetch(`orders?status=eq.pending&select=id${dateQuery}`);
+      const ordersPending = pendingOrders?.length || 0;
 
       // Query 4: Course product stock
-      const products = await dbAll(`SELECT id, name, price, stock FROM products`);
+      const products = await supabaseFetch(`products?select=id,name,price,stock`);
 
       // Format money
       const formatVND = (val: number) => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
       };
 
-      let textOutput = `📊 BÁO CÁO KINH DOANH DSCONS (${rangeLabel}):\n`;
+      let textOutput = `📊 BÁO CÁO KINH DOANH DSCONS (${rangeLabel}) [SUPABASE]:\n`;
       textOutput += `- Đăng ký danh sách chờ (Waitlist): ${leadsCount} học viên mới.\n`;
       textOutput += `- Đơn hàng đã hoàn tất: ${ordersCompleted} đơn.\n`;
       textOutput += `- Doanh thu thực tế nhận được: ${formatVND(revenue)}.\n`;
       textOutput += `- Đơn hàng đang chờ thanh toán: ${ordersPending} đơn.\n\n`;
       textOutput += `Remaining stock (Slots ưu đãi khóa học còn lại):\n`;
       
-      products.forEach((p: any) => {
+      (products || []).forEach((p: any) => {
         const shortName = p.name.split('—')[1]?.trim() || p.name;
         textOutput += `+ ${shortName}: Còn ${p.stock} slots (Giá bán: ${formatVND(p.price)})\n`;
       });
@@ -139,7 +133,7 @@ const createMcpServer = () => {
     } catch (error: any) {
       console.error(`[ERROR] get_business_summary failed:`, error);
       return {
-        content: [{ type: 'text', text: `Error generating business summary: ${error.message}` }],
+        content: [{ type: 'text', text: `Error generating business summary from Supabase: ${error.message}` }],
         isError: true
       };
     }
@@ -147,7 +141,7 @@ const createMcpServer = () => {
 
   // Tool 2: manage_order_status
   server.registerTool('manage_order_status', {
-    description: 'Search, check, complete, or cancel specific student order records.',
+    description: 'Search, check, complete, or cancel specific student order records in Supabase.',
     inputSchema: {
       query: z.string().describe('Target order ID (DS-xxx) or student phone number'),
       action: z.enum(['check', 'complete', 'cancel']).default('check').describe('Operations: check (view detail), complete (confirm paid & send email), cancel (void order)')
@@ -155,36 +149,21 @@ const createMcpServer = () => {
   }, async ({ query, action }) => {
     logAction('manage_order_status', { query, action });
     try {
-      // 1. Search for order by ID or customer phone
-      let order = await dbGet(
-        `SELECT * FROM orders WHERE id = ? OR customer_phone = ? ORDER BY created_at DESC LIMIT 1`,
-        [query, query]
-      );
-
-      // If order not found and the action is check, try finding customer first to create fallback order
-      if (!order) {
-        if (action === 'complete') {
-          // Find customer
-          const customer = await dbGet(`SELECT * FROM customers WHERE phone = ?`, [query]);
-          const name = customer ? customer.name : 'Học viên vãng lai';
-          const newOrderId = `DS-${Date.now()}`;
-          
-          console.log(`Order not found for phone ${query}. Creating fallback completed order.`);
-          
-          // Insert fallback completed order
-          await dbRun(
-            `INSERT INTO orders (id, customer_phone, customer_name, product_id, amount, status, payment_date)
-             VALUES (?, ?, ?, 'revit-mep-thuc-chien', 3900000, 'completed', datetime('now'))`,
-            [newOrderId, query, name]
-          );
-          
-          order = await dbGet(`SELECT * FROM orders WHERE id = ?`, [newOrderId]);
-        } else {
-          return {
-            content: [{ type: 'text', text: `❌ Không tìm thấy thông tin đơn hàng trùng khớp với từ khóa "${query}".` }]
-          };
-        }
+      // 1. Search for order by ID or customer phone in Supabase
+      let orders = [];
+      if (query.toUpperCase().startsWith('DS-')) {
+        orders = await supabaseFetch(`orders?id=eq.${query}&select=*`);
+      } else {
+        orders = await supabaseFetch(`orders?customer_phone=eq.${query}&select=*&order=created_at.desc`);
       }
+
+      if (!orders || orders.length === 0) {
+        return {
+          content: [{ type: 'text', text: `❌ Không tìm thấy thông tin đơn hàng trùng khớp với từ khóa "${query}" trên hệ thống Supabase.` }]
+        };
+      }
+
+      const order = orders[0];
 
       // 2. Perform requested action
       const formatVND = (val: number) => {
@@ -195,90 +174,106 @@ const createMcpServer = () => {
         let statusLabel = order.status === 'completed' ? '🟢 COMPLETED (Đã thanh toán)' : 
                           order.status === 'cancelled' ? '🔴 CANCELLED (Đã hủy)' : '🟡 PENDING (Chờ thanh toán)';
         
-        let detailText = `🔔 THÔNG TIN ĐƠN HÀNG:\n`;
+        let detailText = `🔔 THÔNG TIN ĐƠN HÀNG (SUPABASE):\n`;
         detailText += `- Mã đơn hàng: ${order.id}\n`;
         detailText += `- Học viên: ${order.customer_name} (SĐT: ${order.customer_phone})\n`;
         detailText += `- Gói đăng ký: ${order.product_id}\n`;
-        detailText += `- Giá trị đơn hàng: ${formatVND(order.amount)}\n`;
+        detailText += `- Giá trị đơn hàng: ${formatVND(Number(order.amount))}\n`;
         detailText += `- Trạng thái hiện tại: ${statusLabel}\n`;
         if (order.payment_date) {
           detailText += `- Ngày thanh toán: ${order.payment_date}\n`;
         }
         if (order.sepay_transaction_id) {
-          detailText += `- Mã giao dịch Sepay: ${order.sepay_transaction_id}\n`;
+          detailText += `- Giao dịch Sepay: ${order.sepay_transaction_id}\n`;
         }
 
         return { content: [{ type: 'text', text: detailText }] };
       }
 
       if (action === 'cancel') {
-        await dbRun(`UPDATE orders SET status = 'cancelled' WHERE id = ?`, [order.id]);
+        await supabaseFetch(`orders?id=eq.${order.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ status: 'cancelled' })
+        });
         return {
-          content: [{ type: 'text', text: `🟢 Đã hủy thành công đơn hàng ${order.id} của học viên ${order.customer_name}.` }]
+          content: [{ type: 'text', text: `🟢 Đã hủy thành công đơn hàng ${order.id} của học viên ${order.customer_name} trên Supabase.` }]
         };
       }
 
       if (action === 'complete') {
         if (order.status === 'completed') {
           return {
-            content: [{ type: 'text', text: `ℹ️ Đơn hàng ${order.id} của học viên ${order.customer_name} đã ở trạng thái HOÀN THÀNH từ trước.` }]
+            content: [{ type: 'text', text: `ℹ️ Đơn hàng ${order.id} của học viên ${order.customer_name} đã ở trạng thái HOÀN THÀNH từ trước trên Supabase.` }]
           };
         }
 
         // Update order status to completed
-        await dbRun(
-          `UPDATE orders SET status = 'completed', payment_date = datetime('now') WHERE id = ?`,
-          [order.id]
-        );
+        await supabaseFetch(`orders?id=eq.${order.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            status: 'completed',
+            payment_date: new Date().toISOString()
+          })
+        });
 
         // Decrement stock slots
         if (order.product_id) {
-          const product = await dbGet(`SELECT * FROM products WHERE id = ?`, [order.product_id]);
-          if (product && product.stock > 0) {
-            await dbRun(`UPDATE products SET stock = stock - 1 WHERE id = ?`, [order.product_id]);
+          const productList = await supabaseFetch(`products?id=eq.${order.product_id}&select=stock`);
+          if (productList && productList.length > 0) {
+            const stock = productList[0].stock;
+            if (stock > 0) {
+              await supabaseFetch(`products?id=eq.${order.product_id}`, {
+                method: 'PATCH',
+                body: JSON.stringify({ stock: stock - 1 })
+              });
+            }
           }
         }
 
         // Trigger confirmation email flow via main express api
         let emailTriggerStatus = "Không gửi được email (thiếu thông tin khách hàng)";
-        const customer = await dbGet(`SELECT * FROM customers WHERE phone = ?`, [order.customer_phone]);
-        const product = await dbGet(`SELECT * FROM products WHERE id = ?`, [order.product_id]);
+        const customers = await supabaseFetch(`customers?phone=eq.${order.customer_phone}&select=*`);
+        const productList = await supabaseFetch(`products?id=eq.${order.product_id}&select=*`);
 
-        if (customer && customer.email && product) {
-          try {
-            const apiPort = process.env.PORT || 3000;
-            const url = `http://localhost:${apiPort}/api/send-order-confirm`;
-            
-            const emailBody = {
-              email: customer.email,
-              customerName: order.customer_name,
-              productName: product.name,
-              amount: order.amount,
-              downloadUrl: product.download_url
-            };
+        if (customers && customers.length > 0 && productList && productList.length > 0) {
+          const customer = customers[0];
+          const product = productList[0];
+          if (customer.email) {
+            try {
+              const apiPort = process.env.PORT || 3000;
+              const url = `http://localhost:${apiPort}/api/send-order-confirm`;
+              
+              const emailBody = {
+                email: customer.email,
+                customerName: order.customer_name,
+                productName: product.name,
+                amount: Number(order.amount),
+                downloadUrl: product.download_url
+              };
 
-            console.log(`[EMAIL-TRIGGER] Sending manual trigger request to ${url}`);
-            const res = await fetch(url, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(emailBody)
-            });
+              console.log(`[EMAIL-TRIGGER] Sending manual trigger request to ${url}`);
+              const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(emailBody)
+              });
 
-            if (res.ok) {
-              emailTriggerStatus = "🟢 Đã tự động gửi email xác nhận học tập thành công kèm link quà tặng.";
-            } else {
-              const errJson = await res.json() as any;
-              emailTriggerStatus = `⚠️ Lỗi gửi email tự động: ${errJson.error || 'Server error'}`;
+              if (res.ok) {
+                emailTriggerStatus = "🟢 Đã tự động gửi email xác nhận học tập thành công kèm link quà tặng.";
+              } else {
+                const errJson = await res.json() as any;
+                emailTriggerStatus = `⚠️ Lỗi gửi email tự động: ${errJson.error || 'Server error'}`;
+              }
+            } catch (e: any) {
+              emailTriggerStatus = `⚠️ Không thể gọi API gửi email: ${e.message}`;
             }
-          } catch (e: any) {
-            emailTriggerStatus = `⚠️ Không thể gọi API gửi email: ${e.message}`;
           }
         }
 
         return {
           content: [{
             type: 'text',
-            text: `🟢 Đã kích hoạt duyệt thành công đơn hàng ${order.id} cho học viên ${order.customer_name}!\n` +
+            text: `🟢 Đã duyệt thành công đơn hàng ${order.id} cho học viên ${order.customer_name} trên Supabase!\n` +
                   `- Trạng thái đơn hàng: COMPLETED\n` +
                   `- Khấu trừ slots kho thành công.\n` +
                   `- Email flow: ${emailTriggerStatus}`
@@ -290,7 +285,7 @@ const createMcpServer = () => {
     } catch (error: any) {
       console.error(`[ERROR] manage_order_status failed:`, error);
       return {
-        content: [{ type: 'text', text: `Error managing order status: ${error.message}` }],
+        content: [{ type: 'text', text: `Error managing order status on Supabase: ${error.message}` }],
         isError: true
       };
     }
@@ -298,7 +293,7 @@ const createMcpServer = () => {
 
   // Tool 3: get_recent_leads
   server.registerTool('get_recent_leads', {
-    description: 'Retrieve latest registered customers/leads containing details about their positions, goals, and painpoints.',
+    description: 'Retrieve latest registered customers/leads containing details about their positions, goals, and painpoints directly from Supabase.',
     inputSchema: {
       limit: z.number().default(5).describe('Maximum number of leads to fetch'),
       has_painpoints_only: z.boolean().default(true).describe('Filter to only display leads who explicitly filled detailed painpoint profiles')
@@ -306,25 +301,20 @@ const createMcpServer = () => {
   }, async ({ limit, has_painpoints_only }) => {
     logAction('get_recent_leads', { limit, has_painpoints_only });
     try {
-      let query = `SELECT name, phone, email, role, painpoint, goal, created_at FROM customers`;
-      let params: any[] = [];
-
+      let queryUrl = `customers?order=created_at.desc&limit=${limit}`;
       if (has_painpoints_only) {
-        query += ` WHERE painpoint IS NOT NULL AND painpoint != ''`;
+        queryUrl = `customers?painpoint=not.eq.&painpoint=not.is.null&order=created_at.desc&limit=${limit}`;
       }
 
-      query += ` ORDER BY created_at DESC LIMIT ?`;
-      params.push(limit);
+      const leads = await supabaseFetch(queryUrl);
 
-      const leads = await dbAll(query, params);
-
-      if (leads.length === 0) {
+      if (!leads || leads.length === 0) {
         return {
-          content: [{ type: 'text', text: 'ℹ️ Không tìm thấy học viên đăng ký mới nào trùng khớp điều kiện.' }]
+          content: [{ type: 'text', text: 'ℹ️ Không tìm thấy học viên đăng ký mới nào trên Supabase.' }]
         };
       }
 
-      let textOutput = `📝 DANH SÁCH HỌC VIÊN ĐĂNG KÝ GẦN ĐÂY:\n\n`;
+      let textOutput = `📝 DANH SÁCH HỌC VIÊN ĐĂNG KÝ GẦN ĐÂY (SUPABASE):\n\n`;
       leads.forEach((l: any, idx: number) => {
         textOutput += `${idx + 1}. Học viên: ${l.name} (${l.phone})\n`;
         textOutput += `   - Vai trò: ${l.role || 'Không xác định'}\n`;
@@ -339,7 +329,7 @@ const createMcpServer = () => {
     } catch (error: any) {
       console.error(`[ERROR] get_recent_leads failed:`, error);
       return {
-        content: [{ type: 'text', text: `Error fetching recent leads: ${error.message}` }],
+        content: [{ type: 'text', text: `Error fetching recent leads from Supabase: ${error.message}` }],
         isError: true
       };
     }
@@ -487,7 +477,7 @@ const HOST = '127.0.0.1';
 
 app.listen(PORT, HOST, () => {
   console.log(`[${new Date().toISOString()}] =============================================`);
-  console.log(`[${new Date().toISOString()}] 🚀 DSCons CRM MCP Server is now active!`);
+  console.log(`[${new Date().toISOString()}] 🚀 DSCons CRM MCP Server is now active (Supabase Sync Mode)!`);
   console.log(`[${new Date().toISOString()}] 🌐 Listening locally at http://${HOST}:${PORT}`);
   console.log(`[${new Date().toISOString()}] - Endpoint GET:  http://${HOST}:${PORT}/mcp  (SSE)`);
   console.log(`[${new Date().toISOString()}] - Endpoint POST: http://${HOST}:${PORT}/messages`);
@@ -508,4 +498,5 @@ process.on('SIGINT', async () => {
   }
   process.exit(0);
 });
+
 
