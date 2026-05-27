@@ -14,10 +14,10 @@ export default async function handler(req: any, res: any) {
   try {
     // 1. Xác thực bảo mật API Key từ Sepay gửi sang
     const authHeader = req.headers['authorization'] || req.headers['Authorization'];
-    const expectedApiKey = process.env.SEPAY_API_KEY || 'dscons_secret_2026';
+    const expectedApiKey = process.env.SEPAY_API_KEY;
 
-    if (authHeader !== `Apikey ${expectedApiKey}`) {
-      console.warn('Cảnh báo: Webhook nhận yêu cầu không hợp lệ (Sai API Key).');
+    if (!expectedApiKey || authHeader !== `Apikey ${expectedApiKey}`) {
+      console.warn('Cảnh báo: Webhook nhận yêu cầu không hợp lệ (Sai hoặc thiếu SEPAY_API_KEY).');
       return res.status(401).json({ error: 'Unauthorized' });
     }
 

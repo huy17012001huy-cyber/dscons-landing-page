@@ -44,7 +44,7 @@ INSERT INTO public.system_settings (key, value, description) VALUES
   ('bank_account', '105870479657', 'Số tài khoản nhận chuyển khoản thanh toán'),
   ('bank_code', 'VietinBank', 'Mã ngân hàng (ví dụ: VietinBank, Techcombank, MBBank)'),
   ('bank_owner', 'PHAM QUANG HUY', 'Tên chủ tài khoản nhận tiền (viết hoa không dấu)'),
-  ('resend_api_key', 're_6xcF9T2p_DeQNRm4m7wRfioqMRst5xSXg', 'API Key Resend bảo mật để gửi mail'),
+  ('resend_api_key', 'your_resend_api_key_here', 'API Key Resend bảo mật để gửi mail'),
   ('resend_sender_email', 'onboarding@resend.dev', 'Địa chỉ email người gửi (ví dụ: onboarding@resend.dev)'),
   ('is_test_mode', 'true', 'Trạng thái chế độ Test thanh toán 2K (nhập "true" hoặc "false")')
 ON CONFLICT (key) DO UPDATE 

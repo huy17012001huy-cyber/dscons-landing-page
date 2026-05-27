@@ -14,6 +14,8 @@ dist-ssr
 .env
 .env.*
 *.local
+resend_config.txt
+
 
 # Databases, temporary assets and scrap scripts
 *.db
