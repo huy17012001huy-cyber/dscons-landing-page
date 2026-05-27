@@ -1,0 +1,24 @@
+{
+  "name": "dscons-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for DSCons Website & Chatbot CRM",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.4.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.7",
+    "@types/sqlite3": "^3.1.11",
+    "tsx": "^4.7.2",
+    "typescript": "^5.4.5"
+  }
+}
