@@ -354,6 +354,60 @@ const app = createMcpExpressApp();
 // Active sessions map (stores transport and McpServer instances per sessionId)
 const activeSessions: Record<string, { transport: SSEServerTransport; mcpServer: McpServer }> = {};
 
+// Stateless HTTP Endpoint (POST) to support streamable-http transport
+app.post('/mcp', async (req, res) => {
+  const token = req.query.token as string;
+  const expectedToken = process.env.GOCLAW_GATEWAY_TOKEN || 'f25bab0eedc7c444138a8a5e6003c9a7';
+  
+  if (token !== expectedToken) {
+    console.warn(`[${new Date().toISOString()}] [SECURITY] Unauthorized POST request attempt. Token: "${token}"`);
+    res.status(401).send('Unauthorized: Invalid or missing token');
+    return;
+  }
+
+  const requestMessage = req.body;
+  if (!requestMessage || typeof requestMessage !== 'object') {
+    res.status(400).send('Bad Request: Invalid JSON-RPC message body');
+    return;
+  }
+
+  const responses: any[] = [];
+  const mockTransport = {
+    start: async () => {
+      if (mockTransport.onmessage) {
+        mockTransport.onmessage(requestMessage);
+      }
+    },
+    close: async () => {},
+    send: async (message: any) => {
+      responses.push(message);
+    },
+    onmessage: undefined as any,
+    onclose: undefined as any,
+    onerror: undefined as any
+  };
+
+  const mcpServer = createMcpServer();
+
+  try {
+    await mcpServer.connect(mockTransport);
+    
+    // Give the event loop a tiny tick to process the message and capture the response
+    await new Promise(resolve => setTimeout(resolve, 5));
+    
+    await mcpServer.close();
+
+    if (responses.length > 0) {
+      res.json(responses[0]);
+    } else {
+      res.status(204).end(); // No Content for notifications
+    }
+  } catch (error: any) {
+    console.error(`[${new Date().toISOString()}] Error handling stateless HTTP request:`, error);
+    res.status(500).send(`Error processing request: ${error.message}`);
+  }
+});
+
 // SSE Endpoint (GET)
 app.get('/mcp', async (req, res) => {
   const token = req.query.token as string;
