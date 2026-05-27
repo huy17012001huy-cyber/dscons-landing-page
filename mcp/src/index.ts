@@ -381,6 +381,8 @@ app.get('/mcp', async (req, res) => {
     transport.onclose = async () => {
       console.log(`[${new Date().toISOString()}] SSE Transport closed for session: ${sessionId}`);
       try {
+        // Unset callback to break recursion close loop
+        transport.onclose = undefined;
         await mcpServer.close();
       } catch (err) {
         console.error(`Error closing mcpServer for session ${sessionId}:`, err);
