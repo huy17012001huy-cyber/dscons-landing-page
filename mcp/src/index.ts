@@ -350,7 +350,16 @@ const transports: Record<string, SSEServerTransport> = {};
 
 // SSE Endpoint (GET)
 app.get('/mcp', async (req, res) => {
-  console.log(`[${new Date().toISOString()}] SSE Connection request received`);
+  const token = req.query.token as string;
+  const expectedToken = process.env.GOCLAW_GATEWAY_TOKEN || 'f25bab0eedc7c444138a8a5e6003c9a7';
+  
+  if (token !== expectedToken) {
+    console.warn(`[${new Date().toISOString()}] [SECURITY] Unauthorized SSE connection attempt. Token: "${token}"`);
+    res.status(401).send('Unauthorized: Invalid or missing token');
+    return;
+  }
+
+  console.log(`[${new Date().toISOString()}] [SECURITY] Authorized SSE Connection request received (Token verified)`);
   try {
     // Create new SSE Transport for client
     const transport = new SSEServerTransport('/messages', res);
