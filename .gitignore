@@ -13,6 +13,7 @@ dist-ssr
 # Secrets and local configurations
 .env
 .env.*
+!.env.example
 *.local
 resend_config.txt
 
