@@ -4,9 +4,22 @@ import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
 import { createMcpExpressApp } from '@modelcontextprotocol/sdk/server/express.js';
 import * as z from 'zod';
 import dotenv from 'dotenv';
+import path from 'path';
+import fs from 'fs';
 
 // Load environment variables (to know port of main site, and Supabase credentials)
-dotenv.config();
+let envPath = path.join(process.cwd(), '.env');
+if (!fs.existsSync(envPath)) {
+  envPath = path.join(process.cwd(), '..', '.env');
+}
+if (!fs.existsSync(envPath)) {
+  envPath = path.join(__dirname, '..', '..', '.env');
+}
+if (!fs.existsSync(envPath)) {
+  envPath = 'e:\\ANTIGRAVITY\\DSCons_Landing Page_Zoom\\.env';
+}
+console.log(`[${new Date().toISOString()}] Loading environment from: ${envPath}`);
+dotenv.config({ path: envPath });
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || '';
