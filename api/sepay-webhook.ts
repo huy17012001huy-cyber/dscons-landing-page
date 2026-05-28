@@ -16,6 +16,12 @@ export default async function handler(req: any, res: any) {
     const authHeader = req.headers['authorization'] || req.headers['Authorization'];
     const expectedApiKey = process.env.SEPAY_API_KEY;
 
+    console.log('--- Debug Webhook Auth ---');
+    console.log('Incoming Authorization Header:', authHeader);
+    console.log('Expected API Key in env:', expectedApiKey);
+    console.log('Formed Expected Header:', `Apikey ${expectedApiKey}`);
+    console.log('Comparison matches:', authHeader === `Apikey ${expectedApiKey}`);
+
     if (!expectedApiKey || authHeader !== `Apikey ${expectedApiKey}`) {
       console.warn('Cảnh báo: Webhook nhận yêu cầu không hợp lệ (Sai hoặc thiếu SEPAY_API_KEY).');
       return res.status(401).json({ error: 'Unauthorized' });
@@ -107,6 +113,7 @@ export default async function handler(req: any, res: any) {
         amount: Number(transferAmount), // Số tiền thực tế nhận được
         sepay_transaction_id: String(id),
         payment_date: new Date().toISOString(),
+        is_notified: false, // Reset cờ is_notified về false để chatbot quét và báo tin nhắn hoàn tất
       })
       .eq('id', orderToComplete.id);
 

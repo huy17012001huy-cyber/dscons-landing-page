@@ -3,20 +3,35 @@ import styled from 'styled-components';
 
 interface SwitchProps {
   checked: boolean;
-  onChange: () => void;
+  onChange?: () => void;
+  onCheckedChange?: (checked: boolean) => void;
 }
 
-const Switch: React.FC<SwitchProps> = ({ checked, onChange }) => {
+const Switch: React.FC<SwitchProps> = ({ checked, onChange, onCheckedChange }) => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onChange) {
+      onChange();
+    }
+    if (onCheckedChange) {
+      onCheckedChange(!checked);
+    }
+  };
+
   return (
     <StyledWrapper>
-      <label className="theme-switch">
+      <div 
+        className="theme-switch" 
+        style={{ cursor: 'pointer' }}
+      >
         <input 
           type="checkbox" 
           className="theme-switch__checkbox" 
           checked={checked} 
-          onChange={onChange}
+          readOnly 
         />
-        <div className="theme-switch__container">
+        <div className="theme-switch__container" onClick={handleClick}>
           <div className="theme-switch__clouds" />
           <div className="theme-switch__stars-container">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 55" fill="none">
@@ -33,7 +48,7 @@ const Switch: React.FC<SwitchProps> = ({ checked, onChange }) => {
             </div>
           </div>
         </div>
-      </label>
+      </div>
     </StyledWrapper>
   );
 }
@@ -89,11 +104,15 @@ const StyledWrapper = styled.div`
     inset: 0;
     -webkit-box-shadow: 0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset, 0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset;
     box-shadow: 0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset, 0em 0.05em 0.187em rgba(0, 0, 0, 0.25) inset;
-    border-radius: var(--container-radius)
+    border-radius: var(--container-radius);
   }
 
   .theme-switch__checkbox {
-    display: none;
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
   }
 
   .theme-switch__circle-container {

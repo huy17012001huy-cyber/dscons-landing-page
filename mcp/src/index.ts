@@ -348,6 +348,165 @@ const createMcpServer = () => {
     }
   });
 
+  // Tool 4: get_new_orders
+  server.registerTool('get_new_orders', {
+    description: 'Retrieve all new (both pending and completed) orders that have not been notified to the owner, automatically mark them as notified on Supabase, and return formatted notification texts with cross-referenced email.',
+    inputSchema: {}
+  }, async () => {
+    logAction('get_new_orders', {});
+    try {
+      // 1. Fetch orders that are not notified yet (is_notified is false or null)
+      const newOrders = await supabaseFetch('orders?or=(is_notified.eq.false,is_notified.is.null)&select=*&order=created_at.asc');
+      
+      if (!newOrders || newOrders.length === 0) {
+        return {
+          content: [{ type: 'text', text: 'No new orders found.' }]
+        };
+      }
+
+      // 2. Fetch today's completed orders to show daily summary statistics
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      const dateQuery = `&created_at=gte.${todayStart.toISOString()}`;
+      const completedOrdersToday = await supabaseFetch(`orders?status=eq.completed&select=id${dateQuery}`);
+      const ordersCompletedCount = completedOrdersToday?.length || 0;
+
+      // 3. Process each new order and build notification strings
+      let textOutput = '';
+      const formatVND = (val: number) => {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
+      };
+
+      for (const order of newOrders) {
+        // Lấy thông tin email từ bảng customers dựa trên customer_phone
+        let customerEmail = 'Chưa cung cấp';
+        try {
+          const customerList = await supabaseFetch(`customers?phone=eq.${order.customer_phone}&select=email`);
+          if (customerList && customerList.length > 0 && customerList[0].email) {
+            customerEmail = customerList[0].email;
+          }
+        } catch (err) {
+          console.warn(`Lỗi lấy email từ customer cho SĐT ${order.customer_phone}:`, err);
+        }
+
+        // Lấy tên khóa học rút gọn
+        let productName = order.product_id;
+        if (order.product_id) {
+          const productList = await supabaseFetch(`products?id=eq.${order.product_id}&select=name`);
+          if (productList && productList.length > 0) {
+            productName = productList[0].name.split('—')[1]?.trim() || productList[0].name;
+          }
+        }
+
+        // Phân loại tin nhắn dựa trên status đơn hàng
+        if (order.status === 'pending') {
+          textOutput += `🔔 **CÓ HỌC VIÊN MỚI ĐĂNG KÝ HỌC (CHỜ THANH TOÁN)!**\n` +
+                        `- **Học viên**: ${order.customer_name}\n` +
+                        `- **Số điện thoại**: ${order.customer_phone}\n` +
+                        `- **Email**: ${customerEmail}\n` +
+                        `- **Khóa học đăng ký**: ${productName}\n` +
+                        `- **Số tiền**: ${formatVND(Number(order.amount))}\n` +
+                        `- **Mã đơn hàng**: ${order.id}\n` +
+                        `*Trạng thái: Đang chờ chuyển khoản.*\n\n`;
+        } else {
+          // status === 'completed'
+          textOutput += `🔔 **CÓ ĐƠN HÀNG MỚI HOÀN TẤT!**\n` +
+                        `- **Học viên**: ${order.customer_name}\n` +
+                        `- **Số điện thoại**: ${order.customer_phone}\n` +
+                        `- **Khóa học mua**: ${productName}\n` +
+                        `- **Số tiền thanh toán**: ${formatVND(Number(order.amount))}\n` +
+                        `- **Mã đơn hàng**: ${order.id}\n` +
+                        `*Tổng số đơn hoàn thành hôm nay: ${ordersCompletedCount} đơn.*\n\n`;
+        }
+
+        // 4. Mark this order as notified on Supabase
+        await supabaseFetch(`orders?id=eq.${order.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ is_notified: true })
+        });
+      }
+
+      return {
+        content: [{ type: 'text', text: textOutput.trim() }]
+      };
+    } catch (error: any) {
+      console.error('[ERROR] get_new_orders failed:', error);
+      return {
+        content: [{ type: 'text', text: `Error fetching new orders from Supabase: ${error.message}` }],
+        isError: true
+      };
+    }
+  });
+
+  // Tool 5: get_new_leads
+  server.registerTool('get_new_leads', {
+    description: 'Retrieve all new registered waitlist customers/leads that have not been notified to the owner, automatically mark them as notified on Supabase, and return formatted notification texts.',
+    inputSchema: {}
+  }, async () => {
+    logAction('get_new_leads', {});
+    try {
+      // 1. Fetch customers that are not notified yet (is_notified is false or null)
+      const newLeads = await supabaseFetch('customers?or=(is_notified.eq.false,is_notified.is.null)&select=*&order=created_at.asc');
+      
+      if (!newLeads || newLeads.length === 0) {
+        return {
+          content: [{ type: 'text', text: 'No new registered leads found.' }]
+        };
+      }
+
+      // 2. Fetch today's registered customers to show count
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      const dateQuery = `&created_at=gte.${todayStart.toISOString()}`;
+      const completedLeadsToday = await supabaseFetch(`customers?select=id${dateQuery}`);
+      const leadsTodayCount = completedLeadsToday?.length || 0;
+
+      // 3. Process each new lead and build notification strings
+      let textOutput = '';
+      for (const lead of newLeads) {
+        // Tìm khóa học họ đăng ký trong bảng orders (nếu có)
+        let courseName = 'Chưa chọn khóa học';
+        try {
+          const pendingOrders = await supabaseFetch(`orders?customer_phone=eq.${lead.phone}&select=product_id`);
+          if (pendingOrders && pendingOrders.length > 0 && pendingOrders[0].product_id) {
+            const productList = await supabaseFetch(`products?id=eq.${pendingOrders[0].product_id}&select=name`);
+            if (productList && productList.length > 0) {
+              courseName = productList[0].name.split('—')[1]?.trim() || productList[0].name;
+            }
+          }
+        } catch (err) {
+          console.warn(`Lỗi lấy tên khóa học cho lead ${lead.phone}:`, err);
+        }
+
+        // Định dạng tin nhắn chi tiết (Premium):
+        textOutput += `📝 **CÓ HỌC VIÊN MỚI ĐĂNG KÝ (WAITLIST)!**\n` +
+                      `- **Học viên**: ${lead.name}\n` +
+                      `- **Số điện thoại**: ${lead.phone}\n` +
+                      `- **Email**: ${lead.email || 'Chưa cung cấp'}\n` +
+                      `- **Khóa học đăng ký**: ${courseName}\n` +
+                      `- **Đối tượng**: ${lead.role || 'Chưa xác định'}\n` +
+                      `- **Khó khăn gặp phải**: ${lead.painpoint || 'Không ghi rõ'}\n` +
+                      `*Tổng số khách điền form hôm nay: ${leadsTodayCount} khách.*\n\n`;
+
+        // 4. Mark this customer as notified on Supabase
+        await supabaseFetch(`customers?id=eq.${lead.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ is_notified: true })
+        });
+      }
+
+      return {
+        content: [{ type: 'text', text: textOutput.trim() }]
+      };
+    } catch (error: any) {
+      console.error('[ERROR] get_new_leads failed:', error);
+      return {
+        content: [{ type: 'text', text: `Error fetching new leads from Supabase: ${error.message}` }],
+        isError: true
+      };
+    }
+  });
+
   return server;
 };
 
