@@ -79,6 +79,7 @@ const RegistrationForm = () => {
 
   // Chế độ Test giao dịch 2.000đ (Bật mặc định để kiểm nghiệm webhook siêu mượt)
   const [isTestMode, setIsTestMode] = useState<boolean>(true);
+  const [isTestModeAllowed, setIsTestModeAllowed] = useState<boolean>(true);
   const [paymentCompleted, setPaymentCompleted] = useState<boolean>(false);
 
   // Cấu hình ngân hàng & test mode động từ database
@@ -100,7 +101,9 @@ const RegistrationForm = () => {
           const bankOwnerVal = data.find(s => s.key === "bank_owner")?.value;
 
           if (testModeVal !== undefined) {
-            setIsTestMode(testModeVal === "true");
+            const isAllowed = testModeVal === "true";
+            setIsTestModeAllowed(isAllowed);
+            setIsTestMode(isAllowed);
           }
           if (bankAccVal) setBankAccount(bankAccVal);
           if (bankCodeVal) setBankCode(bankCodeVal);
@@ -352,22 +355,24 @@ const RegistrationForm = () => {
           {step === 1 && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-5 duration-500">
               {/* Toggle chế độ Test của Vực phát triển */}
-              <div className="flex items-center justify-between p-4 bg-primary/5 border border-primary/20 rounded-2xl max-w-lg mx-auto">
-                <div className="flex items-center gap-3">
-                  <span className="relative flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                  </span>
-                  <div>
-                    <h4 className="text-sm font-bold">Chế độ Test Giao Dịch 2.000đ</h4>
-                    <p className="text-xs text-muted-foreground">Quét mã và chuyển khoản 2,000 VNĐ tiền thật để xác minh webhook.</p>
+              {isTestModeAllowed && (
+                <div className="flex items-center justify-between p-4 bg-primary/5 border border-primary/20 rounded-2xl max-w-lg mx-auto">
+                  <div className="flex items-center gap-3">
+                    <span className="relative flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                    </span>
+                    <div>
+                      <h4 className="text-sm font-bold">Chế độ Test Giao Dịch 2.000đ</h4>
+                      <p className="text-xs text-muted-foreground">Quét mã và chuyển khoản 2,000 VNĐ tiền thật để xác minh webhook.</p>
+                    </div>
                   </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" checked={isTestMode} onChange={(e) => setIsTestMode(e.target.checked)} className="sr-only peer" />
+                    <div className="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                  </label>
                 </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" checked={isTestMode} onChange={(e) => setIsTestMode(e.target.checked)} className="sr-only peer" />
-                  <div className="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
+              )}
 
               {/* Grid 3 Gói Khóa học thiết kế cao cấp */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
